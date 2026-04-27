@@ -216,16 +216,17 @@ button{font-family:inherit;cursor:pointer}
 .subscription-toggle button{padding:6px 12px;font-size:12px;border:none;border-radius:4px;background:transparent;color:#64748b;cursor:pointer;transition:all .2s}
 .subscription-toggle button.active{background:#111827;color:#fff;font-weight:700}
 .paywall-card{position:relative;overflow:hidden}
-.paywall-card.locked .panel-bd,.paywall-card.locked .paywall-content{filter:blur(5px);opacity:.58;pointer-events:none;user-select:none}
-.paywall-card.partial-unlock.locked .panel-bd{filter:none;opacity:1;pointer-events:auto;user-select:auto}
-.paywall-card.partial-unlock.locked .paywall-content{filter:none;opacity:1;pointer-events:auto;user-select:auto}
-.cell-locked{filter:blur(4px);opacity:.5;pointer-events:none;user-select:none;min-width:72px}
-.cell-locked-hint{font-size:11px;color:var(--blue);opacity:1!important;filter:none!important;pointer-events:auto!important;white-space:nowrap}
+.paywall-card.locked .panel-bd,.paywall-card.locked .paywall-content{filter:none;opacity:1;pointer-events:auto;user-select:auto}
+.premium-mask,.cell-locked{filter:blur(4px);opacity:.52;pointer-events:none;user-select:none;min-width:72px}
+.premium-mask{display:inline-block}
+.premium-lock-note,.cell-locked-hint{font-size:11px;color:var(--blue);opacity:1!important;filter:none!important;pointer-events:auto!important;white-space:nowrap}
+body.enterprise-subscribed .premium-mask,body.enterprise-subscribed .cell-locked{filter:none;opacity:1;pointer-events:auto;user-select:auto}
+body.enterprise-subscribed .premium-lock-note,body.enterprise-subscribed .cell-locked-hint{display:none}
 .route-free{white-space:nowrap}
 .route-free .route-name{font-weight:700;color:var(--dark)}
 .route-free .route-tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:3px;margin-left:4px;background:var(--green-l);color:var(--green);vertical-align:middle}
 .paywall-overlay{display:none;position:absolute;left:14px;right:14px;top:54px;bottom:14px;z-index:5;align-items:center;justify-content:center;text-align:center;border:1px solid rgba(145,202,255,.9);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(248,251,255,.94));backdrop-filter:saturate(1.1) blur(2px)}
-.paywall-card.locked .paywall-overlay{display:flex}
+.paywall-card.locked .paywall-overlay{display:none}
 .company-unlock-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px;padding:16px 18px;border:1px solid rgba(59,130,246,.18);border-radius:14px;background:linear-gradient(135deg,#f8fbff 0%,#eef6ff 58%,#fff 100%);box-shadow:0 10px 26px rgba(15,23,42,.06)}
 .company-unlock-title{font-size:15px;font-weight:800;color:#0f172a;margin-bottom:4px}
 .company-unlock-desc{font-size:13px;color:#64748b;line-height:1.6}
@@ -237,6 +238,15 @@ button{font-family:inherit;cursor:pointer}
 .paywall-title{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:6px}
 .paywall-desc{font-size:12px;color:#64748b;line-height:1.7;margin-bottom:12px}
 .paywall-note{font-size:11px;color:#8899aa;margin-top:8px}
+.subscription-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(15,23,42,.42);align-items:center;justify-content:center;padding:24px}
+.subscription-modal.open{display:flex}
+.subscription-dialog{width:min(560px,100%);border-radius:18px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:hidden}
+.subscription-dialog-hd{padding:22px 24px;background:linear-gradient(135deg,#eff6ff,#fff);border-bottom:1px solid var(--border)}
+.subscription-dialog-title{font-size:20px;font-weight:900;color:var(--dark);margin-bottom:6px}
+.subscription-dialog-sub{font-size:13px;color:#64748b;line-height:1.7}
+.subscription-benefits{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:20px 24px}
+.subscription-benefit{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:#334155;padding:10px;border:1px solid var(--border);border-radius:10px;background:#f8fafc}
+.subscription-dialog-ft{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--border);background:#fbfdff}
 
 @media (max-width: 1200px){
   .home-kpi-grid{grid-template-columns:1fr 1fr}
@@ -1306,7 +1316,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
         <div class="subscription-toggle">
           <button class="active" data-subscription-status="free" onclick="toggleCompanySubscription(this, 'shipper-company', 'free')">免费版</button>
-          <button data-subscription-status="subscribed" onclick="toggleCompanySubscription(this, 'shipper-company', 'subscribed')">已开通</button>
+          <button data-subscription-status="subscribed" onclick="toggleCompanySubscription(this, 'shipper-company', 'subscribed')">已订阅</button>
         </div>
         <div class="company-period-tabs">
           <button class="time-tab" onclick="switchTimeRange(this, 'shipper-company', 'day')">日</button>
@@ -1339,10 +1349,10 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
 
     <div class="company-unlock-banner">
       <div>
-        <div class="company-unlock-title">开通企业画像，查看完整经营明细</div>
-        <div class="company-unlock-desc">申请通过后可查看完整路线、货类、合作方与对标数据。当前原型点击即通过，方便演示完整能力。</div>
+        <div class="company-unlock-title">订阅企业画像，查看完整数据</div>
+        <div class="company-unlock-desc">订阅后可查看完整路线、货类、合作方与对标数据。当前原型确认订阅即解锁全平台企业画像。</div>
       </div>
-      <button class="company-unlock-btn" type="button" onclick="requestCompanySubscription(this, 'shipper-company')">申请开通企业画像</button>
+      <button class="company-unlock-btn" type="button" onclick="openSubscriptionModal()">订阅查看完整数据</button>
     </div>
 
     <div class="company-compare-grid">
@@ -1355,7 +1365,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             <button class="company-chart-tab" onclick="switchCompanyMetric(this, 'shipper-company', 'efficiency')">效率</button>
           </div>
         </div>
-        <div class="panel-bd"><canvas id="shipperCompanyChart" width="760" height="280" class="index-chart-canvas"></canvas></div>
+        <div class="panel-bd"><canvas id="shipperCompanyChart" width="760" height="280" class="index-chart-canvas premium-mask"></canvas><div class="premium-lock-note" style="text-align:center;margin-top:8px">订阅后查看完整趋势曲线与对标数据</div></div>
       </div>
       <div class="panel">
         <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>本期画像解读</div></div>
@@ -1377,41 +1387,41 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
               <td style="font-weight:700;color:var(--amber)">118.4</td>
               <td style="font-weight:700;color:var(--amber)">96.2</td>
               <td style="font-weight:700;color:var(--blue)">103.6</td>
-              <td class="cell-locked">运价 +4.6pt</td>
-              <td class="cell-locked">旺季价格抬升</td>
-              <td class="cell-locked"><span class="badge badge-warn">提前锁价</span></td>
+              <td class="cell-locked premium-mask">运价 +4.6pt</td>
+              <td class="cell-locked premium-mask">旺季价格抬升</td>
+              <td class="cell-locked premium-mask"><span class="badge badge-warn">提前锁价</span></td>
             </tr>
             <tr>
               <td><div class="route-free"><span class="route-name">上海→山西</span></div></td>
               <td style="font-weight:700;color:var(--green)">112.8</td>
               <td style="font-weight:700;color:var(--blue)">101.4</td>
               <td style="font-weight:700;color:var(--blue)">104.1</td>
-              <td class="cell-locked">效率 +2.8pt</td>
-              <td class="cell-locked">表现稳定</td>
-              <td class="cell-locked"><span class="badge badge-ok">继续合作</span></td>
+              <td class="cell-locked premium-mask">效率 +2.8pt</td>
+              <td class="cell-locked premium-mask">表现稳定</td>
+              <td class="cell-locked premium-mask"><span class="badge badge-ok">继续合作</span></td>
             </tr>
             <tr>
               <td><div class="route-free"><span class="route-name">上海→河北</span></div></td>
               <td style="font-weight:700;color:var(--blue)">107.2</td>
               <td style="font-weight:700;color:var(--green)">103.8</td>
               <td style="font-weight:700;color:var(--green)">105.4</td>
-              <td class="cell-locked">效率 +3.1pt</td>
-              <td class="cell-locked">无明显短板</td>
-              <td class="cell-locked"><span class="badge badge-ok">扩大样本</span></td>
+              <td class="cell-locked premium-mask">效率 +3.1pt</td>
+              <td class="cell-locked premium-mask">无明显短板</td>
+              <td class="cell-locked premium-mask"><span class="badge badge-ok">扩大样本</span></td>
             </tr>
             <tr>
               <td><div class="route-free"><span class="route-name">上海→江苏</span><span class="route-tag">稳定</span></div></td>
               <td style="font-weight:700;color:var(--blue)">102.8</td>
               <td style="font-weight:700;color:var(--blue)">100.6</td>
               <td style="font-weight:700;color:var(--green)">106.2</td>
-              <td class="cell-locked">效率 +4.5pt</td>
-              <td class="cell-locked">短途稳定</td>
-              <td class="cell-locked"><span class="badge badge-ok">优先发运</span></td>
+              <td class="cell-locked premium-mask">效率 +4.5pt</td>
+              <td class="cell-locked premium-mask">短途稳定</td>
+              <td class="cell-locked premium-mask"><span class="badge badge-ok">优先发运</span></td>
             </tr>
           </tbody>
         </table>
         <div style="text-align:center;padding:8px 0 10px;border-top:1px dashed var(--border)">
-          <span class="cell-locked-hint">🔒 较匹配大盘、主要问题、建议动作为订阅专享 — <a style="color:var(--blue);font-weight:700;cursor:pointer" onclick="requestCompanySubscription(this,'shipper-company')">申请开通 ›</a></span>
+          <span class="cell-locked-hint">🔒 较匹配大盘、主要问题、建议动作为订阅专享 — <a style="color:var(--blue);font-weight:700;cursor:pointer" onclick="openSubscriptionModal()">订阅查看 ›</a></span>
         </div>
       </div>
     </div>
@@ -1419,11 +1429,11 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
     <div class="panel paywall-card locked" data-paywall-title="常发货品完整表现">
       <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>我的常发货品表现</div></div>
       <div class="panel-bd"><div class="company-structure-grid">
-        <div class="company-structure-card"><strong>煤炭 34%</strong><span>运价 118.4</span><span>运力 95.6</span><span>趋势：旺季偏紧</span></div>
-        <div class="company-structure-card"><strong>钢铁/金属 28%</strong><span>运价 113.2</span><span>效率 104.8</span><span>趋势：平稳偏强</span></div>
-        <div class="company-structure-card"><strong>铁矿石 16%</strong><span>运价 108.6</span><span>运力 101.2</span><span>趋势：基本稳定</span></div>
-        <div class="company-structure-card"><strong>粮食 12%</strong><span>运价 101.4</span><span>效率 106.1</span><span>趋势：短线改善</span></div>
-        <div class="company-structure-card"><strong>化工品 10%</strong><span>运价 96.8</span><span>异常率 3.2%</span><span>趋势：需关注合规</span></div>
+        <div class="company-structure-card"><strong>煤炭 34%</strong><span class="premium-mask">运价 118.4</span><span class="premium-mask">运力 95.6</span><span class="premium-mask">趋势：旺季偏紧</span></div>
+        <div class="company-structure-card"><strong>钢铁/金属 28%</strong><span class="premium-mask">运价 113.2</span><span class="premium-mask">效率 104.8</span><span class="premium-mask">趋势：平稳偏强</span></div>
+        <div class="company-structure-card"><strong>铁矿石 16%</strong><span class="premium-mask">运价 108.6</span><span class="premium-mask">运力 101.2</span><span class="premium-mask">趋势：基本稳定</span></div>
+        <div class="company-structure-card"><strong>粮食 12%</strong><span class="premium-mask">运价 101.4</span><span class="premium-mask">效率 106.1</span><span class="premium-mask">趋势：短线改善</span></div>
+        <div class="company-structure-card"><strong>化工品 10%</strong><span class="premium-mask">运价 96.8</span><span class="premium-mask">异常率 3.2%</span><span class="premium-mask">趋势：需关注合规</span></div>
       </div></div>
     </div>
 
@@ -1434,9 +1444,9 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
           <table class="tbl">
             <thead><tr><th>承运商</th><th>承运占比</th><th>准点率</th><th>平均运价</th><th>异常率</th><th>效率指数</th><th>综合评价</th></tr></thead>
             <tbody>
-              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="showPage('carrier-company')"><strong>顺丰物流集团</strong><span class="link-icon">↗</span></a></td><td>42%</td><td style="color:var(--green)">93.2%</td><td>118.6</td><td style="color:var(--green)">2.1%</td><td style="font-weight:700;color:var(--green)">105.8</td><td><span class="badge badge-ok">主力稳定</span></td></tr>
-              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="showPage('carrier-company')">中通快运<span class="link-icon">↗</span></a></td><td>31%</td><td style="color:var(--blue)">89.6%</td><td>115.2</td><td>2.8%</td><td style="font-weight:700;color:var(--blue)">101.6</td><td><span class="badge badge-info">可继续观察</span></td></tr>
-              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="showPage('carrier-company')">圆通大件物流<span class="link-icon">↗</span></a></td><td>18%</td><td style="color:var(--amber)">84.3%</td><td>122.4</td><td style="color:#ef4444">4.1%</td><td style="font-weight:700;color:var(--amber)">96.4</td><td><span class="badge badge-warn">控制占比</span></td></tr>
+              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="openCarrierProfile('顺丰物流集团')"><strong>顺丰物流集团</strong><span class="link-icon">↗</span></a></td><td>42%</td><td class="premium-mask" style="color:var(--green)">93.2%</td><td class="premium-mask">118.6</td><td class="premium-mask" style="color:var(--green)">2.1%</td><td class="premium-mask" style="font-weight:700;color:var(--green)">105.8</td><td class="premium-mask"><span class="badge badge-ok">主力稳定</span></td></tr>
+              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="openCarrierProfile('中通快运')">中通快运<span class="link-icon">↗</span></a></td><td>31%</td><td class="premium-mask" style="color:var(--blue)">89.6%</td><td class="premium-mask">115.2</td><td class="premium-mask">2.8%</td><td class="premium-mask" style="font-weight:700;color:var(--blue)">101.6</td><td class="premium-mask"><span class="badge badge-info">可继续观察</span></td></tr>
+              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="openCarrierProfile('圆通大件物流')">圆通大件物流<span class="link-icon">↗</span></a></td><td>18%</td><td class="premium-mask" style="color:var(--amber)">84.3%</td><td class="premium-mask">122.4</td><td class="premium-mask" style="color:#ef4444">4.1%</td><td class="premium-mask" style="font-weight:700;color:var(--amber)">96.4</td><td class="premium-mask"><span class="badge badge-warn">控制占比</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -1447,9 +1457,9 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
           <table class="tbl">
             <thead><tr><th>承运商</th><th>适配路线</th><th>效率</th><th>运价</th></tr></thead>
             <tbody>
-              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="showPage('carrier-company')">德邦大件<span class="link-icon">↗</span></a></td><td>上海→河北</td><td style="color:var(--green)">106.4</td><td>110.2</td></tr>
-              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="showPage('carrier-company')">安能物流<span class="link-icon">↗</span></a></td><td>上海→江苏</td><td style="color:var(--green)">105.1</td><td>103.6</td></tr>
-              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="showPage('carrier-company')">区域车队联盟<span class="link-icon">↗</span></a></td><td>上海→山西</td><td style="color:var(--blue)">101.8</td><td>111.4</td></tr>
+              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="openCarrierProfile('德邦大件')">德邦大件<span class="link-icon">↗</span></a></td><td>上海→河北</td><td class="premium-mask" style="color:var(--green)">106.4</td><td class="premium-mask">110.2</td></tr>
+              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="openCarrierProfile('安能物流')">安能物流<span class="link-icon">↗</span></a></td><td>上海→江苏</td><td class="premium-mask" style="color:var(--green)">105.1</td><td class="premium-mask">103.6</td></tr>
+              <tr><td><a class="carrier-link" data-tooltip="点击查看企业地图详情" onclick="openCarrierProfile('区域车队联盟')">区域车队联盟<span class="link-icon">↗</span></a></td><td>上海→山西</td><td class="premium-mask" style="color:var(--blue)">101.8</td><td class="premium-mask">111.4</td></tr>
             </tbody>
           </table>
         </div>
@@ -1477,7 +1487,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
         <div class="subscription-toggle">
           <button class="active" data-subscription-status="free" onclick="toggleCompanySubscription(this, 'carrier-company', 'free')">免费版</button>
-          <button data-subscription-status="subscribed" onclick="toggleCompanySubscription(this, 'carrier-company', 'subscribed')">已开通</button>
+          <button data-subscription-status="subscribed" onclick="toggleCompanySubscription(this, 'carrier-company', 'subscribed')">已订阅</button>
         </div>
         <div class="company-period-tabs">
           <button class="time-tab" onclick="switchTimeRange(this, 'carrier-company', 'day')">日</button>
@@ -1495,10 +1505,10 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
 
     <div class="company-unlock-banner">
       <div>
-        <div class="company-unlock-title">开通企业画像，查看完整经营明细</div>
-        <div class="company-unlock-desc">申请通过后可查看完整路线、货类、合作方与对标数据。当前原型点击即通过，方便演示完整能力。</div>
+        <div class="company-unlock-title">订阅企业画像，查看完整数据</div>
+        <div class="company-unlock-desc">订阅后可查看完整路线、货类、合作方与对标数据。当前原型确认订阅即解锁全平台企业画像。</div>
       </div>
-      <button class="company-unlock-btn" type="button" onclick="requestCompanySubscription(this, 'carrier-company')">申请开通企业画像</button>
+      <button class="company-unlock-btn" type="button" onclick="openSubscriptionModal()">订阅查看完整数据</button>
     </div>
 
     <div class="company-compare-grid">
@@ -1511,7 +1521,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             <button class="company-chart-tab" onclick="switchCompanyMetric(this, 'carrier-company', 'price')">运价</button>
           </div>
         </div>
-        <div class="panel-bd"><canvas id="carrierCompanyChart" width="760" height="280" class="index-chart-canvas"></canvas></div>
+        <div class="panel-bd"><canvas id="carrierCompanyChart" width="760" height="280" class="index-chart-canvas premium-mask"></canvas><div class="premium-lock-note" style="text-align:center;margin-top:8px">订阅后查看完整趋势曲线与对标数据</div></div>
       </div>
       <div class="panel">
         <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>本期画像解读</div></div>
@@ -1528,10 +1538,10 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
         <table class="tbl">
           <thead><tr><th>路线</th><th>运输占比</th><th>运价指数</th><th>效率指数</th><th>接单响应</th><th>较匹配大盘</th><th>机会判断</th></tr></thead>
           <tbody>
-            <tr><td><strong>上海→鄂尔多斯</strong></td><td>32%</td><td style="font-weight:700;color:var(--green)">111.2</td><td style="font-weight:700;color:var(--blue)">105.8</td><td>1.8小时</td><td style="color:var(--green)">效率 +2.2pt</td><td><span class="badge badge-ok">重点深耕</span></td></tr>
-            <tr><td>上海→山西</td><td>24%</td><td style="font-weight:700;color:var(--blue)">108.6</td><td style="font-weight:700;color:var(--green)">106.1</td><td>2.1小时</td><td style="color:var(--green)">效率 +3.6pt</td><td><span class="badge badge-ok">扩展货主</span></td></tr>
-            <tr><td>上海→河北</td><td>18%</td><td style="font-weight:700;color:var(--green)">105.2</td><td style="font-weight:700;color:var(--green)">107.4</td><td>1.6小时</td><td style="color:var(--green)">响应 +18%</td><td><span class="badge badge-ok">优势线路</span></td></tr>
-            <tr><td>上海→江苏</td><td>16%</td><td style="font-weight:700;color:var(--blue)">102.8</td><td style="font-weight:700;color:var(--green)">106.8</td><td>1.2小时</td><td style="color:var(--green)">效率 +4.4pt</td><td><span class="badge badge-info">稳定运营</span></td></tr>
+            <tr><td><strong>上海→鄂尔多斯</strong></td><td>32%</td><td class="premium-mask" style="font-weight:700;color:var(--green)">111.2</td><td class="premium-mask" style="font-weight:700;color:var(--blue)">105.8</td><td class="premium-mask">1.8小时</td><td class="premium-mask" style="color:var(--green)">效率 +2.2pt</td><td class="premium-mask"><span class="badge badge-ok">重点深耕</span></td></tr>
+            <tr><td>上海→山西</td><td>24%</td><td class="premium-mask" style="font-weight:700;color:var(--blue)">108.6</td><td class="premium-mask" style="font-weight:700;color:var(--green)">106.1</td><td class="premium-mask">2.1小时</td><td class="premium-mask" style="color:var(--green)">效率 +3.6pt</td><td class="premium-mask"><span class="badge badge-ok">扩展货主</span></td></tr>
+            <tr><td>上海→河北</td><td>18%</td><td class="premium-mask" style="font-weight:700;color:var(--green)">105.2</td><td class="premium-mask" style="font-weight:700;color:var(--green)">107.4</td><td class="premium-mask">1.6小时</td><td class="premium-mask" style="color:var(--green)">响应 +18%</td><td class="premium-mask"><span class="badge badge-ok">优势线路</span></td></tr>
+            <tr><td>上海→江苏</td><td>16%</td><td class="premium-mask" style="font-weight:700;color:var(--blue)">102.8</td><td class="premium-mask" style="font-weight:700;color:var(--green)">106.8</td><td class="premium-mask">1.2小时</td><td class="premium-mask" style="color:var(--green)">效率 +4.4pt</td><td class="premium-mask"><span class="badge badge-info">稳定运营</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -1540,21 +1550,42 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
     <div class="panel paywall-card locked" data-paywall-title="路线经营画像完整数据">
       <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>路线经营画像</div></div>
       <div class="panel-bd"><div class="company-structure-grid">
-        <div class="company-structure-card"><strong>上海→鄂尔多斯</strong><span>货量热度 118</span><span>价格水平 111</span><span>竞争强度：中高</span><span>履约：稳定</span></div>
-        <div class="company-structure-card"><strong>上海→山西</strong><span>货量热度 112</span><span>价格水平 109</span><span>竞争强度：中</span><span>履约：优势</span></div>
-        <div class="company-structure-card"><strong>上海→河北</strong><span>货量热度 106</span><span>价格水平 105</span><span>竞争强度：中低</span><span>履约：强</span></div>
-        <div class="company-structure-card"><strong>上海→江苏</strong><span>货量热度 103</span><span>价格水平 103</span><span>竞争强度：高</span><span>履约：强</span></div>
-        <div class="company-structure-card"><strong>上海→安徽</strong><span>货量热度 98</span><span>价格水平 99</span><span>竞争强度：中</span><span>履约：可提升</span></div>
+        <div class="company-structure-card"><strong>上海→鄂尔多斯</strong><span class="premium-mask">货量热度 118</span><span class="premium-mask">价格水平 111</span><span class="premium-mask">竞争强度：中高</span><span class="premium-mask">履约：稳定</span></div>
+        <div class="company-structure-card"><strong>上海→山西</strong><span class="premium-mask">货量热度 112</span><span class="premium-mask">价格水平 109</span><span class="premium-mask">竞争强度：中</span><span class="premium-mask">履约：优势</span></div>
+        <div class="company-structure-card"><strong>上海→河北</strong><span class="premium-mask">货量热度 106</span><span class="premium-mask">价格水平 105</span><span class="premium-mask">竞争强度：中低</span><span class="premium-mask">履约：强</span></div>
+        <div class="company-structure-card"><strong>上海→江苏</strong><span class="premium-mask">货量热度 103</span><span class="premium-mask">价格水平 103</span><span class="premium-mask">竞争强度：高</span><span class="premium-mask">履约：强</span></div>
+        <div class="company-structure-card"><strong>上海→安徽</strong><span class="premium-mask">货量热度 98</span><span class="premium-mask">价格水平 99</span><span class="premium-mask">竞争强度：中</span><span class="premium-mask">履约：可提升</span></div>
       </div></div>
     </div>
 
     <div class="panel paywall-card locked" data-paywall-title="推荐货主机会完整名单">
       <div class="panel-hd"><div class="panel-title"><div class="ptbar blue"></div>推荐货主机会</div></div>
       <div class="panel-bd"><div class="company-opportunity-grid">
-        <div class="company-opportunity-card"><h4>华东钢贸集团</h4><p>匹配路线：上海→山西；常发货类：钢铁/金属。需求热度 116，价格接受度较高，履约匹配度 92%。</p><div class="company-mini-meta"><span>推荐理由</span><strong>效率优势明显</strong></div></div>
-        <div class="company-opportunity-card"><h4>北方能源贸易公司</h4><p>匹配路线：上海→鄂尔多斯；常发货类：煤炭。近期发运频次上升，偏好稳定车队与提前锁价。</p><div class="company-mini-meta"><span>推荐理由</span><strong>旺季货量充足</strong></div></div>
-        <div class="company-opportunity-card"><h4>长三角制造业客户</h4><p>匹配路线：上海→江苏/安徽；常发货类：建材、设备。短途履约要求高，适配当前高准点线路。</p><div class="company-mini-meta"><span>推荐理由</span><strong>短途响应快</strong></div></div>
+        <div class="company-opportunity-card"><h4>华东钢贸集团</h4><p class="premium-mask">匹配路线：上海→山西；常发货类：钢铁/金属。需求热度 116，价格接受度较高，履约匹配度 92%。</p><div class="company-mini-meta premium-mask"><span>推荐理由</span><strong>效率优势明显</strong></div></div>
+        <div class="company-opportunity-card"><h4>北方能源贸易公司</h4><p class="premium-mask">匹配路线：上海→鄂尔多斯；常发货类：煤炭。近期发运频次上升，偏好稳定车队与提前锁价。</p><div class="company-mini-meta premium-mask"><span>推荐理由</span><strong>旺季货量充足</strong></div></div>
+        <div class="company-opportunity-card"><h4>长三角制造业客户</h4><p class="premium-mask">匹配路线：上海→江苏/安徽；常发货类：建材、设备。短途履约要求高，适配当前高准点线路。</p><div class="company-mini-meta premium-mask"><span>推荐理由</span><strong>短途响应快</strong></div></div>
       </div></div>
+    </div>
+  </div>
+</div>
+
+<div class="subscription-modal" id="subscriptionModal" onclick="closeSubscriptionModal(event)">
+  <div class="subscription-dialog" onclick="event.stopPropagation()">
+    <div class="subscription-dialog-hd">
+      <div class="subscription-dialog-title">订阅企业画像，解锁全平台数据</div>
+      <div class="subscription-dialog-sub">订阅后可同时查看货主企业与承运商企业的完整路线、货类、合作方和对标数据。本原型中点击确认后立即解锁。</div>
+    </div>
+    <div class="subscription-benefits">
+      <div class="subscription-benefit">✓ 完整路线表现与趋势对标</div>
+      <div class="subscription-benefit">✓ 常发货类与结构变化</div>
+      <div class="subscription-benefit">✓ 合作方表现与异常指标</div>
+      <div class="subscription-benefit">✓ 可替代承运商对比</div>
+      <div class="subscription-benefit">✓ 推荐货主机会线索</div>
+      <div class="subscription-benefit">✓ 全国与匹配样本大盘数据</div>
+    </div>
+    <div class="subscription-dialog-ft">
+      <button class="btn-outline" type="button" onclick="closeSubscriptionModal()">暂不订阅</button>
+      <button class="btn-primary" type="button" onclick="confirmSubscription()">确认订阅并解锁</button>
     </div>
   </div>
 </div>
@@ -1774,31 +1805,64 @@ function ensurePaywallOverlays(root = document) {
   });
 }
 
-function applyCompanySubscription(page, status) {
-  const pageEl = document.getElementById('page-' + page);
-  if (!pageEl) return;
-  ensurePaywallOverlays(pageEl);
-  pageEl.querySelectorAll('.paywall-card').forEach(card => {
-    card.classList.toggle('locked', status !== 'subscribed');
-  });
-  const toggle = pageEl.querySelector('.subscription-toggle');
-  if (toggle) {
-    toggle.querySelectorAll('button').forEach(b => {
-      b.classList.toggle('active', b.dataset.subscriptionStatus === status);
+function applyGlobalSubscription(status) {
+  const subscribed = status === 'subscribed';
+  document.body.classList.toggle('enterprise-subscribed', subscribed);
+  ['shipper-company', 'carrier-company'].forEach(page => {
+    const pageEl = document.getElementById('page-' + page);
+    if (!pageEl) return;
+    ensurePaywallOverlays(pageEl);
+    pageEl.querySelectorAll('.paywall-card').forEach(card => {
+      card.classList.toggle('locked', !subscribed);
     });
-  }
-  pageEl.querySelectorAll('.company-unlock-btn').forEach(btn => {
-    btn.textContent = status === 'subscribed' ? '已开通企业画像' : '申请开通企业画像';
-    btn.classList.toggle('subscribed', status === 'subscribed');
+    pageEl.querySelectorAll('.subscription-toggle button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.subscriptionStatus === status);
+    });
+    pageEl.querySelectorAll('.company-unlock-btn').forEach(btn => {
+      btn.textContent = subscribed ? '已订阅，全部数据已解锁' : '订阅查看完整数据';
+      btn.classList.toggle('subscribed', subscribed);
+    });
   });
+}
+
+function openSubscriptionModal() {
+  const modal = document.getElementById('subscriptionModal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeSubscriptionModal(event) {
+  if (event && event.target !== event.currentTarget) return;
+  const modal = document.getElementById('subscriptionModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function confirmSubscription() {
+  applyGlobalSubscription('subscribed');
+  closeSubscriptionModal();
 }
 
 function toggleCompanySubscription(btn, page, status) {
-  applyCompanySubscription(page, status);
+  if (status === 'subscribed') {
+    openSubscriptionModal();
+    return;
+  }
+  applyGlobalSubscription('free');
 }
 
 function requestCompanySubscription(btn, page) {
-  applyCompanySubscription(page, 'subscribed');
+  openSubscriptionModal();
+}
+
+function openCarrierProfile(name) {
+  const pageEl = document.getElementById('page-carrier-company');
+  if (pageEl) {
+    const select = pageEl.querySelector('select');
+    if (select) {
+      const match = Array.from(select.options).find(option => option.textContent.trim() === name);
+      if (match) select.value = match.value;
+    }
+  }
+  showPage('carrier-company');
 }
 
 function switchTimeRange(btn, page, range) {
@@ -2089,6 +2153,7 @@ setInterval(updateClock, 1000);
 // ===== INIT =====
 window.addEventListener('load', () => {
   ensurePaywallOverlays();
+  applyGlobalSubscription('free');
   updateKPICharts('week');
   drawChartsForPage('home');
   updateClock();
