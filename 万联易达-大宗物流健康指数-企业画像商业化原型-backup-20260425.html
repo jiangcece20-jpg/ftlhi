@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>万联易达 · 大宗物流健康指数 FTLHI</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1677ff;--blue-l:#e8f1ff;--blue-d:#0958d9;
+  --red:#c0272d;--red-l:#fff0f0;--red-d:#961e22;
+  --green:#22c55e;--green-l:#f0fdf4;
+  --amber:#f59e0b;--amber-l:#fffbeb;
+  --gray:#64748b;--gray-l:#f5f6f8;--gray-ll:#fafbfc;
+  --border:#e4e8f0;--dark:#1a2233;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans SC',sans-serif;background:#f0f3f8;color:var(--dark);font-size:14px;min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+
+/* ===== HEADER ===== */
+.hdr{background:#fff;border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 28px;position:sticky;top:0;z-index:300;box-shadow:0 1px 8px rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px;margin-right:36px;cursor:pointer;text-decoration:none}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--red) 0%,#e84040 100%);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:17px;flex-shrink:0;letter-spacing:0}
+.logo-text{line-height:1.3}
+.logo-name{font-size:15px;font-weight:700;color:var(--dark)}
+.logo-sub{font-size:10.5px;color:#8899aa;letter-spacing:.8px}
+.hdr-nav{display:flex;align-items:center;flex:1;gap:2px}
+.nav-item{padding:7px 16px;border-radius:6px;cursor:pointer;font-size:13.5px;color:#5a6a7e;border:none;background:none;transition:all .18s;white-space:nowrap;border-bottom:2px solid transparent}
+.nav-item:hover{color:var(--blue);background:var(--blue-l)}
+.nav-item.active{color:var(--blue);font-weight:600;border-bottom-color:var(--blue);background:var(--blue-l)}
+.hdr-right{display:flex;align-items:center;gap:14px;margin-left:auto}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--green);background:var(--green-l);padding:4px 10px;border-radius:20px;border:1px solid #bbf7d0}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.hdr-time{font-size:12.5px;color:var(--gray);font-variant-numeric:tabular-nums}
+.btn-primary{background:var(--blue);color:#fff;padding:7px 18px;border-radius:7px;font-size:13px;font-weight:600;border:none;transition:background .15s}
+.btn-primary:hover{background:var(--blue-d)}
+.btn-outline{background:#fff;color:var(--blue);padding:7px 15px;border-radius:7px;font-size:13px;border:1px solid #91caff;transition:all .15s}
+.btn-outline:hover{background:var(--blue-l)}
+.btn-sm{padding:4px 12px;border-radius:5px;font-size:12.5px;border:1px solid var(--border);background:#fff;color:var(--gray);transition:all .15s}
+.btn-sm:hover{border-color:#91caff;color:var(--blue);background:var(--blue-l)}
+
+/* ===== ALERT STRIP ===== */
+.alert-strip{background:#fffbe6;border-bottom:1px solid #ffe58f;padding:6px 28px;display:flex;align-items:center;gap:10px;font-size:12.5px}
+.alert-tag{background:#fa8c16;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+.marquee-wrap{flex:1;overflow:hidden}
+.marquee-text{color:#ad6800;animation:marquee 40s linear infinite;white-space:nowrap;display:inline-block}
+@keyframes marquee{0%{transform:translateX(80%)}100%{transform:translateX(-100%)}}
+
+/* ===== PAGE SYSTEM ===== */
+.page{display:none}
+.page.active{display:block;animation:fadeUp .2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.content{max-width:1320px;margin:0 auto;padding:24px 28px}
+
+/* ===== PAGE HEADER BAR ===== */
+.ph{background:#fff;border-bottom:1px solid var(--border);padding:20px 28px 0}
+.ph-inner{max-width:1320px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between}
+.ph-title{font-size:24px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.ph-sub{font-size:12.5px;color:#8899aa;margin-bottom:16px}
+.period-btns{display:flex;gap:4px}
+.period-btn{padding:5px 14px;border:1px solid var(--border);border-radius:5px;background:#fff;font-size:13px;color:#4a5a6e;cursor:pointer;transition:all .15s}
+.period-btn:hover{border-color:#91caff;color:var(--blue)}
+.period-btn.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+
+/* ===== KPI CARDS ===== */
+.kpi-grid{display:grid;gap:14px;margin-bottom:20px}
+.kpi-grid.c4{grid-template-columns:repeat(4,1fr)}
+.kpi-grid.c3{grid-template-columns:repeat(3,1fr)}
+.kpi-grid.c2{grid-template-columns:repeat(2,1fr)}
+.kpi-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px 20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.kpi-card.blue::before{background:var(--blue)}
+.kpi-card.green::before{background:var(--green)}
+.kpi-card.amber::before{background:var(--amber)}
+.kpi-card.red::before{background:var(--red)}
+.kpi-card.purple::before{background:#8b5cf6}
+.kpi-card:hover{box-shadow:0 4px 20px rgba(22,119,255,.12);border-color:#91caff;transform:translateY(-2px)}
+.kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.kpi-lbl{font-size:12.5px;color:#8899aa;font-weight:400}
+.kpi-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.kpi-ico.blue{background:var(--blue-l)}
+.kpi-ico.green{background:var(--green-l)}
+.kpi-ico.amber{background:var(--amber-l)}
+.kpi-ico.red{background:var(--red-l)}
+.kpi-val{font-size:30px;font-weight:700;line-height:1;margin-bottom:8px;color:var(--dark)}
+.kpi-val.blue{color:var(--blue)}
+.kpi-val.green{color:var(--green)}
+.kpi-val.amber{color:var(--amber)}
+.kpi-val.red{color:var(--red)}
+.kpi-meta{font-size:12px;color:#8899aa;margin-bottom:6px}
+.kpi-delta{font-size:12px;display:flex;align-items:center;gap:3px}
+.kpi-delta.up{color:var(--green)}
+.kpi-delta.down{color:#ef4444}
+.kpi-delta.flat{color:var(--amber)}
+.kpi-link{font-size:12px;color:var(--blue);cursor:pointer;margin-top:8px;display:inline-block}
+.kpi-link:hover{text-decoration:underline}
+
+/* ===== PANELS ===== */
+.panel{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow)}
+.panel-hd{padding:14px 18px;border-bottom:1px solid #f0f3f8;display:flex;align-items:center;justify-content:space-between;background:var(--gray-ll)}
+.panel-title{font-size:14px;font-weight:600;color:var(--dark);display:flex;align-items:center;gap:7px}
+.ptbar{width:3px;height:16px;border-radius:2px;background:var(--blue)}
+.ptbar.green{background:var(--green)}
+.ptbar.amber{background:var(--amber)}
+.ptbar.red{background:var(--red)}
+.ptbar.purple{background:#8b5cf6}
+.panel-bd{padding:18px}
+.panel-actions{display:flex;gap:8px;align-items:center}
+
+/* ===== GRID LAYOUTS ===== */
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:16px}
+.g11{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g13{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+
+/* ===== HOME LAYOUT ===== */
+.home-kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:20px;align-items:stretch}
+.home-feature-card{position:relative;overflow:hidden;border-radius:14px;padding:22px 24px;min-height:170px;cursor:pointer;color:#fff;background:linear-gradient(135deg,#163a86 0%,#1677ff 54%,#7db7ff 100%);box-shadow:0 16px 40px rgba(22,119,255,.22)}
+.home-feature-card::before{content:'';position:absolute;right:-52px;top:-52px;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.08)}
+.home-feature-card::after{content:'';position:absolute;right:78px;bottom:-58px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.1)}
+.home-feature-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px;position:relative;z-index:1}
+.home-feature-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.14);font-size:12px;font-weight:600;backdrop-filter:blur(6px)}
+.home-feature-period{font-size:12px;color:rgba(255,255,255,.78);margin-top:8px}
+.home-feature-score{display:flex;align-items:flex-end;gap:14px;margin-bottom:12px;position:relative;z-index:1}
+.home-feature-score .num{font-size:52px;font-weight:900;line-height:1;letter-spacing:-1.8px}
+.home-feature-score .desc{font-size:13px;color:rgba(255,255,255,.84);padding-bottom:8px;line-height:1.6}
+.home-feature-copy{font-size:13px;line-height:1.8;color:rgba(255,255,255,.92);max-width:92%;margin-bottom:14px;position:relative;z-index:1}
+.home-feature-meta{display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+.home-feature-chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:11.5px;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.18)}
+.home-main-grid{display:grid;grid-template-columns:2.15fr 1fr;gap:16px;margin-bottom:16px}
+.home-chart-panel .panel-bd{padding-bottom:12px}
+.chart-mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.chart-mini-stat{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.chart-mini-stat strong{display:block;font-size:18px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.chart-mini-stat span{display:block;font-size:12px;color:var(--gray);line-height:1.6}
+.insight-kicker{font-size:12px;color:var(--gray);margin-top:4px}
+.home-data-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;margin-bottom:16px}
+.mini-insight-list{display:grid;gap:10px}
+.mini-insight-item{padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#f8fafc}
+.mini-insight-item strong{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--dark);margin-bottom:5px}
+.mini-insight-item span{display:block;font-size:12px;color:#6b7b8f;line-height:1.7}
+.mini-insight-item em{font-style:normal;font-size:11.5px;color:var(--gray)}
+.insight-tabs{display:flex;gap:4px;background:#eef3f8;border-radius:6px;padding:3px}
+.insight-tab{border:none;background:transparent;color:#64748b;border-radius:5px;padding:4px 10px;font-size:12px;transition:all .15s}
+.insight-tab.active{background:#fff;color:var(--blue);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.insight-pane{display:none}
+.insight-pane.active{display:block}
+.home-region-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.home-region-card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:all .18s;box-shadow:var(--shadow);min-height:172px}
+.home-region-card:hover{box-shadow:0 8px 22px rgba(22,119,255,.12);border-color:#91caff;transform:translateY(-2px)}
+.home-region-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:#dbe5f0}
+.home-region-card.hot::before{background:var(--red)}
+.home-region-card.good::before{background:var(--green)}
+.home-region-card.steady::before{background:var(--blue)}
+.home-region-card.watch::before{background:var(--amber)}
+.home-region-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
+.home-region-name{font-size:13.5px;font-weight:700;color:var(--dark)}
+.region-metric-list{display:grid;gap:8px;margin-top:12px}
+.region-metric{display:grid;grid-template-columns:34px 46px 1fr;gap:8px;align-items:center}
+.region-metric-label{font-size:11.5px;color:#64748b}
+.region-metric-value{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.region-metric-track{height:6px;background:#eef1f6;border-radius:999px;overflow:hidden}
+.region-metric-track span{display:block;height:100%;border-radius:999px}
+.home-region-footer{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--gray)}
+.index-chart-canvas{border:1px solid #eef1f6;border-radius:8px;display:block;width:100%;height:auto;background:#fff}
+.supply-chart-summary,.index-chart-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.supply-summary-item,.index-summary-item{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:11px 12px}
+.supply-summary-item strong,.index-summary-item strong{display:block;font-size:15px;font-weight:700;margin-bottom:3px}
+.supply-summary-item span,.index-summary-item span{display:block;font-size:12px;color:#64748b;line-height:1.6}
+.regional-supply-grid,.regional-index-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.regional-supply-card,.regional-index-card{border:1px solid var(--border);border-radius:10px;padding:14px;background:#fff;box-shadow:var(--shadow);cursor:pointer;transition:all .18s}
+.regional-supply-card:hover,.regional-index-card:hover{box-shadow:0 8px 22px rgba(22,119,255,.12);border-color:#91caff;transform:translateY(-2px)}
+.regional-supply-head,.regional-index-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.regional-supply-name,.regional-index-name{font-size:13.5px;font-weight:700;color:var(--dark)}
+.regional-supply-score,.regional-index-score{font-size:26px;font-weight:800;line-height:1;margin-bottom:8px;font-variant-numeric:tabular-nums}
+.regional-supply-track,.regional-index-track{height:7px;background:#eef1f6;border-radius:999px;overflow:hidden;margin-bottom:8px}
+.regional-supply-track span,.regional-index-track span{display:block;height:100%;border-radius:999px}
+.regional-supply-meta,.regional-index-meta{display:flex;justify-content:space-between;font-size:11.5px;color:#64748b}
+.company-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:18px;box-shadow:var(--shadow)}
+.company-select-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.company-select-row label{font-size:13px;font-weight:700;color:var(--dark)}
+.company-select-row select{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;color:var(--dark);background:#fff;cursor:pointer}
+.company-period-tabs{display:flex;gap:6px;border:1px solid var(--border);border-radius:6px;padding:2px;background:#f8f9fa}
+.company-period-tabs .time-tab{padding:6px 14px;font-size:12px;border:none;border-radius:4px;background:transparent;color:#666;cursor:pointer;transition:all .2s}
+.company-period-tabs .time-tab.active{background:var(--blue);color:#fff;font-weight:600}
+.company-overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.company-index-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.company-index-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue)}
+.company-index-card.amber::before{background:var(--amber)}
+.company-index-card.green::before{background:var(--green)}
+.company-index-card.blue::before{background:var(--blue)}
+.company-index-title{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:10px}
+.company-index-value{font-size:34px;font-weight:900;line-height:1;color:var(--dark);font-variant-numeric:tabular-nums;margin-bottom:10px}
+.company-index-bench{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.company-bench-item{background:#f8fafc;border:1px solid #eef1f6;border-radius:8px;padding:8px}
+.company-bench-item span{display:block;font-size:11px;color:#8899aa;margin-bottom:4px}
+.company-bench-item strong{font-size:15px;color:var(--dark);font-variant-numeric:tabular-nums}
+.company-chart-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.company-chart-tab{border:1px solid var(--border);background:#fff;color:#64748b;border-radius:999px;padding:6px 12px;font-size:12px;cursor:pointer}
+.company-chart-tab.active{border-color:#91caff;background:var(--blue-l);color:var(--blue);font-weight:700}
+.company-compare-grid{display:grid;grid-template-columns:1.35fr .85fr;gap:16px}
+.company-structure-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.company-structure-card{border:1px solid var(--border);border-radius:10px;padding:13px;background:#fff}
+.company-structure-card strong{display:block;font-size:15px;margin-bottom:8px;color:var(--dark)}
+.company-structure-card span{display:block;font-size:12px;line-height:1.7;color:#64748b}
+.company-opportunity-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.company-opportunity-card{border:1px solid var(--border);border-radius:12px;padding:15px;background:linear-gradient(180deg,#fff,#f8fbff);box-shadow:var(--shadow)}
+.company-opportunity-card h4{font-size:14px;margin-bottom:10px;color:var(--dark)}
+.company-opportunity-card p{font-size:12px;color:#64748b;line-height:1.7;margin-bottom:10px}
+.company-mini-meta{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:#64748b}
+.subscription-toggle{display:flex;gap:6px;border:1px solid var(--border);border-radius:6px;padding:2px;background:#f8f9fa}
+.subscription-toggle button{padding:6px 12px;font-size:12px;border:none;border-radius:4px;background:transparent;color:#64748b;cursor:pointer;transition:all .2s}
+.subscription-toggle button.active{background:#111827;color:#fff;font-weight:700}
+.paywall-card{position:relative;overflow:hidden}
+.paywall-card.locked .panel-bd,.paywall-card.locked .paywall-content{filter:blur(5px);opacity:.58;pointer-events:none;user-select:none}
+.paywall-overlay{display:none;position:absolute;left:14px;right:14px;top:54px;bottom:14px;z-index:5;align-items:center;justify-content:center;text-align:center;border:1px solid rgba(145,202,255,.9);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(248,251,255,.94));backdrop-filter:saturate(1.1) blur(2px)}
+.paywall-card.locked .paywall-overlay{display:flex}
+.company-unlock-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:16px;padding:16px 18px;border:1px solid rgba(59,130,246,.18);border-radius:14px;background:linear-gradient(135deg,#f8fbff 0%,#eef6ff 58%,#fff 100%);box-shadow:0 10px 26px rgba(15,23,42,.06)}
+.company-unlock-title{font-size:15px;font-weight:800;color:#0f172a;margin-bottom:4px}
+.company-unlock-desc{font-size:13px;color:#64748b;line-height:1.6}
+.company-unlock-btn{border:none;border-radius:10px;padding:11px 18px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer;white-space:nowrap;box-shadow:0 10px 22px rgba(37,99,235,.22);transition:all .2s}
+.company-unlock-btn:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(37,99,235,.26)}
+.company-unlock-btn.subscribed{background:var(--green);box-shadow:0 10px 22px rgba(34,197,94,.2)}
+.paywall-box{max-width:360px;padding:18px}
+.paywall-lock{width:42px;height:42px;margin:0 auto 10px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--blue-l);color:var(--blue);font-size:20px}
+.paywall-title{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:6px}
+.paywall-desc{font-size:12px;color:#64748b;line-height:1.7;margin-bottom:12px}
+.paywall-note{font-size:11px;color:#8899aa;margin-top:8px}
+
+@media (max-width: 1200px){
+  .home-kpi-grid{grid-template-columns:1fr 1fr}
+  .home-main-grid,.home-data-grid,.g11,.company-compare-grid{grid-template-columns:1fr}
+  .home-region-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .regional-supply-grid,.regional-index-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .company-structure-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+@media (max-width: 760px){
+  .home-kpi-grid,.home-region-grid,.chart-mini-stats,.supply-chart-summary,.index-chart-summary,.regional-supply-grid,.regional-index-grid,.company-overview-grid,.company-structure-grid,.company-opportunity-grid{grid-template-columns:1fr}
+  .company-toolbar{align-items:flex-start;flex-direction:column}
+  .subscription-toggle{width:100%}
+  .company-unlock-banner{align-items:flex-start;flex-direction:column}
+  .company-unlock-btn{width:100%}
+}
+
+/* ===== CHART LEGEND ===== */
+.legend{display:flex;gap:18px;margin-bottom:12px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray)}
+.legend-line{width:24px;height:2.5px;border-radius:2px}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+
+/* ===== TABLE ===== */
+.tbl-wrap{overflow-x:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+table.tbl th{background:#fafbfc;padding:10px 14px;text-align:left;font-weight:500;color:#8899aa;font-size:12px;border-bottom:1px solid var(--border);white-space:nowrap}
+table.tbl td{padding:10px 14px;border-bottom:1px solid #f4f7fa;vertical-align:middle;color:var(--dark)}
+table.tbl tr:last-child td{border-bottom:none}
+table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
+
+/* ===== BADGES ===== */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:4px;font-size:11.5px;font-weight:500}
+.badge-ok{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+.badge-warn{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
+.badge-danger{background:#fff1f2;color:#e11d48;border:1px solid #fecdd3}
+.badge-info{background:var(--blue-l);color:var(--blue);border:1px solid #91caff}
+.badge-purple{background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe}
+
+/* ===== SECTION TABS ===== */
+.sec-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:20px;background:#fff;padding:0 18px}
+.sec-tab{padding:12px 20px;cursor:pointer;font-size:13.5px;color:#5a6a7e;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.sec-tab:hover{color:var(--blue)}
+.sec-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+
+/* ===== INDEX DETAIL SECTIONS ===== */
+.idx-sub{display:none}
+.idx-sub.active{display:block}
+
+/* ===== PROGRESS ===== */
+.prog{margin-bottom:12px}
+.prog-lbl{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
+.prog-lbl strong{color:var(--dark)}
+.prog-track{height:7px;background:#eef1f6;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .8s ease}
+
+/* ===== REGION CARDS ===== */
+.region-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.region-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 18px;cursor:pointer;transition:all .18s;box-shadow:var(--shadow)}
+.region-card:hover{box-shadow:0 4px 16px rgba(22,119,255,.12);border-color:#91caff;transform:translateY(-1px)}
+.rc-name{font-size:13.5px;font-weight:600;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.rc-score{font-size:30px;font-weight:700;margin-bottom:6px}
+.rc-bar{height:6px;background:#eef1f6;border-radius:3px;overflow:hidden;margin-bottom:8px}
+.rc-fill{height:100%;border-radius:3px}
+.rc-desc{font-size:12px;color:#8899aa;line-height:1.6}
+
+/* ===== REPORT CARDS ===== */
+.report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+.report-card{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .18s;box-shadow:var(--shadow)}
+.report-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-2px)}
+.rc-img{height:110px;display:flex;align-items:center;justify-content:center;font-size:42px}
+.rc-body{padding:14px 16px}
+.rc-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin-bottom:6px}
+.rc-title{font-size:13.5px;font-weight:600;margin-bottom:6px;line-height:1.5;color:var(--dark)}
+.rc-meta{font-size:11.5px;color:#9aaab8}
+
+/* ===== TIMELINE ===== */
+.tl{list-style:none}
+.tl-item{display:flex;gap:10px;margin-bottom:14px;font-size:13px}
+.tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.tl-dot.ok{background:var(--green)}
+.tl-dot.warn{background:var(--amber)}
+.tl-dot.danger{background:#ef4444}
+.tl-body{flex:1}
+.tl-time{color:#8899aa;font-size:12px;margin-bottom:2px}
+
+/* ===== INSIGHT BOX ===== */
+.insight{background:linear-gradient(135deg,#f0f6ff 0%,#e8f4ff 100%);border:1px solid #bdd7ff;border-radius:10px;padding:16px;margin-bottom:14px}
+.insight-head{font-size:13px;font-weight:600;color:var(--blue);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.insight-body{font-size:13px;color:#3a4a5e;line-height:1.9}
+.insight.warn{background:linear-gradient(135deg,#fffbeb 0%,#fef9e8 100%);border-color:#fde68a}
+.insight.warn .insight-head{color:#d97706}
+.insight.danger{background:linear-gradient(135deg,#fff1f2 0%,#fff0f0 100%);border-color:#fecdd3}
+.insight.danger .insight-head{color:#e11d48}
+
+/* ===== STAT GRID ===== */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat-item{background:var(--gray-l);border-radius:8px;padding:14px 16px;text-align:center}
+.stat-item-val{font-size:26px;font-weight:700;line-height:1;margin-bottom:4px}
+.stat-item-lbl{font-size:12px;color:var(--gray)}
+.stat-item-sub{font-size:11px;color:#9aaab8;margin-top:2px}
+
+/* ===== API DOCS ===== */
+.api-endpoint{background:#1e2433;color:#e2e8f0;border-radius:8px;padding:14px 18px;font-family:'Courier New',monospace;font-size:13px;margin-bottom:12px;line-height:1.7}
+.api-endpoint .method{color:#34d399;font-weight:700}
+.api-endpoint .url{color:#60a5fa}
+.api-param{display:grid;grid-template-columns:200px 120px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid #f0f3f8;font-size:13px;align-items:start}
+.api-param:last-child{border-bottom:none}
+.param-name{font-family:'Courier New',monospace;color:var(--blue);font-weight:500}
+.param-type{color:#8b5cf6;font-size:12px}
+.param-desc{color:var(--gray)}
+
+/* ===== DEMAND FORECAST ===== */
+.forecast-row{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
+.fc-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .15s}
+.fc-card:hover{border-color:#91caff;box-shadow:0 3px 12px rgba(22,119,255,.1)}
+.fc-card.highlight{border-color:var(--blue);background:var(--blue-l)}
+.fc-month{font-size:12px;color:#8899aa;margin-bottom:6px}
+.fc-val{font-size:20px;font-weight:700;color:var(--dark)}
+.fc-delta{font-size:11.5px;margin-top:4px}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#d0d7e0;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#b0bad0}
+
+/* ===== FOOTER ===== */
+.footer{background:#fff;border-top:1px solid var(--border);padding:20px 28px;text-align:center;font-size:12px;color:#9aaab8;margin-top:8px}
+
+/* ===== COMMODITY TABS ===== */
+.comm-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.comm-tab{padding:6px 16px;border:1px solid var(--border);border-radius:20px;font-size:12.5px;color:var(--gray);cursor:pointer;transition:all .15s;background:#fff}
+.comm-tab:hover{border-color:#91caff;color:var(--blue)}
+.comm-tab.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+
+/* ===== METRIC HERO ===== */
+.metric-hero{background:#fff;border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:18px;box-shadow:var(--shadow)}
+.mh-value{font-size:64px;font-weight:900;line-height:1;letter-spacing:-2px}
+.mh-value.blue{color:var(--blue)}
+.mh-value.green{color:var(--green)}
+.mh-value.amber{color:var(--amber)}
+.mh-range{font-size:13px;color:#8899aa;margin:10px 0 14px}
+.rating-badge{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;font-size:17px;font-weight:700;margin-left:14px;vertical-align:middle}
+.rA{background:#f0fdf4;color:#16a34a;border:2px solid #86efac}
+.rB{background:#fffbeb;color:#d97706;border:2px solid #fcd34d}
+.rC{background:#fff1f2;color:#e11d48;border:2px solid #fda4af}
+.mh-desc{font-size:14px;color:#4a5a6e;line-height:1.9;background:#f8fafc;border-radius:10px;padding:14px 18px}
+
+/* ===== BREADCRUMB ===== */
+.bc{font-size:12.5px;color:#8899aa;margin-bottom:14px}
+.bc span{color:var(--blue);cursor:pointer}
+.bc span:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="hdr">
+  <a class="logo" onclick="showPage('home')">
+    <div class="logo-icon">万</div>
+    <div class="logo-text">
+      <div class="logo-name">万联易达</div>
+      <div class="logo-sub">WANLIAN YIDA</div>
+    </div>
+  </a>
+  <nav class="hdr-nav">
+    <button class="nav-item active" id="nav-home" onclick="showPage('home')">📊 指数首页</button>
+    <button class="nav-item" id="nav-supply" onclick="showPage('supply')">运力供给指数</button>
+    <button class="nav-item" id="nav-price" onclick="showPage('price')">运价指数</button>
+    <button class="nav-item" id="nav-efficiency" onclick="showPage('efficiency')">物流效率指数</button>
+    <button class="nav-item" id="nav-forecast" onclick="showPage('forecast')">需求预测</button>
+    <button class="nav-item" id="nav-regional" onclick="showPage('regional')">区域分析</button>
+    <button class="nav-item" id="nav-shipper-company" onclick="showPage('shipper-company')">货主企业</button>
+    <button class="nav-item" id="nav-carrier-company" onclick="showPage('carrier-company')">承运商企业</button>
+    <button class="nav-item" id="nav-history" onclick="showPage('history')">历史数据</button>
+    <button class="nav-item" id="nav-report" onclick="showPage('report')">行业报告</button>
+    <button class="nav-item" id="nav-api" onclick="showPage('api')">API接入</button>
+  </nav>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>实时更新</div>
+    <span class="hdr-time" id="hdr-time">2024-12-15 14:32:18</span>
+    <button class="btn-primary">定制报告</button>
+  </div>
+</header>
+
+<!-- ===== ALERT STRIP ===== -->
+<div class="alert-strip">
+  <span class="alert-tag">市场动态</span>
+  <div class="marquee-wrap">
+    <span class="marquee-text">📌 12月FTLHI运价指数112.4，较上月上升3.7%，煤炭与钢铁线路回升明显 &nbsp;|&nbsp; ⚠ 西北地区运价指数升至115.6，能源矿产运输旺季，建议货主提前锁定运力 &nbsp;|&nbsp; 🚛 本周大宗商品运力供给偏紧，预计圣诞节前后继续收紧，建议提前安排 &nbsp;|&nbsp; 📊 2024年Q4内部交易样本报告已发布，煤炭线路运价较Q3上涨8.4%</span>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: 指数首页
+     ================================================================ -->
+<div class="page active" id="page-home">
+  <div class="ph">
+    <div class="ph-inner">
+      <div>
+        <h1 class="ph-title">大宗物流健康指数（FTLHI）</h1>
+        <p class="ph-sub">Freight Truck-Load Health Index &nbsp;|&nbsp; 2024年第4季度 &nbsp;|&nbsp; 第12周发布版本</p>
+      </div>
+      <div>
+        <div class="period-btns">
+          <button class="time-tab" onclick="switchTimeRange(this, 'home', 'day')" style="padding:6px 14px;font-size:12px;border:1px solid #ddd;border-radius:4px;background:transparent;color:#666;cursor:pointer;transition:all .2s;margin-right:4px">日</button>
+          <button class="time-tab active" onclick="switchTimeRange(this, 'home', 'week')" style="padding:6px 14px;font-size:12px;border:1px solid #ddd;border-radius:4px;background:var(--blue);color:#fff;cursor:pointer;transition:all .2s;margin-right:4px;font-weight:600">周</button>
+          <button class="time-tab" onclick="switchTimeRange(this, 'home', 'month')" style="padding:6px 14px;font-size:12px;border:1px solid #ddd;border-radius:4px;background:transparent;color:#666;cursor:pointer;transition:all .2s">月</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <!-- KPI Cards -->
+    <div class="home-kpi-grid">
+      <div class="kpi-card amber" onclick="showPage('supply')">
+        <div class="kpi-top"><span class="kpi-lbl">运力供给指数</span><div class="kpi-ico amber">🚛</div></div>
+        <div class="kpi-val">96.8 <span class="rating-badge rB">B</span></div>
+        <div class="kpi-meta">基准值100 | 常态区间：80~120</div>
+        <div class="kpi-delta down">↓ -1.8% 较上月</div>
+        <div class="kpi-link">查看详情 ›</div>
+      </div>
+      <div class="kpi-card green" onclick="showPage('price')">
+        <div class="kpi-top"><span class="kpi-lbl">运价指数</span><div class="kpi-ico green">💰</div></div>
+        <div class="kpi-val green">112.4 <span class="rating-badge rA">A</span></div>
+        <div class="kpi-meta">基准值100 | 常态区间：80~120</div>
+        <div class="kpi-delta up">↑ +3.7% 较上月</div>
+        <div class="kpi-link">查看详情 ›</div>
+      </div>
+      <div class="kpi-card blue" onclick="showPage('efficiency')">
+        <div class="kpi-top"><span class="kpi-lbl">物流效率指数</span><div class="kpi-ico blue">⚡</div></div>
+        <div class="kpi-val blue">102.1 <span class="rating-badge rA">A-</span></div>
+        <div class="kpi-meta">基准值100 | 常态区间：80~120</div>
+        <div class="kpi-delta flat">— -0.5% 较上月</div>
+        <div class="kpi-link">查看详情 ›</div>
+      </div>
+    </div>
+
+    <!-- Main Chart + Sidebar -->
+    <div class="home-main-grid">
+      <div class="panel home-chart-panel">
+        <div class="panel-hd">
+          <div>
+            <div class="panel-title"><div class="ptbar"></div>三大指数趋势</div>
+            <div class="insight-kicker">时间粒度与页面右上角日/周/月联动。</div>
+          </div>
+          <div class="panel-actions">
+            <button class="btn-sm">导出数据</button>
+            <button class="btn-sm">⤢ 全屏</button>
+          </div>
+        </div>
+        <div class="panel-bd">
+          <div class="legend">
+            <div class="legend-item"><div class="legend-line" style="background:var(--amber)"></div>运力供给指数</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--green)"></div>运价指数</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--blue)"></div>物流效率指数</div>
+          </div>
+          <canvas id="mainChart" width="840" height="300"></canvas>
+          <div class="chart-mini-stats">
+            <div class="chart-mini-stat">
+              <strong style="color:var(--green)">运价领涨</strong>
+              <span>12月运价指数 112.4，连续三个月回升，煤炭与钢铁是主要拉动项。</span>
+            </div>
+            <div class="chart-mini-stat">
+              <strong style="color:var(--amber)">供给承压</strong>
+              <span>运力供给指数回到 100 以下，节前锁车难度上升，区域分化开始放大。</span>
+            </div>
+            <div class="chart-mini-stat">
+              <strong style="color:var(--blue)">效率稳定</strong>
+              <span>物流效率指数基本守住常态区间，主要波动来自西北天气与局部装卸等待。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd">
+          <div class="panel-title"><div class="ptbar"></div>本期解读</div>
+          <div class="insight-tabs">
+            <button class="insight-tab active" onclick="switchInsightTab(this,'summary')">解读</button>
+            <button class="insight-tab" onclick="switchInsightTab(this,'risk')">风险机会</button>
+          </div>
+        </div>
+        <div class="panel-bd" style="padding:14px">
+          <div class="insight-pane active" id="insight-summary">
+            <div class="insight">
+              <div class="insight-head">📌 核心观点</div>
+              <div class="insight-body">2024年Q4大宗物流三大指数整体保持健康运行。运价指数112.4回升显著，主要受煤炭、钢铁运输需求增加驱动；运力供给指数96.8略有下降，主要因部分区域运力向高运价线路集中；物流效率指数102.1保持稳定。</div>
+            </div>
+            <div class="insight warn">
+              <div class="insight-head">📊 区域表现</div>
+              <div class="insight-body">华东地区运价指数保持高位，运力供给不足；华北地区运力丰富，运价指数较低；中部地区整体较为均衡；西北地区运力收紧，运价上涨。</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+              <span class="badge badge-info">煤炭 ↑旺季</span>
+              <span class="badge badge-warn">西北运力 偏紧</span>
+              <span class="badge badge-ok">华东 稳定</span>
+              <span class="badge badge-danger">东北 受限</span>
+            </div>
+          </div>
+          <div class="insight-pane" id="insight-risk">
+            <div class="mini-insight-list">
+              <div class="mini-insight-item">
+                <strong><span>机会窗口</span><em>价格侧</em></strong>
+                <span>煤炭、钢铁品类运价连续回升，华北至华东干线景气上行，适合提前锁定优质线路资源。</span>
+              </div>
+              <div class="mini-insight-item">
+                <strong><span>风险提醒</span><em>供给侧</em></strong>
+                <span>西北区域运力最紧，节前车辆继续向高价线路聚集，临时调车成本和响应时长仍有上行压力。</span>
+              </div>
+              <div class="mini-insight-item">
+                <strong><span>跟踪重点</span><em>效率侧</em></strong>
+                <span>东北天气扰动与局部装卸等待仍需盯防，若跨区域长距离运输增加，效率波动可能先于价格体现。</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn-outline" style="width:100%;margin-top:12px" onclick="showPage('report')">下载完整季报 ›</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-data-grid">
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar green"></div>热门路线指数及环比</div></div>
+        <div class="panel-bd" style="padding:0">
+          <table class="tbl">
+            <thead><tr><th>路线</th><th>运价指数</th><th>环比</th><th>运力指数</th><th>环比</th><th>物流效率</th><th>环比</th><th>线路评级</th></tr></thead>
+            <tbody>
+              <tr><td><strong>上海 → 鄂尔多斯</strong></td><td style="font-weight:600">112.4</td><td class="kpi-delta up" style="color:var(--green)">↑ +5.3%</td><td style="font-weight:600">96.8</td><td class="kpi-delta down" style="color:#ef4444">↓ -2.1%</td><td style="font-weight:600">102.1</td><td class="kpi-delta up" style="color:var(--green)">↑ +1.8%</td><td><span class="badge badge-ok">A</span></td></tr>
+              <tr><td><strong>北京 → 内蒙古</strong></td><td style="font-weight:600">108.4</td><td class="kpi-delta up" style="color:var(--green)">↑ +2.1%</td><td style="font-weight:600">98.6</td><td class="kpi-delta up" style="color:var(--green)">↑ +1.4%</td><td style="font-weight:600">102.8</td><td class="kpi-delta up" style="color:var(--green)">↑ +2.3%</td><td><span class="badge badge-ok">A</span></td></tr>
+              <tr><td><strong>天津 → 山西</strong></td><td style="font-weight:600">105.2</td><td class="kpi-delta flat" style="color:var(--amber)">— -0.8%</td><td style="font-weight:600">102.1</td><td class="kpi-delta up" style="color:var(--green)">↑ +0.9%</td><td style="font-weight:600">101.4</td><td class="kpi-delta flat" style="color:var(--amber)">— +0.2%</td><td><span class="badge badge-ok">A-</span></td></tr>
+              <tr><td><strong>苏州 → 新疆</strong></td><td style="font-weight:600">98.4</td><td class="kpi-delta down" style="color:#ef4444">↓ -3.2%</td><td style="font-weight:600">106.3</td><td class="kpi-delta up" style="color:var(--green)">↑ +2.6%</td><td style="font-weight:600">99.8</td><td class="kpi-delta down" style="color:#ef4444">↓ -1.5%</td><td><span class="badge badge-warn">B+</span></td></tr>
+              <tr><td><strong>广州 → 重庆</strong></td><td style="font-weight:600">96.1</td><td class="kpi-delta down" style="color:#ef4444">↓ -2.4%</td><td style="font-weight:600">108.2</td><td class="kpi-delta up" style="color:var(--green)">↑ +3.1%</td><td style="font-weight:600">97.5</td><td class="kpi-delta down" style="color:#ef4444">↓ -0.9%</td><td><span class="badge badge-warn">B+</span></td></tr>
+              <tr><td><strong>武汉 → 青海</strong></td><td style="font-weight:600">93.8</td><td class="kpi-delta down" style="color:#ef4444">↓ -1.6%</td><td style="font-weight:600">110.4</td><td class="kpi-delta up" style="color:var(--green)">↑ +1.2%</td><td style="font-weight:600">95.1</td><td class="kpi-delta flat" style="color:var(--amber)">— +0.1%</td><td><span class="badge badge-warn">B</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar green"></div>品类运价快查</div></div>
+        <div class="panel-bd" style="padding:0">
+          <table class="tbl">
+            <thead><tr><th>品类</th><th>当前运价(元/吨)</th><th>本月环比</th><th>同比</th><th>评级</th></tr></thead>
+            <tbody>
+              <tr onclick="showPage('price')"><td>🖤 煤炭</td><td style="font-weight:600">278</td><td class="kpi-delta up" style="color:var(--green)">↑ +5.3%</td><td style="color:var(--green)">↑ +8.4%</td><td><span class="badge badge-ok">A</span></td></tr>
+              <tr onclick="showPage('price')"><td>⚙ 钢铁</td><td style="font-weight:600">310</td><td class="kpi-delta up" style="color:var(--green)">↑ +2.1%</td><td style="color:var(--green)">↑ +3.7%</td><td><span class="badge badge-ok">A</span></td></tr>
+              <tr onclick="showPage('price')"><td>⛏ 矿石</td><td style="font-weight:600">295</td><td class="kpi-delta flat" style="color:var(--amber)">— -0.8%</td><td style="color:var(--amber)">— +0.2%</td><td><span class="badge badge-warn">B+</span></td></tr>
+              <tr onclick="showPage('price')"><td>🌾 粮食</td><td style="font-weight:600">302</td><td class="kpi-delta up" style="color:var(--green)">↑ +1.6%</td><td style="color:var(--green)">↑ +5.1%</td><td><span class="badge badge-ok">A</span></td></tr>
+              <tr onclick="showPage('price')"><td>⚗ 化工品</td><td style="font-weight:600">330</td><td class="kpi-delta down" style="color:#ef4444">↓ -2.4%</td><td style="color:#ef4444">↓ -1.9%</td><td><span class="badge badge-warn">B</span></td></tr>
+              <tr onclick="showPage('price')"><td>🪨 建材</td><td style="font-weight:600">248</td><td class="kpi-delta up" style="color:var(--green)">↑ +0.9%</td><td style="color:var(--amber)">— +1.3%</td><td><span class="badge badge-ok">A-</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regional Overview -->
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="panel-title"><div class="ptbar amber"></div>全国及七大区域三指数速览</div>
+        <button class="btn-sm" onclick="showPage('regional')">详细分析 ›</button>
+      </div>
+      <div class="panel-bd">
+        <div class="home-region-grid">
+          <div class="home-region-card steady" onclick="showPage('regional')">
+            <div class="home-region-head">
+              <div class="home-region-name">全国样本</div>
+              <span class="badge badge-info">内部交易</span>
+            </div>
+            <div class="region-metric-list">
+              <div class="region-metric"><div class="region-metric-label">运价</div><div class="region-metric-value" style="color:var(--green)">112.4</div><div class="region-metric-track"><span style="width:81%;background:var(--green)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">运力</div><div class="region-metric-value" style="color:var(--amber)">96.8</div><div class="region-metric-track"><span style="width:42%;background:var(--amber)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">效率</div><div class="region-metric-value" style="color:var(--blue)">102.1</div><div class="region-metric-track"><span style="width:55%;background:var(--blue)"></span></div></div>
+            </div>
+            <div class="home-region-footer"><span>样本口径</span><span>价格驱动</span></div>
+          </div>
+          <div class="home-region-card watch" onclick="showPage('regional')">
+            <div class="home-region-head">
+              <div class="home-region-name">华北</div>
+              <span class="badge badge-warn">价格偏高</span>
+            </div>
+            <div class="region-metric-list">
+              <div class="region-metric"><div class="region-metric-label">运价</div><div class="region-metric-value" style="color:var(--amber)">112.4</div><div class="region-metric-track"><span style="width:81%;background:var(--amber)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">运力</div><div class="region-metric-value" style="color:var(--blue)">108.2</div><div class="region-metric-track"><span style="width:71%;background:var(--blue)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">效率</div><div class="region-metric-value" style="color:var(--blue)">105.6</div><div class="region-metric-track"><span style="width:64%;background:var(--blue)"></span></div></div>
+            </div>
+            <div class="home-region-footer"><span>环比</span><span style="color:var(--green)">↑ +3.2%</span></div>
+          </div>
+          <div class="home-region-card good" onclick="showPage('regional')">
+            <div class="home-region-head">
+              <div class="home-region-name">华东</div>
+              <span class="badge badge-ok">稳定</span>
+            </div>
+            <div class="region-metric-list">
+              <div class="region-metric"><div class="region-metric-label">运价</div><div class="region-metric-value" style="color:var(--green)">108.2</div><div class="region-metric-track"><span style="width:71%;background:var(--green)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">运力</div><div class="region-metric-value" style="color:var(--blue)">104.6</div><div class="region-metric-track"><span style="width:61%;background:var(--blue)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">效率</div><div class="region-metric-value" style="color:var(--green)">106.8</div><div class="region-metric-track"><span style="width:67%;background:var(--green)"></span></div></div>
+            </div>
+            <div class="home-region-footer"><span>环比</span><span style="color:var(--green)">↑ +1.8%</span></div>
+          </div>
+          <div class="home-region-card watch" onclick="showPage('regional')">
+            <div class="home-region-head">
+              <div class="home-region-name">华南</div>
+              <span class="badge badge-info">平稳</span>
+            </div>
+            <div class="region-metric-list">
+              <div class="region-metric"><div class="region-metric-label">运价</div><div class="region-metric-value" style="color:var(--amber)">104.8</div><div class="region-metric-track"><span style="width:62%;background:var(--amber)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">运力</div><div class="region-metric-value" style="color:var(--amber)">102.1</div><div class="region-metric-track"><span style="width:55%;background:var(--amber)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">效率</div><div class="region-metric-value" style="color:var(--blue)">103.4</div><div class="region-metric-track"><span style="width:58%;background:var(--blue)"></span></div></div>
+            </div>
+            <div class="home-region-footer"><span>环比</span><span style="color:var(--amber)">— -0.4%</span></div>
+          </div>
+          <div class="home-region-card steady" onclick="showPage('regional')">
+            <div class="home-region-head">
+              <div class="home-region-name">华中</div>
+              <span class="badge badge-info">均衡</span>
+            </div>
+            <div class="region-metric-list">
+              <div class="region-metric"><div class="region-metric-label">运价</div><div class="region-metric-value" style="color:var(--blue)">106.3</div><div class="region-metric-track"><span style="width:66%;background:var(--blue)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">运力</div><div class="region-metric-value" style="color:var(--green)">105.8</div><div class="region-metric-track"><span style="width:65%;background:var(--green)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">效率</div><div class="region-metric-value" style="color:var(--blue)">104.2</div><div class="region-metric-track"><span style="width:60%;background:var(--blue)"></span></div></div>
+            </div>
+            <div class="home-region-footer"><span>环比</span><span style="color:var(--green)">↑ +2.1%</span></div>
+          </div>
+          <div class="home-region-card hot" onclick="showPage('regional')">
+            <div class="home-region-head">
+              <div class="home-region-name">西北</div>
+              <span class="badge badge-danger">偏紧关注</span>
+            </div>
+            <div class="region-metric-list">
+              <div class="region-metric"><div class="region-metric-label">运价</div><div class="region-metric-value" style="color:var(--red)">115.6</div><div class="region-metric-track"><span style="width:89%;background:var(--red)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">运力</div><div class="region-metric-value" style="color:var(--red)">112.3</div><div class="region-metric-track"><span style="width:81%;background:var(--red)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">效率</div><div class="region-metric-value" style="color:var(--amber)">110.8</div><div class="region-metric-track"><span style="width:77%;background:var(--amber)"></span></div></div>
+            </div>
+            <div class="home-region-footer"><span>环比</span><span style="color:var(--green)">↑ +4.5%</span></div>
+          </div>
+          <div class="home-region-card steady" onclick="showPage('regional')">
+            <div class="home-region-head">
+              <div class="home-region-name">西南</div>
+              <span class="badge badge-info">正常</span>
+            </div>
+            <div class="region-metric-list">
+              <div class="region-metric"><div class="region-metric-label">运价</div><div class="region-metric-value" style="color:var(--blue)">101.2</div><div class="region-metric-track"><span style="width:53%;background:var(--blue)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">运力</div><div class="region-metric-value" style="color:var(--blue)">99.6</div><div class="region-metric-track"><span style="width:49%;background:var(--blue)"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">效率</div><div class="region-metric-value" style="color:var(--blue)">102.1</div><div class="region-metric-track"><span style="width:55%;background:var(--blue)"></span></div></div>
+            </div>
+            <div class="home-region-footer"><span>环比</span><span style="color:var(--green)">↑ +1.0%</span></div>
+          </div>
+          <div class="home-region-card watch" onclick="showPage('regional')">
+            <div class="home-region-head">
+              <div class="home-region-name">东北</div>
+              <span class="badge badge-warn">承压</span>
+            </div>
+            <div class="region-metric-list">
+              <div class="region-metric"><div class="region-metric-label">运价</div><div class="region-metric-value" style="color:#64748b">98.4</div><div class="region-metric-track"><span style="width:46%;background:#94a3b8"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">运力</div><div class="region-metric-value" style="color:#64748b">96.2</div><div class="region-metric-track"><span style="width:41%;background:#94a3b8"></span></div></div>
+              <div class="region-metric"><div class="region-metric-label">效率</div><div class="region-metric-value" style="color:#64748b">97.8</div><div class="region-metric-track"><span style="width:45%;background:#94a3b8"></span></div></div>
+            </div>
+            <div class="home-region-footer"><span>环比</span><span style="color:#ef4444">↓ -1.2%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: 综合健康指数
+     ================================================================ -->
+<div class="page" id="page-composite">
+  <div class="ph">
+    <div class="ph-inner">
+      <div>
+        <h1 class="ph-title">综合健康指数</h1>
+        <p class="ph-sub">Comprehensive Health Index &nbsp;|&nbsp; 衡量大宗物流行业整体运行健康程度</p>
+      </div>
+      <div><button class="btn-outline" onclick="showPage('home')">← 返回首页</button></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="bc"><span onclick="showPage('home')">指数首页</span> / 综合健康指数</div>
+    <div class="metric-hero">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;color:#8899aa;margin-bottom:8px">2024年12月（月度） · 第12周发布版</div>
+          <div class="mh-value blue">108.6 <span class="rating-badge rA">A</span></div>
+          <div class="mh-range">基准值：100 &nbsp;|&nbsp; 健康区间：80~120 &nbsp;|&nbsp; 较上月：<span style="color:var(--green)">↑ +2.3% (+2.4pt)</span></div>
+          <div class="mh-desc">综合健康指数综合评估大宗物流行业的整体运行状态，融合运价水平、运力供给、运输效率、安全合规、供应链韧性五个维度。本期指数108.6，处于健康区间且持续改善，反映大宗物流行业在Q4运输旺季中保持稳健态势，煤炭、钢铁运输需求旺盛是主要驱动因素。</div>
+        </div>
+        <div style="text-align:right">
+          <canvas id="compositeSparkline" width="200" height="100"></canvas>
+          <div style="font-size:11.5px;color:#8899aa;margin-top:4px">近12个月走势</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Five Dimensions -->
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar"></div>五维健康评分拆解</div></div>
+      <div class="panel-bd">
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:18px">
+          <div style="text-align:center;padding:16px 10px;border:1px solid var(--border);border-radius:10px;cursor:pointer" class="kpi-card blue">
+            <div style="font-size:22px;margin-bottom:6px">⚡</div>
+            <div style="font-size:12px;color:#8899aa;margin-bottom:6px">运输效率</div>
+            <div style="font-size:26px;font-weight:700;color:var(--blue)">78.3</div>
+            <div style="font-size:11px;color:var(--green)">↑ +1.2</div>
+          </div>
+          <div style="text-align:center;padding:16px 10px;border:1px solid var(--border);border-radius:10px;cursor:pointer" class="kpi-card green">
+            <div style="font-size:22px;margin-bottom:6px">💹</div>
+            <div style="font-size:12px;color:#8899aa;margin-bottom:6px">成本管控</div>
+            <div style="font-size:26px;font-weight:700;color:var(--green)">85.1</div>
+            <div style="font-size:11px;color:var(--green)">↑ +0.8</div>
+          </div>
+          <div style="text-align:center;padding:16px 10px;border:1px solid var(--border);border-radius:10px;cursor:pointer" class="kpi-card">
+            <div style="font-size:22px;margin-bottom:6px">🛡</div>
+            <div style="font-size:12px;color:#8899aa;margin-bottom:6px">安全合规</div>
+            <div style="font-size:26px;font-weight:700;color:#1a2233">88.7</div>
+            <div style="font-size:11px;color:var(--green)">↑ +1.5</div>
+          </div>
+          <div style="text-align:center;padding:16px 10px;border:1px solid var(--border);border-radius:10px;cursor:pointer" class="kpi-card amber">
+            <div style="font-size:22px;margin-bottom:6px">🔗</div>
+            <div style="font-size:12px;color:#8899aa;margin-bottom:6px">供应链稳定</div>
+            <div style="font-size:26px;font-weight:700;color:var(--amber)">83.4</div>
+            <div style="font-size:11px;color:var(--amber)">— +0.3</div>
+          </div>
+          <div style="text-align:center;padding:16px 10px;border:1px solid var(--border);border-radius:10px;cursor:pointer" class="kpi-card">
+            <div style="font-size:22px;margin-bottom:6px">🌿</div>
+            <div style="font-size:12px;color:#8899aa;margin-bottom:6px">绿色低碳</div>
+            <div style="font-size:26px;font-weight:700;color:#16a34a">79.8</div>
+            <div style="font-size:11px;color:var(--green)">↑ +2.1</div>
+          </div>
+        </div>
+        <canvas id="compositeChart" width="1100" height="220"></canvas>
+      </div>
+    </div>
+
+    <div class="g21">
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar green"></div>月度历史对比</div></div>
+        <div class="panel-bd" style="padding:0">
+          <table class="tbl">
+            <thead><tr><th>期间</th><th>综合指数</th><th>运价</th><th>运力</th><th>效率</th><th>评级</th></tr></thead>
+            <tbody>
+              <tr><td><strong>2024年12月</strong></td><td style="color:var(--blue);font-weight:700">108.6</td><td>112.4</td><td>96.8</td><td>102.1</td><td><span class="badge badge-ok">A</span></td></tr>
+              <tr><td>2024年11月</td><td>106.1</td><td>108.4</td><td>98.6</td><td>102.8</td><td><span class="badge badge-ok">A</span></td></tr>
+              <tr><td>2024年10月</td><td>104.8</td><td>105.2</td><td>102.1</td><td>101.4</td><td><span class="badge badge-ok">A-</span></td></tr>
+              <tr><td>2024年9月</td><td>101.3</td><td>98.4</td><td>106.3</td><td>99.8</td><td><span class="badge badge-warn">B+</span></td></tr>
+              <tr><td>2024年8月</td><td>99.6</td><td>96.1</td><td>108.2</td><td>97.5</td><td><span class="badge badge-warn">B+</span></td></tr>
+              <tr><td>2024年7月</td><td>97.2</td><td>93.8</td><td>110.4</td><td>95.1</td><td><span class="badge badge-warn">B</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>专家解读</div></div>
+        <div class="panel-bd">
+          <ul class="tl" style="list-style:none">
+            <li class="tl-item"><div class="tl-dot ok"></div><div class="tl-body"><div class="tl-time">核心驱动</div><div>Q4传统旺季叠加年底补库存需求，煤炭运量同比增长14.2%，是指数上行主要驱动力</div></div></li>
+            <li class="tl-item"><div class="tl-dot warn"></div><div class="tl-body"><div class="tl-time">主要风险</div><div>西北部分线路运力集中，导致华东地区轻工商品补货运力有所偏紧</div></div></li>
+            <li class="tl-item"><div class="tl-dot ok"></div><div class="tl-body"><div class="tl-time">向好信号</div><div>绿色低碳指数持续回升，反映新能源重卡渗透率提升，行业转型加速</div></div></li>
+            <li class="tl-item"><div class="tl-dot danger"></div><div class="tl-body"><div class="tl-time">关注事项</div><div>东北道路条件受冬季影响，Q1运输效率指数预计下滑3~5点</div></div></li>
+          </ul>
+          <button class="btn-primary" style="width:100%;margin-top:12px" onclick="showPage('report')">下载完整分析报告</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: 运力供给指数
+     ================================================================ -->
+<div class="page" id="page-supply">
+  <div class="ph"><div class="ph-inner">
+    <div><h1 class="ph-title">运力供给指数</h1><p class="ph-sub">Supply Capacity Index &nbsp;|&nbsp; 衡量全国大宗物流运力供需平衡状态</p></div>
+    <button class="btn-outline" onclick="showPage('home')">← 返回首页</button>
+  </div></div>
+  <div class="content">
+    <div class="bc"><span onclick="showPage('home')">指数首页</span> / 运力供给指数</div>
+    <div style="display:flex;gap:6px;margin-bottom:16px;justify-content:flex-end;border:1px solid var(--border);border-radius:6px;padding:2px;background:#f8f9fa;width:fit-content;margin-left:auto">
+      <button class="time-tab" onclick="switchTimeRange(this, 'supply', 'day')" style="padding:6px 14px;font-size:12px;border:none;background:transparent;color:#666;cursor:pointer;transition:all .2s">按日</button>
+      <button class="time-tab" onclick="switchTimeRange(this, 'supply', 'week')" style="padding:6px 14px;font-size:12px;border:none;background:transparent;color:#666;cursor:pointer;transition:all .2s">按周</button>
+      <button class="time-tab active" onclick="switchTimeRange(this, 'supply', 'month')" style="padding:6px 14px;font-size:12px;border:none;border-radius:4px;background:var(--blue);color:#fff;cursor:pointer;font-weight:600;transition:all .2s">按月</button>
+    </div>
+    <div class="metric-hero">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;color:#8899aa;margin-bottom:8px">2024年12月 · 月度</div>
+          <div class="mh-value" style="color:var(--amber)">96.8 <span class="rating-badge rB">B</span></div>
+          <div class="mh-range">基准值：100 &nbsp;|&nbsp; 正常区间：85~115 &nbsp;|&nbsp; 较上月：<span style="color:#ef4444">↓ -1.8% (-1.8pt)</span></div>
+          <div class="mh-desc">运力供给指数低于基准值100，显示市场处于阶段性供给偏紧状态。当前在线重卡3,214辆，主要集中在煤炭运输主产区（内蒙古、山西、陕西），导致其他线路运力相对稀缺。建议有运输需求的货主提前2~3周锁定运力。</div>
+        </div>
+
+      </div>
+    </div>
+
+	    <div class="g11">
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>分省运力分布（TOP8）</div></div>
+        <div class="panel-bd">
+          <div class="prog"><div class="prog-lbl"><strong>内蒙古</strong><span style="color:var(--blue)">27.4% &nbsp;|&nbsp; 主产区能源运输</span></div><div class="prog-track"><div class="prog-fill" style="width:88%;background:var(--blue)"></div></div></div>
+          <div class="prog"><div class="prog-lbl"><strong>山西</strong><span style="color:var(--blue)">23.2% &nbsp;|&nbsp; 煤炭钙铁双主力</span></div><div class="prog-track"><div class="prog-fill" style="width:75%;background:var(--blue)"></div></div></div>
+          <div class="prog"><div class="prog-lbl"><strong>陕西</strong><span style="color:var(--green)">19.3% &nbsp;|&nbsp; 煤炭神木榆林</span></div><div class="prog-track"><div class="prog-fill" style="width:62%;background:var(--green)"></div></div></div>
+          <div class="prog"><div class="prog-lbl"><strong>河北</strong><span style="color:var(--green)">16.9% &nbsp;|&nbsp; 钙铁矿石唐山</span></div><div class="prog-track"><div class="prog-fill" style="width:54%;background:var(--green)"></div></div></div>
+          <div class="prog"><div class="prog-lbl"><strong>辽宁</strong><span style="color:var(--amber)">13.4% &nbsp;|&nbsp; 矿石钙铁港口</span></div><div class="prog-track"><div class="prog-fill" style="width:43%;background:var(--amber)"></div></div></div>
+          <div class="prog"><div class="prog-lbl"><strong>甘肃</strong><span style="color:var(--amber)">11.9% &nbsp;|&nbsp; 矿产兰州枚纺</span></div><div class="prog-track"><div class="prog-fill" style="width:38%;background:var(--amber)"></div></div></div>
+          <div class="prog"><div class="prog-lbl"><strong>新疆</strong><span style="color:#ef4444">6.7% &nbsp;|&nbsp; 远途能源资源</span></div><div class="prog-track"><div class="prog-fill" style="width:21%;background:#ef4444"></div></div></div>
+          <div class="prog"><div class="prog-lbl"><strong>黑龙江</strong><span style="color:#8b5cf6">5.5% &nbsp;|&nbsp; 粗食大豆运输</span></div><div class="prog-track"><div class="prog-fill" style="width:18%;background:#8b5cf6"></div></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd">
+          <div>
+            <div class="panel-title"><div class="ptbar"></div>运力供给趋势（<span id="supply-period">近12个月</span>）</div>
+            <div class="insight-kicker">与页面上方按日/按周/按月联动，100 为供需均衡线。</div>
+          </div>
+        </div>
+        <div class="panel-bd">
+          <canvas id="supplyChart" width="620" height="260" class="index-chart-canvas"></canvas>
+          <div class="supply-chart-summary">
+            <div class="supply-summary-item">
+              <strong style="color:var(--amber)">96.8</strong>
+              <span>当前发布值，低于 100 均衡线，供给偏紧。</span>
+            </div>
+            <div class="supply-summary-item">
+              <strong style="color:#ef4444">-1.8pt</strong>
+              <span>较上期回落，节前锁车难度有所抬升。</span>
+            </div>
+            <div class="supply-summary-item">
+              <strong style="color:var(--blue)">西北</strong>
+              <span>区域运力紧张最明显，是本期主要拖累项。</span>
+            </div>
+          </div>
+          <div class="insight warn" style="margin-top:14px">
+            <div class="insight-head">⚠ 预警：运力偏紧</div>
+            <div class="insight-body">当前运力指数低于基准，预计未来4~6周内，春节前运力将进一步收紧。建议货主在元旦前完成Q1运力锁定。</div>
+	      </div>
+	    </div>
+	  </div>
+</div>
+
+	    <div class="panel">
+      <div class="panel-hd">
+        <div class="panel-title"><div class="ptbar amber"></div>七大区域运力指数分布</div>
+        <button class="btn-sm" onclick="showPage('regional')">区域分析 ›</button>
+      </div>
+      <div class="panel-bd">
+        <div class="regional-supply-grid">
+          <div class="regional-supply-card">
+            <div class="regional-supply-head"><div class="regional-supply-name">华北</div><span class="badge badge-info">相对充足</span></div>
+            <div class="regional-supply-score" style="color:var(--blue)">108.2</div>
+            <div class="regional-supply-track"><span style="width:71%;background:var(--blue)"></span></div>
+            <div class="regional-supply-meta"><span>环比 ↑ +1.4%</span><span>煤炭主产区</span></div>
+          </div>
+          <div class="regional-supply-card">
+            <div class="regional-supply-head"><div class="regional-supply-name">华东</div><span class="badge badge-info">正常</span></div>
+            <div class="regional-supply-score" style="color:var(--blue)">104.6</div>
+            <div class="regional-supply-track"><span style="width:61%;background:var(--blue)"></span></div>
+            <div class="regional-supply-meta"><span>环比 ↑ +0.8%</span><span>需求承接强</span></div>
+          </div>
+          <div class="regional-supply-card">
+            <div class="regional-supply-head"><div class="regional-supply-name">华南</div><span class="badge badge-info">平稳</span></div>
+            <div class="regional-supply-score" style="color:var(--amber)">102.1</div>
+            <div class="regional-supply-track"><span style="width:55%;background:var(--amber)"></span></div>
+            <div class="regional-supply-meta"><span>环比 — -0.2%</span><span>外贸链路平稳</span></div>
+          </div>
+          <div class="regional-supply-card">
+            <div class="regional-supply-head"><div class="regional-supply-name">华中</div><span class="badge badge-ok">均衡</span></div>
+            <div class="regional-supply-score" style="color:var(--green)">105.8</div>
+            <div class="regional-supply-track"><span style="width:65%;background:var(--green)"></span></div>
+            <div class="regional-supply-meta"><span>环比 ↑ +1.1%</span><span>中转枢纽</span></div>
+          </div>
+          <div class="regional-supply-card">
+            <div class="regional-supply-head"><div class="regional-supply-name">西北</div><span class="badge badge-danger">紧张</span></div>
+            <div class="regional-supply-score" style="color:var(--red)">89.4</div>
+            <div class="regional-supply-track"><span style="width:24%;background:var(--red)"></span></div>
+            <div class="regional-supply-meta"><span>环比 ↓ -3.6%</span><span>能源外运高峰</span></div>
+          </div>
+          <div class="regional-supply-card">
+            <div class="regional-supply-head"><div class="regional-supply-name">西南</div><span class="badge badge-warn">偏紧</span></div>
+            <div class="regional-supply-score" style="color:var(--amber)">99.6</div>
+            <div class="regional-supply-track"><span style="width:49%;background:var(--amber)"></span></div>
+            <div class="regional-supply-meta"><span>环比 ↑ +0.4%</span><span>山地线路约束</span></div>
+          </div>
+          <div class="regional-supply-card">
+            <div class="regional-supply-head"><div class="regional-supply-name">东北</div><span class="badge badge-warn">承压</span></div>
+            <div class="regional-supply-score" style="color:#64748b">96.2</div>
+            <div class="regional-supply-track"><span style="width:41%;background:#94a3b8"></span></div>
+            <div class="regional-supply-meta"><span>环比 ↓ -1.5%</span><span>天气扰动</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Supply Forecast Table -->
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar blue"></div>未来6周运力供给预测</div></div>
+      <div class="panel-bd" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>周次</th><th>运力供给指数（预测）</th><th>在线运力预估</th><th>运力紧张等级</th><th>主要影响因素</th><th>建议操作</th></tr></thead>
+          <tbody>
+            <tr><td>12月第3周</td><td style="color:var(--amber)">95.2</td><td>3,180辆</td><td><span class="badge badge-warn">偏紧</span></td><td>年底备货、煤炭旺季</td><td>尽快锁定运力</td></tr>
+            <tr><td>12月第4周</td><td style="color:var(--amber)">93.8</td><td>3,050辆</td><td><span class="badge badge-warn">偏紧</span></td><td>年货运输高峰</td><td>提前预约承运商</td></tr>
+            <tr><td>1月第1周</td><td style="color:#ef4444">89.4</td><td>2,840辆</td><td><span class="badge badge-danger">紧张</span></td><td>元旦后运力返乡</td><td>签订框架协议</td></tr>
+            <tr><td>1月第2-3周</td><td style="color:#ef4444">82.1</td><td>2,620辆</td><td><span class="badge badge-danger">严重偏紧</span></td><td>春节运力大幅下降</td><td>备用运力池激活</td></tr>
+            <tr><td>春节后第1周</td><td style="color:var(--amber)">94.6</td><td>3,010辆</td><td><span class="badge badge-warn">偏紧</span></td><td>返程运力逐步恢复</td><td>关注恢复节奏</td></tr>
+            <tr><td>春节后第2-3周</td><td style="color:var(--green)">102.4</td><td>3,280辆</td><td><span class="badge badge-ok">正常</span></td><td>运力完全恢复</td><td>正常采购</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: 运价指数
+     ================================================================ -->
+<div class="page" id="page-price">
+  <div class="ph"><div class="ph-inner">
+    <div><h1 class="ph-title">运价指数</h1><p class="ph-sub">Freight Rate Index &nbsp;|&nbsp; 大宗物流全品类运价综合指数</p></div>
+    <button class="btn-outline" onclick="showPage('home')">← 返回首页</button>
+  </div></div>
+  <div class="content">
+    <div class="bc"><span onclick="showPage('home')">指数首页</span> / 运价指数</div>
+    <div style="display:flex;gap:6px;margin-bottom:16px;justify-content:flex-end;border:1px solid var(--border);border-radius:6px;padding:2px;background:#f8f9fa;width:fit-content;margin-left:auto">
+	      <button class="time-tab" onclick="switchTimeRange(this, 'price', 'day')" style="padding:6px 14px;font-size:12px;border:none;background:transparent;color:#666;cursor:pointer;transition:all .2s">按日</button>
+	      <button class="time-tab" onclick="switchTimeRange(this, 'price', 'week')" style="padding:6px 14px;font-size:12px;border:none;background:transparent;color:#666;cursor:pointer;transition:all .2s">按周</button>
+	      <button class="time-tab active" onclick="switchTimeRange(this, 'price', 'month')" style="padding:6px 14px;font-size:12px;border:none;border-radius:4px;background:var(--blue);color:#fff;cursor:pointer;font-weight:600;transition:all .2s">按月</button>
+    </div>
+    <div class="metric-hero">
+      <div class="mh-value green">112.4 <span class="rating-badge rA">A</span></div>
+	      <div class="mh-range">基准值：100 &nbsp;|&nbsp; 常态区间：80~120 &nbsp;|&nbsp; 较上月：<span style="color:var(--green)">↑ +3.7% (+4pt)</span></div>
+      <div class="mh-desc">运价指数持续上升，主要受到Q4煤炭、矿石旺季运输需求驱动。综合运价较去年同期上涨7.1%，但仍处于行业合理区间。化工品因受环保政策影响运价有所回落，建议关注相关政策变化。</div>
+    </div>
+
+    <div class="comm-tabs">
+      <button class="comm-tab active">全品类综合</button>
+      <button class="comm-tab" onclick="setCommTab(this)">🖤 煤炭</button>
+      <button class="comm-tab" onclick="setCommTab(this)">⚙ 钢铁/金属</button>
+      <button class="comm-tab" onclick="setCommTab(this)">⛏ 铁矿石</button>
+      <button class="comm-tab" onclick="setCommTab(this)">🌾 粮食/农产品</button>
+      <button class="comm-tab" onclick="setCommTab(this)">⚗ 化工品</button>
+      <button class="comm-tab" onclick="setCommTab(this)">🪨 建材</button>
+    </div>
+
+    <div class="g21">
+      <div class="panel">
+	        <div class="panel-hd">
+	          <div>
+	            <div class="panel-title"><div class="ptbar green"></div>运价指数走势（<span id="price-period">近12个月</span>）</div>
+	            <div class="insight-kicker">与页面上方按日/按周/按月联动，100 为合理运价中枢。</div>
+	          </div>
+	        </div>
+	        <div class="panel-bd">
+	          <canvas id="priceChart" width="780" height="260" class="index-chart-canvas"></canvas>
+	          <div class="index-chart-summary">
+	            <div class="index-summary-item">
+	              <strong style="color:var(--green)">112.4</strong>
+	              <span>本期发布值，高于合理中枢但仍在常态区间。</span>
+	            </div>
+	            <div class="index-summary-item">
+	              <strong style="color:var(--green)">+4.0pt</strong>
+	              <span>近周期上行，煤炭、钢铁线路贡献更明显。</span>
+	            </div>
+	            <div class="index-summary-item">
+	              <strong style="color:var(--amber)">西北</strong>
+	              <span>区域运价最高，能源矿产旺季带来结构性抬升。</span>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar"></div>主要线路运价快查</div></div>
+        <div class="panel-bd" style="padding:0">
+          <table class="tbl">
+            <thead><tr><th>线路</th><th>品类</th><th>运价(元/吨)</th><th>环比</th></tr></thead>
+            <tbody>
+              <tr><td>鄂尔多斯→曹妃甸</td><td>煤炭</td><td style="font-weight:700;color:var(--blue)">278</td><td style="color:var(--green)">↑ 5.3%</td></tr>
+              <tr><td>大同→秦皇岛</td><td>煤炭</td><td style="font-weight:700;color:var(--blue)">265</td><td style="color:var(--green)">↑ 4.1%</td></tr>
+              <tr><td>太原→上海</td><td>钢铁</td><td style="font-weight:700;color:var(--blue)">310</td><td style="color:var(--green)">↑ 2.1%</td></tr>
+              <tr><td>包头→天津港</td><td>钢铁/矿石</td><td style="font-weight:700;color:var(--blue)">295</td><td style="color:var(--amber)">— -0.8%</td></tr>
+              <tr><td>宁波舟山→郑州</td><td>铁矿石</td><td style="font-weight:700;color:var(--blue)">330</td><td style="color:#ef4444">↓ 2.4%</td></tr>
+              <tr><td>神木→西安</td><td>煤炭</td><td style="font-weight:700;color:var(--blue)">255</td><td style="color:var(--green)">↑ 3.8%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+	    <!-- Price by region -->
+	    <div class="panel">
+	      <div class="panel-hd">
+	        <div class="panel-title"><div class="ptbar amber"></div>七大区域运价指数分布</div>
+	        <button class="btn-sm" onclick="showPage('regional')">区域分析 ›</button>
+	      </div>
+	      <div class="panel-bd">
+	        <div class="regional-index-grid">
+	          <div class="regional-index-card" onclick="showPage('regional')">
+	            <div class="regional-index-head"><div class="regional-index-name">西北</div><span class="badge badge-danger">偏高</span></div>
+	            <div class="regional-index-score" style="color:var(--red)">115.6</div>
+	            <div class="regional-index-track"><span style="width:89%;background:linear-gradient(90deg,var(--red),#f87171)"></span></div>
+	            <div class="regional-index-meta"><span>环比 ↑ +4.5%</span><span>能源矿产旺季</span></div>
+	          </div>
+	          <div class="regional-index-card" onclick="showPage('regional')">
+	            <div class="regional-index-head"><div class="regional-index-name">华北</div><span class="badge badge-warn">偏高</span></div>
+	            <div class="regional-index-score" style="color:var(--amber)">112.4</div>
+	            <div class="regional-index-track"><span style="width:81%;background:linear-gradient(90deg,var(--amber),#fcd34d)"></span></div>
+	            <div class="regional-index-meta"><span>环比 ↑ +3.2%</span><span>煤炭发运提升</span></div>
+	          </div>
+	          <div class="regional-index-card" onclick="showPage('regional')">
+	            <div class="regional-index-head"><div class="regional-index-name">华东</div><span class="badge badge-info">合理</span></div>
+	            <div class="regional-index-score" style="color:var(--green)">108.2</div>
+	            <div class="regional-index-track"><span style="width:71%;background:linear-gradient(90deg,var(--green),#86efac)"></span></div>
+	            <div class="regional-index-meta"><span>环比 ↑ +1.8%</span><span>港口链路活跃</span></div>
+	          </div>
+	          <div class="regional-index-card" onclick="showPage('regional')">
+	            <div class="regional-index-head"><div class="regional-index-name">华中</div><span class="badge badge-info">稳定</span></div>
+	            <div class="regional-index-score" style="color:var(--blue)">106.3</div>
+	            <div class="regional-index-track"><span style="width:66%;background:linear-gradient(90deg,var(--blue),#93c5fd)"></span></div>
+	            <div class="regional-index-meta"><span>环比 ↑ +2.1%</span><span>中转枢纽支撑</span></div>
+	          </div>
+	          <div class="regional-index-card" onclick="showPage('regional')">
+	            <div class="regional-index-head"><div class="regional-index-name">华南</div><span class="badge badge-ok">正常</span></div>
+	            <div class="regional-index-score" style="color:var(--green)">104.8</div>
+	            <div class="regional-index-track"><span style="width:62%;background:linear-gradient(90deg,var(--green),#4ade80)"></span></div>
+	            <div class="regional-index-meta"><span>环比 — -0.4%</span><span>化工品平稳</span></div>
+	          </div>
+	          <div class="regional-index-card" onclick="showPage('regional')">
+	            <div class="regional-index-head"><div class="regional-index-name">西南</div><span class="badge badge-info">合理</span></div>
+	            <div class="regional-index-score" style="color:var(--blue)">101.2</div>
+	            <div class="regional-index-track"><span style="width:53%;background:linear-gradient(90deg,var(--blue),#93c5fd)"></span></div>
+	            <div class="regional-index-meta"><span>环比 ↑ +0.6%</span><span>山地溢价温和</span></div>
+	          </div>
+	          <div class="regional-index-card" onclick="showPage('regional')">
+	            <div class="regional-index-head"><div class="regional-index-name">东北</div><span class="badge badge-warn">低位</span></div>
+	            <div class="regional-index-score" style="color:#64748b">98.4</div>
+	            <div class="regional-index-track"><span style="width:46%;background:linear-gradient(90deg,#94a3b8,#cbd5e1)"></span></div>
+	            <div class="regional-index-meta"><span>环比 ↓ -1.5%</span><span>粮食淡季回落</span></div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: 物流效率指数
+     ================================================================ -->
+<div class="page" id="page-efficiency">
+  <div class="ph"><div class="ph-inner">
+    <div><h1 class="ph-title">物流效率指数</h1><p class="ph-sub">Logistics Efficiency Index &nbsp;|&nbsp; 衡量大宗物流全程运输效率与时效性</p></div>
+    <button class="btn-outline" onclick="showPage('home')">← 返回首页</button>
+  </div></div>
+  <div class="content">
+    <div class="bc"><span onclick="showPage('home')">指数首页</span> / 物流效率指数</div>
+    <div style="display:flex;gap:6px;margin-bottom:16px;justify-content:flex-end;border:1px solid var(--border);border-radius:6px;padding:2px;background:#f8f9fa;width:fit-content;margin-left:auto">
+	      <button class="time-tab" onclick="switchTimeRange(this, 'efficiency', 'day')" style="padding:6px 14px;font-size:12px;border:none;background:transparent;color:#666;cursor:pointer;transition:all .2s">按日</button>
+	      <button class="time-tab" onclick="switchTimeRange(this, 'efficiency', 'week')" style="padding:6px 14px;font-size:12px;border:none;background:transparent;color:#666;cursor:pointer;transition:all .2s">按周</button>
+	      <button class="time-tab active" onclick="switchTimeRange(this, 'efficiency', 'month')" style="padding:6px 14px;font-size:12px;border:none;border-radius:4px;background:var(--blue);color:#fff;cursor:pointer;font-weight:600;transition:all .2s">按月</button>
+    </div>
+    <div class="metric-hero">
+      <div class="mh-value blue">102.1 <span class="rating-badge rA">A-</span></div>
+	      <div class="mh-range">基准值：100 &nbsp;|&nbsp; 常态区间：80~120 &nbsp;|&nbsp; 较上月：<span style="color:var(--amber)">— -0.5pt</span></div>
+      <div class="mh-desc">物流效率指数微幅下降，主要因西北地区恶劣天气导致部分线路平均运输时间延长。整体效率仍处于良好区间，全国平均货物在途时长为36.8小时，准点率达到91.4%，高于行业平均水平（85.2%）。</div>
+    </div>
+	    <div class="g11">
+      <div class="panel">
+	         <div class="panel-hd">
+	           <div>
+	             <div class="panel-title"><div class="ptbar"></div>物流效率指数趋势（<span id="efficiency-period">近12个月</span>）</div>
+		             <div class="insight-kicker">与页面上方按日/按周/按月联动，100 为常态效率基准。</div>
+	           </div>
+	         </div>
+	        <div class="panel-bd">
+	          <canvas id="effChart" width="620" height="260" class="index-chart-canvas"></canvas>
+	          <div class="index-chart-summary">
+	            <div class="index-summary-item">
+	              <strong style="color:var(--blue)">102.1</strong>
+	              <span>本期发布值，整体效率仍处于常态偏优区间。</span>
+	            </div>
+	            <div class="index-summary-item">
+	              <strong style="color:var(--amber)">-0.5pt</strong>
+	              <span>近周期微降，主要来自西北天气与等待时长扰动。</span>
+	            </div>
+	            <div class="index-summary-item">
+	              <strong style="color:var(--green)">91.4%</strong>
+	              <span>全程准点率保持较好，履约稳定性仍是优势项。</span>
+	            </div>
+	          </div>
+	        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar green"></div>品类效率排行</div></div>
+        <div class="panel-bd" style="padding:0">
+          <table class="tbl">
+            <thead><tr><th>品类</th><th>平均在途(小时)</th><th>准点率</th><th>空驶率</th><th>效率评级</th></tr></thead>
+            <tbody>
+              <tr><td>🖤 煤炭</td><td>38.2</td><td style="color:var(--green)">93.8%</td><td>18.4%</td><td><span class="badge badge-ok">A</span></td></tr>
+              <tr><td>⚙ 钢铁</td><td>42.6</td><td style="color:var(--green)">91.2%</td><td>22.1%</td><td><span class="badge badge-ok">A-</span></td></tr>
+              <tr><td>⛏ 铁矿石</td><td>35.4</td><td style="color:var(--amber)">88.9%</td><td>24.3%</td><td><span class="badge badge-warn">B+</span></td></tr>
+              <tr><td>🌾 粮食</td><td>28.8</td><td style="color:var(--green)">95.1%</td><td>16.2%</td><td><span class="badge badge-ok">A</span></td></tr>
+              <tr><td>⚗ 化工品</td><td>31.2</td><td style="color:var(--amber)">86.4%</td><td>28.7%</td><td><span class="badge badge-warn">B</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="panel-title"><div class="ptbar amber"></div>七大区域物流效率指数分布</div>
+        <button class="btn-sm" onclick="showPage('regional')">区域分析 ›</button>
+      </div>
+      <div class="panel-bd">
+        <div class="regional-index-grid">
+          <div class="regional-index-card" onclick="showPage('regional')">
+            <div class="regional-index-head"><div class="regional-index-name">华东</div><span class="badge badge-ok">高效</span></div>
+            <div class="regional-index-score" style="color:var(--green)">106.8</div>
+            <div class="regional-index-track"><span style="width:67%;background:linear-gradient(90deg,var(--green),#86efac)"></span></div>
+            <div class="regional-index-meta"><span>准点率 94.2%</span><span>港口链路稳定</span></div>
+          </div>
+          <div class="regional-index-card" onclick="showPage('regional')">
+            <div class="regional-index-head"><div class="regional-index-name">华北</div><span class="badge badge-info">良好</span></div>
+            <div class="regional-index-score" style="color:var(--blue)">105.6</div>
+            <div class="regional-index-track"><span style="width:64%;background:linear-gradient(90deg,var(--blue),#93c5fd)"></span></div>
+            <div class="regional-index-meta"><span>准点率 92.6%</span><span>干线履约稳定</span></div>
+          </div>
+          <div class="regional-index-card" onclick="showPage('regional')">
+            <div class="regional-index-head"><div class="regional-index-name">华中</div><span class="badge badge-info">平稳</span></div>
+            <div class="regional-index-score" style="color:var(--blue)">104.2</div>
+            <div class="regional-index-track"><span style="width:60%;background:linear-gradient(90deg,var(--blue),#93c5fd)"></span></div>
+            <div class="regional-index-meta"><span>准点率 91.8%</span><span>中转效率较好</span></div>
+          </div>
+          <div class="regional-index-card" onclick="showPage('regional')">
+            <div class="regional-index-head"><div class="regional-index-name">华南</div><span class="badge badge-info">正常</span></div>
+            <div class="regional-index-score" style="color:var(--blue)">103.4</div>
+            <div class="regional-index-track"><span style="width:58%;background:linear-gradient(90deg,var(--blue),#93c5fd)"></span></div>
+            <div class="regional-index-meta"><span>准点率 90.9%</span><span>装卸等待可控</span></div>
+          </div>
+          <div class="regional-index-card" onclick="showPage('regional')">
+            <div class="regional-index-head"><div class="regional-index-name">西南</div><span class="badge badge-info">正常</span></div>
+            <div class="regional-index-score" style="color:var(--blue)">102.1</div>
+            <div class="regional-index-track"><span style="width:55%;background:linear-gradient(90deg,var(--blue),#93c5fd)"></span></div>
+            <div class="regional-index-meta"><span>准点率 90.4%</span><span>山地线路约束</span></div>
+          </div>
+          <div class="regional-index-card" onclick="showPage('regional')">
+            <div class="regional-index-head"><div class="regional-index-name">东北</div><span class="badge badge-warn">承压</span></div>
+            <div class="regional-index-score" style="color:var(--amber)">98.6</div>
+            <div class="regional-index-track"><span style="width:47%;background:linear-gradient(90deg,var(--amber),#fcd34d)"></span></div>
+            <div class="regional-index-meta"><span>准点率 87.6%</span><span>天气扰动增加</span></div>
+          </div>
+          <div class="regional-index-card" onclick="showPage('regional')">
+            <div class="regional-index-head"><div class="regional-index-name">西北</div><span class="badge badge-danger">偏慢</span></div>
+            <div class="regional-index-score" style="color:var(--red)">94.8</div>
+            <div class="regional-index-track"><span style="width:37%;background:linear-gradient(90deg,var(--red),#f87171)"></span></div>
+            <div class="regional-index-meta"><span>准点率 84.1%</span><span>天气与装卸等待</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: 需求预测
+     ================================================================ -->
+<div class="page" id="page-forecast">
+  <div class="ph"><div class="ph-inner">
+    <div><h1 class="ph-title">需求预测</h1><p class="ph-sub">Demand Forecast &nbsp;|&nbsp; 基于多源数据的大宗物流货量需求预测系统</p></div>
+    <div><button class="btn-primary" style="margin-right:8px">订阅预测报告</button><button class="btn-outline" onclick="showPage('home')">← 返回首页</button></div>
+  </div></div>
+  <div class="content">
+    <div class="bc"><span onclick="showPage('home')">指数首页</span> / 需求预测</div>
+    <div class="insight">
+      <div class="insight-head">🤖 AI预测说明</div>
+      <div class="insight-body">本系统基于大宗商品价格指数、PMI制造业指数、港口吞吐量、电力消耗指数、历史运单数据等15+维度特征，采用LSTM+XGBoost集成模型，提供未来1~8周货量需求预测，平均误差率≤4.2%。</div>
+    </div>
+
+    <div class="kpi-grid c4" style="margin-bottom:20px">
+      <div class="kpi-card blue"><div class="kpi-top"><span class="kpi-lbl">预测区间</span></div><div class="kpi-val blue" style="font-size:20px">1~8周</div><div class="kpi-meta">最长预测周期</div></div>
+      <div class="kpi-card green"><div class="kpi-top"><span class="kpi-lbl">预测精度</span></div><div class="kpi-val green" style="font-size:20px">95.8%</div><div class="kpi-meta">近12个月平均准确率</div></div>
+      <div class="kpi-card amber"><div class="kpi-top"><span class="kpi-lbl">涵盖品类</span></div><div class="kpi-val" style="font-size:20px;color:var(--amber)">12类</div><div class="kpi-meta">煤炭、钢铁、矿石等</div></div>
+      <div class="kpi-card"><div class="kpi-top"><span class="kpi-lbl">数据刷新</span></div><div class="kpi-val" style="font-size:20px">每周</div><div class="kpi-meta">每周一09:00更新</div></div>
+    </div>
+
+    <!-- Forecast Cards -->
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar"></div>未来8周综合货量预测指数</div><div class="panel-actions"><select style="padding:5px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;color:var(--gray)"><option>全品类综合</option><option>煤炭</option><option>钢铁</option><option>矿石</option></select></div></div>
+      <div class="panel-bd">
+        <div class="forecast-row">
+          <div class="fc-card highlight"><div class="fc-month">本周（W12）</div><div class="fc-val">108.6</div><div class="fc-delta" style="color:var(--green)">↑ +2.3%</div><div style="font-size:10px;color:#8899aa;margin-top:4px">实际数据</div></div>
+          <div class="fc-card"><div class="fc-month">W+1</div><div class="fc-val">107.2</div><div class="fc-delta" style="color:var(--amber)">— -1.3%</div><div style="font-size:10px;color:#8899aa;margin-top:4px">±1.8%</div></div>
+          <div class="fc-card"><div class="fc-month">W+2</div><div class="fc-val">105.8</div><div class="fc-delta" style="color:#ef4444">↓ -1.3%</div><div style="font-size:10px;color:#8899aa;margin-top:4px">±2.1%</div></div>
+          <div class="fc-card"><div class="fc-month">W+3 (元旦前)</div><div class="fc-val">103.4</div><div class="fc-delta" style="color:#ef4444">↓ -2.3%</div><div style="font-size:10px;color:#8899aa;margin-top:4px">±2.4%</div></div>
+          <div class="fc-card"><div class="fc-month">W+4 (元旦后)</div><div class="fc-val">98.6</div><div class="fc-delta" style="color:#ef4444">↓ -4.6%</div><div style="font-size:10px;color:#8899aa;margin-top:4px">±3.2%</div></div>
+          <div class="fc-card"><div class="fc-month">W+5~8 (春节)</div><div class="fc-val">82~88</div><div class="fc-delta" style="color:#ef4444">↓ 春节低谷</div><div style="font-size:10px;color:#8899aa;margin-top:4px">±4.5%</div></div>
+        </div>
+        <canvas id="forecastChart" width="1100" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Commodity Forecast Table -->
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar green"></div>品类需求预测详情（未来4周）</div></div>
+      <div class="panel-bd" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>品类</th><th>本周实际货量指数</th><th>W+1预测</th><th>W+2预测</th><th>W+3预测</th><th>W+4预测</th><th>趋势判断</th><th>置信度</th></tr></thead>
+          <tbody>
+            <tr><td>🖤 煤炭</td><td style="font-weight:700;color:var(--blue)">124.8</td><td>122.3</td><td>118.6</td><td>112.4</td><td>95.2</td><td><span class="badge badge-warn">先高后降</span></td><td>93.4%</td></tr>
+            <tr><td>⚙ 钢铁</td><td style="font-weight:700;color:var(--blue)">108.4</td><td>107.1</td><td>104.8</td><td>101.2</td><td>96.8</td><td><span class="badge badge-warn">缓慢下行</span></td><td>91.2%</td></tr>
+            <tr><td>⛏ 铁矿石</td><td style="font-weight:700;color:var(--blue)">102.6</td><td>101.8</td><td>102.4</td><td>103.1</td><td>98.4</td><td><span class="badge badge-ok">基本稳定</span></td><td>88.6%</td></tr>
+            <tr><td>🌾 粮食</td><td style="font-weight:700;color:var(--blue)">94.2</td><td>96.8</td><td>98.4</td><td>102.1</td><td>88.6</td><td><span class="badge badge-ok">节前小旺</span></td><td>89.3%</td></tr>
+            <tr><td>⚗ 化工品</td><td style="font-weight:700;color:var(--amber)">98.4</td><td>97.2</td><td>95.6</td><td>94.1</td><td>91.8</td><td><span class="badge badge-danger">持续下行</span></td><td>87.1%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: 区域分析
+     ================================================================ -->
+<div class="page" id="page-regional">
+  <div class="ph"><div class="ph-inner">
+    <div><h1 class="ph-title">区域分析</h1><p class="ph-sub">Regional Analysis &nbsp;|&nbsp; 全国七大区域大宗物流分区域指数对比与分析</p></div>
+    <button class="btn-outline" onclick="showPage('home')">← 返回首页</button>
+  </div></div>
+  <div class="content">
+    <div class="bc"><span onclick="showPage('home')">指数首页</span> / 区域分析</div>
+    <div class="region-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="region-card"><div class="rc-name">华北地区 <span class="badge badge-ok">↑ 3.2%</span></div><div class="rc-score" style="color:var(--blue)">112.4</div><div class="rc-bar"><div class="rc-fill" style="width:85%;background:var(--blue)"></div></div><div class="rc-desc">煤炭运输旺季，内蒙古、山西、河北能源运输需求旺盛，运价持续高位</div></div>
+      <div class="region-card"><div class="rc-name">华东地区 <span class="badge badge-ok">↑ 1.8%</span></div><div class="rc-score" style="color:var(--green)">108.2</div><div class="rc-bar"><div class="rc-fill" style="width:78%;background:var(--green)"></div></div><div class="rc-desc">港口物流活跃，钢铁、矿石流转顺畅，长三角制造业备货需求稳定</div></div>
+      <div class="region-card"><div class="rc-name">华南地区 <span class="badge badge-warn">— -0.4%</span></div><div class="rc-score" style="color:var(--amber)">104.8</div><div class="rc-bar"><div class="rc-fill" style="width:72%;background:var(--amber)"></div></div><div class="rc-desc">化工品运输占比较高，受环保政策影响轻微，广东进出口货物稳定</div></div>
+      <div class="region-card"><div class="rc-name">华中地区 <span class="badge badge-ok">↑ 2.1%</span></div><div class="rc-score" style="color:var(--blue)">106.3</div><div class="rc-bar"><div class="rc-fill" style="width:75%;background:var(--blue)"></div></div><div class="rc-desc">武汉、郑州中转枢纽功能增强，货流密度高，中部制造业运输稳健</div></div>
+      <div class="region-card"><div class="rc-name">西北地区 <span class="badge badge-danger">↑ 4.5%</span></div><div class="rc-score" style="color:var(--red)">115.6</div><div class="rc-bar"><div class="rc-fill" style="width:90%;background:var(--red)"></div></div><div class="rc-desc">能源矿产运输旺盛，新疆、甘肃、宁夏矿产资源外运需求急增，运价全国最高</div></div>
+      <div class="region-card"><div class="rc-name">西南地区 <span class="badge badge-ok">↑ 1.0%</span></div><div class="rc-score" style="color:var(--blue)">101.2</div><div class="rc-bar"><div class="rc-fill" style="width:58%;background:var(--blue)"></div></div><div class="rc-desc">西部开发战略持续推进，四川、云南、贵州基础设施货物需求稳定增长</div></div>
+      <div class="region-card"><div class="rc-name">东北地区 <span class="badge badge-danger">↓ -1.2%</span></div><div class="rc-score" style="color:#94a3b8">98.4</div><div class="rc-bar"><div class="rc-fill" style="width:48%;background:#94a3b8)"></div></div><div class="rc-desc">冬季道路限制增多，粮食运输进入淡季，部分运力转移至西北高运价线路</div></div>
+      <div class="region-card"><div class="rc-name">全国综合 <span class="badge badge-ok">↑ 2.3%</span></div><div class="rc-score" style="color:var(--blue)">108.6</div><div class="rc-bar"><div class="rc-fill" style="width:80%;background:var(--blue)"></div></div><div class="rc-desc">综合指数健康运行，Q4旺季效应明显，整体处于A级健康区间</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar"></div>区域指数对比柱状图</div></div>
+      <div class="panel-bd"><canvas id="regionalChart" width="1200" height="260"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: 货主企业
+     ================================================================ -->
+<div class="page" id="page-shipper-company">
+  <div class="ph"><div class="ph-inner">
+    <div><h1 class="ph-title">货主企业画像</h1><p class="ph-sub">Shipper Enterprise Profile &nbsp;|&nbsp; 从发货视角查看企业指数、路线、货品与承运商表现</p></div>
+    <button class="btn-outline" onclick="showPage('home')">← 返回首页</button>
+  </div></div>
+  <div class="content">
+    <div class="bc"><span onclick="showPage('home')">指数首页</span> / 货主企业</div>
+    <div class="company-toolbar">
+      <div class="company-select-row">
+        <label>选择货主企业：</label>
+        <select><option>万联易达重点货主A</option><option>华东钢贸集团</option><option>北方能源贸易公司</option><option>长三角制造业客户</option></select>
+        <span class="badge badge-info">匹配样本：华东 + 上海出发线路 + 钢铁/煤炭货类</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <div class="subscription-toggle">
+          <button class="active" data-subscription-status="free" onclick="toggleCompanySubscription(this, 'shipper-company', 'free')">免费版</button>
+          <button data-subscription-status="subscribed" onclick="toggleCompanySubscription(this, 'shipper-company', 'subscribed')">已开通</button>
+        </div>
+        <div class="company-period-tabs">
+          <button class="time-tab" onclick="switchTimeRange(this, 'shipper-company', 'day')">日</button>
+          <button class="time-tab active" onclick="switchTimeRange(this, 'shipper-company', 'week')">周</button>
+          <button class="time-tab" onclick="switchTimeRange(this, 'shipper-company', 'month')">月</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="company-overview-grid">
+      <div class="company-index-card amber">
+        <div class="company-index-title"><span>运力供给指数</span><span class="badge badge-warn">略紧</span></div>
+        <div class="company-index-value" style="color:var(--amber)">97.6</div>
+        <div class="kpi-delta down">↓ -1.2pt 较上期</div>
+        <div class="company-index-bench"><div class="company-bench-item"><span>全国内部大盘</span><strong>96.8</strong></div><div class="company-bench-item"><span>匹配样本大盘</span><strong>99.4</strong></div></div>
+      </div>
+      <div class="company-index-card green">
+        <div class="company-index-title"><span>运价指数</span><span class="badge badge-warn">偏高</span></div>
+        <div class="company-index-value" style="color:var(--green)">116.2</div>
+        <div class="kpi-delta up">↑ +2.8pt 较上期</div>
+        <div class="company-index-bench"><div class="company-bench-item"><span>全国内部大盘</span><strong>112.4</strong></div><div class="company-bench-item"><span>匹配样本大盘</span><strong>113.8</strong></div></div>
+      </div>
+      <div class="company-index-card blue">
+        <div class="company-index-title"><span>物流效率指数</span><span class="badge badge-ok">稳定</span></div>
+        <div class="company-index-value" style="color:var(--blue)">104.2</div>
+        <div class="kpi-delta up">↑ +0.6pt 较上期</div>
+        <div class="company-index-bench"><div class="company-bench-item"><span>全国内部大盘</span><strong>102.1</strong></div><div class="company-bench-item"><span>匹配样本大盘</span><strong>101.7</strong></div></div>
+      </div>
+    </div>
+
+    <div class="company-unlock-banner">
+      <div>
+        <div class="company-unlock-title">开通企业画像，查看完整经营明细</div>
+        <div class="company-unlock-desc">申请通过后可查看完整路线、货类、合作方与对标数据。当前原型点击即通过，方便演示完整能力。</div>
+      </div>
+      <button class="company-unlock-btn" type="button" onclick="requestCompanySubscription(this, 'shipper-company')">申请开通企业画像</button>
+    </div>
+
+    <div class="company-compare-grid">
+      <div class="panel paywall-card locked" data-paywall-title="完整指数走势对比">
+        <div class="panel-hd">
+          <div><div class="panel-title"><div class="ptbar blue"></div>我的指数走势对比（<span id="shipper-company-period">近12周</span>）</div><div class="insight-kicker">三线分别为我的指数、全国内部大盘、匹配样本大盘。</div></div>
+          <div class="company-chart-tabs">
+            <button class="company-chart-tab active" onclick="switchCompanyMetric(this, 'shipper-company', 'price')">运价</button>
+            <button class="company-chart-tab" onclick="switchCompanyMetric(this, 'shipper-company', 'supply')">运力</button>
+            <button class="company-chart-tab" onclick="switchCompanyMetric(this, 'shipper-company', 'efficiency')">效率</button>
+          </div>
+        </div>
+        <div class="panel-bd"><canvas id="shipperCompanyChart" width="760" height="280" class="index-chart-canvas"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>本期画像解读</div></div>
+        <div class="panel-bd">
+          <div class="insight"><div class="insight-head">经营状态</div><div class="insight-body">本期发货效率优于两个大盘，主要来自上海至江苏、河北线路履约稳定；运价高于匹配样本大盘 2.4pt，需要关注煤炭与钢铁旺季溢价。</div></div>
+          <div class="insight warn" style="margin-top:12px"><div class="insight-head">关注点</div><div class="insight-body">西北方向运力偏紧，若春节前仍有集中发运，建议提前锁定 2 家备用承运商。</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel paywall-card locked" data-paywall-title="常发路线完整表现">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar green"></div>我的常发路线表现</div></div>
+      <div class="panel-bd" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>路线</th><th>运价指数</th><th>运力指数</th><th>效率指数</th><th>较匹配大盘</th><th>主要问题</th><th>建议动作</th></tr></thead>
+          <tbody>
+            <tr><td><strong>上海→鄂尔多斯</strong></td><td style="font-weight:700;color:var(--amber)">118.4</td><td style="font-weight:700;color:var(--amber)">96.2</td><td style="font-weight:700;color:var(--blue)">103.6</td><td style="color:#ef4444">运价 +4.6pt</td><td>旺季价格抬升</td><td><span class="badge badge-warn">提前锁价</span></td></tr>
+            <tr><td>上海→山西</td><td style="font-weight:700;color:var(--green)">112.8</td><td style="font-weight:700;color:var(--blue)">101.4</td><td style="font-weight:700;color:var(--blue)">104.1</td><td style="color:var(--green)">效率 +2.8pt</td><td>表现稳定</td><td><span class="badge badge-ok">继续合作</span></td></tr>
+            <tr><td>上海→河北</td><td style="font-weight:700;color:var(--blue)">107.2</td><td style="font-weight:700;color:var(--green)">103.8</td><td style="font-weight:700;color:var(--green)">105.4</td><td style="color:var(--green)">效率 +3.1pt</td><td>无明显短板</td><td><span class="badge badge-ok">扩大样本</span></td></tr>
+            <tr><td>上海→江苏</td><td style="font-weight:700;color:var(--blue)">102.8</td><td style="font-weight:700;color:var(--blue)">100.6</td><td style="font-weight:700;color:var(--green)">106.2</td><td style="color:var(--green)">效率 +4.5pt</td><td>短途稳定</td><td><span class="badge badge-ok">优先发运</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel paywall-card locked" data-paywall-title="常发货品完整表现">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>我的常发货品表现</div></div>
+      <div class="panel-bd"><div class="company-structure-grid">
+        <div class="company-structure-card"><strong>煤炭 34%</strong><span>运价 118.4</span><span>运力 95.6</span><span>趋势：旺季偏紧</span></div>
+        <div class="company-structure-card"><strong>钢铁/金属 28%</strong><span>运价 113.2</span><span>效率 104.8</span><span>趋势：平稳偏强</span></div>
+        <div class="company-structure-card"><strong>铁矿石 16%</strong><span>运价 108.6</span><span>运力 101.2</span><span>趋势：基本稳定</span></div>
+        <div class="company-structure-card"><strong>粮食 12%</strong><span>运价 101.4</span><span>效率 106.1</span><span>趋势：短线改善</span></div>
+        <div class="company-structure-card"><strong>化工品 10%</strong><span>运价 96.8</span><span>异常率 3.2%</span><span>趋势：需关注合规</span></div>
+      </div></div>
+    </div>
+
+    <div class="company-compare-grid">
+      <div class="panel paywall-card locked" data-paywall-title="常用承运商完整表现">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar green"></div>常用承运商表现</div></div>
+        <div class="panel-bd" style="padding:0">
+          <table class="tbl">
+            <thead><tr><th>承运商</th><th>承运占比</th><th>准点率</th><th>平均运价</th><th>异常率</th><th>效率指数</th><th>综合评价</th></tr></thead>
+            <tbody>
+              <tr><td><strong>顺丰物流集团</strong></td><td>42%</td><td style="color:var(--green)">93.2%</td><td>118.6</td><td style="color:var(--green)">2.1%</td><td style="font-weight:700;color:var(--green)">105.8</td><td><span class="badge badge-ok">主力稳定</span></td></tr>
+              <tr><td>中通快运</td><td>31%</td><td style="color:var(--blue)">89.6%</td><td>115.2</td><td>2.8%</td><td style="font-weight:700;color:var(--blue)">101.6</td><td><span class="badge badge-info">可继续观察</span></td></tr>
+              <tr><td>圆通大件物流</td><td>18%</td><td style="color:var(--amber)">84.3%</td><td>122.4</td><td style="color:#ef4444">4.1%</td><td style="font-weight:700;color:var(--amber)">96.4</td><td><span class="badge badge-warn">控制占比</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel paywall-card locked" data-paywall-title="可替代承运商完整名单">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar blue"></div>可替代承运商对比</div></div>
+        <div class="panel-bd" style="padding:0">
+          <table class="tbl">
+            <thead><tr><th>承运商</th><th>适配路线</th><th>效率</th><th>运价</th></tr></thead>
+            <tbody>
+              <tr><td>德邦大件</td><td>上海→河北</td><td style="color:var(--green)">106.4</td><td>110.2</td></tr>
+              <tr><td>安能物流</td><td>上海→江苏</td><td style="color:var(--green)">105.1</td><td>103.6</td></tr>
+              <tr><td>区域车队联盟</td><td>上海→山西</td><td style="color:var(--blue)">101.8</td><td>111.4</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PAGE: 承运商企业
+     ================================================================ -->
+<div class="page" id="page-carrier-company">
+  <div class="ph"><div class="ph-inner">
+    <div><h1 class="ph-title">承运商企业画像</h1><p class="ph-sub">Carrier Enterprise Profile &nbsp;|&nbsp; 从承运视角查看常跑线路、指数对标与货主机会</p></div>
+    <button class="btn-outline" onclick="showPage('home')">← 返回首页</button>
+  </div></div>
+  <div class="content">
+    <div class="bc"><span onclick="showPage('home')">指数首页</span> / 承运商企业</div>
+    <div class="company-toolbar">
+      <div class="company-select-row">
+        <label>选择承运商企业：</label>
+        <select><option>顺丰物流集团</option><option>中通快运</option><option>圆通大件物流</option><option>区域车队联盟</option></select>
+        <span class="badge badge-info">匹配样本：华东出发 + 能源/钢铁线路 + 中长途干线</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <div class="subscription-toggle">
+          <button class="active" data-subscription-status="free" onclick="toggleCompanySubscription(this, 'carrier-company', 'free')">免费版</button>
+          <button data-subscription-status="subscribed" onclick="toggleCompanySubscription(this, 'carrier-company', 'subscribed')">已开通</button>
+        </div>
+        <div class="company-period-tabs">
+          <button class="time-tab" onclick="switchTimeRange(this, 'carrier-company', 'day')">日</button>
+          <button class="time-tab active" onclick="switchTimeRange(this, 'carrier-company', 'week')">周</button>
+          <button class="time-tab" onclick="switchTimeRange(this, 'carrier-company', 'month')">月</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="company-overview-grid">
+      <div class="company-index-card amber"><div class="company-index-title"><span>运力供给指数</span><span class="badge badge-ok">可调度</span></div><div class="company-index-value" style="color:var(--amber)">103.8</div><div class="kpi-delta up">↑ +1.6pt 较上期</div><div class="company-index-bench"><div class="company-bench-item"><span>全国内部大盘</span><strong>96.8</strong></div><div class="company-bench-item"><span>匹配样本大盘</span><strong>101.2</strong></div></div></div>
+      <div class="company-index-card green"><div class="company-index-title"><span>运价指数</span><span class="badge badge-info">合理</span></div><div class="company-index-value" style="color:var(--green)">109.6</div><div class="kpi-delta up">↑ +1.1pt 较上期</div><div class="company-index-bench"><div class="company-bench-item"><span>全国内部大盘</span><strong>112.4</strong></div><div class="company-bench-item"><span>匹配样本大盘</span><strong>110.8</strong></div></div></div>
+      <div class="company-index-card blue"><div class="company-index-title"><span>物流效率指数</span><span class="badge badge-ok">优势</span></div><div class="company-index-value" style="color:var(--blue)">106.4</div><div class="kpi-delta up">↑ +2.2pt 较上期</div><div class="company-index-bench"><div class="company-bench-item"><span>全国内部大盘</span><strong>102.1</strong></div><div class="company-bench-item"><span>匹配样本大盘</span><strong>103.6</strong></div></div></div>
+    </div>
+
+    <div class="company-unlock-banner">
+      <div>
+        <div class="company-unlock-title">开通企业画像，查看完整经营明细</div>
+        <div class="company-unlock-desc">申请通过后可查看完整路线、货类、合作方与对标数据。当前原型点击即通过，方便演示完整能力。</div>
+      </div>
+      <button class="company-unlock-btn" type="button" onclick="requestCompanySubscription(this, 'carrier-company')">申请开通企业画像</button>
+    </div>
+
+    <div class="company-compare-grid">
+      <div class="panel paywall-card locked" data-paywall-title="完整指数走势对比">
+        <div class="panel-hd">
+          <div><div class="panel-title"><div class="ptbar blue"></div>我的指数走势对比（<span id="carrier-company-period">近12周</span>）</div><div class="insight-kicker">默认展示物流效率指数，可切换运力、运价、效率。</div></div>
+          <div class="company-chart-tabs">
+            <button class="company-chart-tab active" onclick="switchCompanyMetric(this, 'carrier-company', 'efficiency')">效率</button>
+            <button class="company-chart-tab" onclick="switchCompanyMetric(this, 'carrier-company', 'supply')">运力</button>
+            <button class="company-chart-tab" onclick="switchCompanyMetric(this, 'carrier-company', 'price')">运价</button>
+          </div>
+        </div>
+        <div class="panel-bd"><canvas id="carrierCompanyChart" width="760" height="280" class="index-chart-canvas"></canvas></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>本期画像解读</div></div>
+        <div class="panel-bd">
+          <div class="insight"><div class="insight-head">经营状态</div><div class="insight-body">常跑线路效率指数高于匹配样本大盘 2.8pt，优势来自上海至河北、江苏短中途线路；当前运价低于全国大盘，仍有部分线路议价空间。</div></div>
+          <div class="insight warn" style="margin-top:12px"><div class="insight-head">机会线索</div><div class="insight-body">上海至山西、鄂尔多斯线路需求热度上升，可优先接触钢贸和能源类货主。</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel paywall-card locked" data-paywall-title="常跑路线完整表现">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar green"></div>我的常跑路线</div></div>
+      <div class="panel-bd" style="padding:0">
+        <table class="tbl">
+          <thead><tr><th>路线</th><th>运输占比</th><th>运价指数</th><th>效率指数</th><th>接单响应</th><th>较匹配大盘</th><th>机会判断</th></tr></thead>
+          <tbody>
+            <tr><td><strong>上海→鄂尔多斯</strong></td><td>32%</td><td style="font-weight:700;color:var(--green)">111.2</td><td style="font-weight:700;color:var(--blue)">105.8</td><td>1.8小时</td><td style="color:var(--green)">效率 +2.2pt</td><td><span class="badge badge-ok">重点深耕</span></td></tr>
+            <tr><td>上海→山西</td><td>24%</td><td style="font-weight:700;color:var(--blue)">108.6</td><td style="font-weight:700;color:var(--green)">106.1</td><td>2.1小时</td><td style="color:var(--green)">效率 +3.6pt</td><td><span class="badge badge-ok">扩展货主</span></td></tr>
+            <tr><td>上海→河北</td><td>18%</td><td style="font-weight:700;color:var(--green)">105.2</td><td style="font-weight:700;color:var(--green)">107.4</td><td>1.6小时</td><td style="color:var(--green)">响应 +18%</td><td><span class="badge badge-ok">优势线路</span></td></tr>
+            <tr><td>上海→江苏</td><td>16%</td><td style="font-weight:700;color:var(--blue)">102.8</td><td style="font-weight:700;color:var(--green)">106.8</td><td>1.2小时</td><td style="color:var(--green)">效率 +4.4pt</td><td><span class="badge badge-info">稳定运营</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel paywall-card locked" data-paywall-title="路线经营画像完整数据">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar amber"></div>路线经营画像</div></div>
+      <div class="panel-bd"><div class="company-structure-grid">
+        <div class="company-structure-card"><strong>上海→鄂尔多斯</strong><span>货量热度 118</span><span>价格水平 111</span><span>竞争强度：中高</span><span>履约：稳定</span></div>
+        <div class="company-structure-card"><strong>上海→山西</strong><span>货量热度 112</span><span>价格水平 109</span><span>竞争强度：中</span><span>履约：优势</span></div>
+        <div class="company-structure-card"><strong>上海→河北</strong><span>货量热度 106</span><span>价格水平 105</span><span>竞争强度：中低</span><span>履约：强</span></div>
+        <div class="company-structure-card"><strong>上海→江苏</strong><span>货量热度 103</span><span>价格水平 103</span><span>竞争强度：高</span><span>履约：强</span></div>
+        <div class="company-structure-card"><strong>上海→安徽</strong><span>货量热度 98</span><span>价格水平 99</span><span>竞争强度：中</span><span>履约：可提升</span></div>
+      </div></div>
+    </div>
+
+    <div class="panel paywall-card locked" data-paywall-title="推荐货主机会完整名单">
+      <div class="panel-hd"><div class="panel-title"><div class="ptbar blue"></div>推荐货主机会</div></div>
+      <div class="panel-bd"><div class="company-opportunity-grid">
+        <div class="company-opportunity-card"><h4>华东钢贸集团</h4><p>匹配路线：上海→山西；常发货类：钢铁/金属。需求热度 116，价格接受度较高，履约匹配度 92%。</p><div class="company-mini-meta"><span>推荐理由</span><strong>效率优势明显</strong></div></div>
+        <div class="company-opportunity-card"><h4>北方能源贸易公司</h4><p>匹配路线：上海→鄂尔多斯；常发货类：煤炭。近期发运频次上升，偏好稳定车队与提前锁价。</p><div class="company-mini-meta"><span>推荐理由</span><strong>旺季货量充足</strong></div></div>
+        <div class="company-opportunity-card"><h4>长三角制造业客户</h4><p>匹配路线：上海→江苏/安徽；常发货类：建材、设备。短途履约要求高，适配当前高准点线路。</p><div class="company-mini-meta"><span>推荐理由</span><strong>短途响应快</strong></div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function drawTrendChart(canvasId, data, color) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  
+  if (!data || data.length < 2) return;
+  
+  const minVal = Math.min(...data);
+  const maxVal = Math.max(...data);
+  const range = maxVal - minVal || 1;
+  
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  
+  for (let i = 0; i < data.length; i++) {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((data[i] - minVal) / range) * (h - 4) - 2;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+}
+
+function getHomeSeries(timeRange) {
+  const labels = timeRange === 'day'
+    ? ['D-29','D-25','D-21','D-17','D-13','D-9','D-5','D']
+    : timeRange === 'week'
+      ? ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12']
+      : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const supply = timeRange === 'day'
+    ? [94.2, 94.8, 95.3, 95.8, 96.3, 96.7, 96.4, 95.3]
+    : timeRange === 'week'
+      ? [92.1, 93.4, 94.2, 94.8, 95.1, 95.6, 96.2, 96.5, 96.7, 96.8, 96.6, 96.3]
+      : [88.4, 89.2, 90.1, 91.3, 92.5, 93.4, 94.2, 95.1, 95.8, 96.2, 96.5, 96.8];
+  const price = timeRange === 'day'
+    ? [109.2, 109.8, 110.6, 111.3, 111.9, 112.4, 111.8, 110.8]
+    : timeRange === 'week'
+      ? [107.3, 108.2, 109.1, 109.8, 110.5, 111.2, 111.8, 112.1, 112.3, 112.4, 112.3, 112.2]
+      : [102.4, 104.1, 105.8, 107.2, 108.5, 109.6, 110.5, 111.2, 111.8, 112.1, 112.3, 112.4];
+  const efficiency = timeRange === 'day'
+    ? [100.8, 101.5, 102.0, 102.2, 101.8, 101.4, 100.8, 99.9]
+    : timeRange === 'week'
+      ? [99.5, 100.2, 100.8, 101.2, 101.5, 101.8, 102.0, 102.1, 102.0, 101.8, 101.5, 101.2]
+      : [98.2, 99.1, 99.8, 100.3, 100.8, 101.1, 101.4, 101.7, 101.9, 102.0, 102.1, 102.1];
+  return { labels, supply, price, efficiency };
+}
+
+function updateKPICharts(timeRange) {
+  const { labels, supply, price, efficiency } = getHomeSeries(timeRange);
+  drawTrendChart('kpiChart-supply', supply, '#f59e0b');
+  drawTrendChart('kpiChart-price', price, '#10b981');
+  drawTrendChart('kpiChart-efficiency', efficiency, '#3b82f6');
+  const mainChart = document.getElementById('mainChart');
+  if (mainChart) {
+    drawLine(mainChart.getContext('2d'), [
+      {data: supply, color: '#f59e0b'},
+      {data: price, color: '#22c55e'},
+      {data: efficiency, color: '#1677ff'},
+    ], {labels});
+  }
+}
+
+function drawSupplyTrendChart(timeRange) {
+  const canvas = document.getElementById('supplyChart');
+  if (!canvas) return;
+  const { labels, supply } = getHomeSeries(timeRange);
+  const ctx = canvas.getContext('2d');
+  drawLine(ctx, [{data: supply, color: '#f59e0b'}], {labels, rangeValues: [100]});
+  const W = canvas.width, H = canvas.height;
+  const pad = {t:20, r:20, b:36, l:52};
+  const vals = supply;
+  const minV = Math.min(...vals, 100) * 0.97;
+  const maxV = Math.max(...vals, 100) * 1.02;
+  const baselineY = pad.t + (H - pad.t - pad.b) * (1 - ((100 - minV) / (maxV - minV)));
+  ctx.save();
+  ctx.setLineDash([5, 5]);
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad.l, baselineY);
+  ctx.lineTo(W - pad.r, baselineY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#64748b';
+  ctx.font = '12px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('均衡线100', W - pad.r, baselineY - 8);
+  ctx.restore();
+}
+
+function drawIndexBaseline(canvas, values, label) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const pad = {t:20, r:20, b:36, l:52};
+  const minV = Math.min(...values, 100) * 0.97;
+  const maxV = Math.max(...values, 100) * 1.02;
+  const baselineY = pad.t + (H - pad.t - pad.b) * (1 - ((100 - minV) / (maxV - minV)));
+  ctx.save();
+  ctx.setLineDash([5, 5]);
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad.l, baselineY);
+  ctx.lineTo(W - pad.r, baselineY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#64748b';
+  ctx.font = '12px sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText(label, W - pad.r, baselineY - 8);
+  ctx.restore();
+}
+
+function drawPriceTrendChart(timeRange) {
+  const canvas = document.getElementById('priceChart');
+  if (!canvas) return;
+  const { labels, price } = getHomeSeries(timeRange);
+  const ctx = canvas.getContext('2d');
+  drawLine(ctx, [{data: price, color: '#22c55e'}], {labels, rangeValues: [100]});
+  drawIndexBaseline(canvas, price, '合理中枢100');
+}
+
+function drawEfficiencyTrendChart(timeRange) {
+  const canvas = document.getElementById('effChart');
+  if (!canvas) return;
+  const { labels, efficiency } = getHomeSeries(timeRange);
+  const ctx = canvas.getContext('2d');
+  drawLine(ctx, [{data: efficiency, color: '#1677ff'}], {labels, rangeValues: [100]});
+  drawIndexBaseline(canvas, efficiency, '基准线100');
+}
+
+function getCompanySeries(page, metric, timeRange) {
+  const base = getHomeSeries(timeRange);
+  const source = base[metric] || base.efficiency;
+  const profile = page === 'shipper-company'
+    ? {
+        price: {mine: 3.8, national: 0, matched: 1.4},
+        supply: {mine: 0.8, national: 0, matched: 2.6},
+        efficiency: {mine: 2.1, national: 0, matched: -0.4},
+      }
+    : {
+        price: {mine: -2.8, national: 0, matched: -1.6},
+        supply: {mine: 7.0, national: 0, matched: 4.4},
+        efficiency: {mine: 4.3, national: 0, matched: 1.5},
+      };
+  const offsets = profile[metric] || profile.efficiency;
+  const smooth = source.map((v, i) => (i - source.length + 1) * 0.12);
+  return {
+    labels: base.labels,
+    mine: source.map((v, i) => v + offsets.mine + smooth[i]),
+    national: source.map(v => v + offsets.national),
+    matched: source.map((v, i) => v + offsets.matched + smooth[i] * 0.5),
+  };
+}
+
+function drawCompanyChart(page, timeRange, metric) {
+  const canvasId = page === 'shipper-company' ? 'shipperCompanyChart' : 'carrierCompanyChart';
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const { labels, mine, national, matched } = getCompanySeries(page, metric, timeRange);
+  drawLine(canvas.getContext('2d'), [
+    {data: mine, color: '#1677ff'},
+    {data: national, color: '#94a3b8'},
+    {data: matched, color: '#22c55e'},
+  ], {labels, rangeValues: [100]});
+  drawIndexBaseline(canvas, mine.concat(national, matched), '基准线100');
+}
+
+function getCompanyActiveMetric(page) {
+  const active = document.querySelector('#page-' + page + ' .company-chart-tab.active');
+  if (!active) return page === 'carrier-company' ? 'efficiency' : 'price';
+  const text = active.textContent.trim();
+  if (text.includes('运力')) return 'supply';
+  if (text.includes('运价')) return 'price';
+  return 'efficiency';
+}
+
+function getPageActiveRange(page) {
+  const activeTab = document.querySelector('#page-' + page + ' .time-tab.active');
+  if (!activeTab) return 'week';
+  const text = activeTab.textContent.trim();
+  return text.includes('日') ? 'day' : text.includes('月') ? 'month' : 'week';
+}
+
+function switchCompanyMetric(btn, page, metric) {
+  const panel = btn.closest('.panel');
+  panel.querySelectorAll('.company-chart-tab').forEach(tab => tab.classList.remove('active'));
+  btn.classList.add('active');
+  drawCompanyChart(page, getPageActiveRange(page), metric);
+}
+
+function ensurePaywallOverlays(root = document) {
+  root.querySelectorAll('.paywall-card').forEach(card => {
+    const body = card.querySelector('.panel-bd');
+    if (body) body.classList.add('paywall-content');
+    if (card.querySelector('.paywall-overlay')) return;
+    const title = card.dataset.paywallTitle || '完整企业画像数据';
+    const overlay = document.createElement('div');
+    overlay.className = 'paywall-overlay';
+    overlay.innerHTML = `
+      <div class="paywall-box">
+        <div class="paywall-lock">🔒</div>
+        <div class="paywall-title">${title}</div>
+        <div class="paywall-desc">订阅后查看完整路线、货类、合作方与对标数据，支持企业经营画像深度分析。</div>
+        <div class="paywall-note">当前为免费版试看，数据已做模糊处理</div>
+      </div>`;
+    card.appendChild(overlay);
+  });
+}
+
+function applyCompanySubscription(page, status) {
+  const pageEl = document.getElementById('page-' + page);
+  if (!pageEl) return;
+  ensurePaywallOverlays(pageEl);
+  pageEl.querySelectorAll('.paywall-card').forEach(card => {
+    card.classList.toggle('locked', status !== 'subscribed');
+  });
+  const toggle = pageEl.querySelector('.subscription-toggle');
+  if (toggle) {
+    toggle.querySelectorAll('button').forEach(b => {
+      b.classList.toggle('active', b.dataset.subscriptionStatus === status);
+    });
+  }
+  pageEl.querySelectorAll('.company-unlock-btn').forEach(btn => {
+    btn.textContent = status === 'subscribed' ? '已开通企业画像' : '申请开通企业画像';
+    btn.classList.toggle('subscribed', status === 'subscribed');
+  });
+}
+
+function toggleCompanySubscription(btn, page, status) {
+  applyCompanySubscription(page, status);
+}
+
+function requestCompanySubscription(btn, page) {
+  applyCompanySubscription(page, 'subscribed');
+}
+
+function switchTimeRange(btn, page, range) {
+  const container = btn.parentElement;
+  container.querySelectorAll('.time-tab').forEach(b => {
+    b.style.background = 'transparent';
+    b.style.color = '#666';
+    b.style.fontWeight = '400';
+    b.classList.remove('active');
+  });
+  btn.style.background = 'var(--blue)';
+  btn.style.color = '#fff';
+  btn.style.fontWeight = '600';
+  btn.classList.add('active');
+  
+  let periodText = '';
+  if (range === 'day') periodText = '近30天';
+  else if (range === 'week') periodText = '近12周';
+  else if (range === 'month') periodText = '近12个月';
+  
+  if (page === 'home') {
+    updateKPICharts(range);
+  } else if (page === 'supply') {
+    drawSupplyTrendChart(range);
+    const supplyPeriod = document.getElementById('supply-period');
+    if (supplyPeriod) supplyPeriod.textContent = periodText;
+  } else if (page === 'price') {
+    drawPriceTrendChart(range);
+    const pricePeriod = document.getElementById('price-period');
+    if (pricePeriod) pricePeriod.textContent = periodText;
+  } else if (page === 'efficiency') {
+    drawEfficiencyTrendChart(range);
+    const efficiencyPeriod = document.getElementById('efficiency-period');
+    if (efficiencyPeriod) efficiencyPeriod.textContent = periodText;
+  } else if (page === 'shipper-company' || page === 'carrier-company') {
+    drawCompanyChart(page, range, getCompanyActiveMetric(page));
+    const companyPeriod = document.getElementById(page + '-period');
+    if (companyPeriod) companyPeriod.textContent = periodText;
+  }
+  console.log('Switched to ' + page + ' - ' + range);
+}
+
+function switchInsightTab(btn, target) {
+  const panel = btn.closest('.panel');
+  panel.querySelectorAll('.insight-tab').forEach(tab => tab.classList.remove('active'));
+  btn.classList.add('active');
+  panel.querySelectorAll('.insight-pane').forEach(pane => pane.classList.remove('active'));
+  const activePane = panel.querySelector('#insight-' + target);
+  if (activePane) activePane.classList.add('active');
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  const nav = document.getElementById('nav-' + id);
+  if (nav) nav.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  setTimeout(() => {
+    drawChartsForPage(id);
+  }, 50);
+}
+
+function setPeriod(btn) {
+  btn.closest('.period-btns').querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setCommTab(btn) {
+  btn.closest('.comm-tabs').querySelectorAll('.comm-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ===== CHARTS =====
+function drawLine(ctx, datasets, opts) {
+  const W = ctx.canvas.width, H = ctx.canvas.height;
+  const pad = {t:20, r:20, b:36, l:52};
+  const iW = W - pad.l - pad.r, iH = H - pad.t - pad.b;
+  ctx.clearRect(0, 0, W, H);
+
+  const allVals = datasets.flatMap(d => d.data).concat(opts.rangeValues || []);
+  const minV = Math.min(...allVals) * 0.97;
+  const maxV = Math.max(...allVals) * 1.02;
+  const labels = opts.labels || MONTHS;
+
+  // Grid lines
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + (iH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + iW, y);
+    ctx.strokeStyle = '#eef1f6'; ctx.lineWidth = 1; ctx.stroke();
+    const v = maxV - ((maxV - minV) / 4) * i;
+    ctx.font = '11px sans-serif'; ctx.fillStyle = '#9aaab8'; ctx.textAlign = 'right';
+    ctx.fillText(v.toFixed(1), pad.l - 6, y + 4);
+  }
+
+  // X labels
+  labels.forEach((l, i) => {
+    const x = pad.l + (iW / (labels.length - 1)) * i;
+    ctx.font = '11px sans-serif'; ctx.fillStyle = '#9aaab8'; ctx.textAlign = 'center';
+    ctx.fillText(l, x, H - 8);
+  });
+
+  // Lines
+  datasets.forEach(ds => {
+    ctx.beginPath();
+    ds.data.forEach((v, i) => {
+      const x = pad.l + (iW / (ds.data.length - 1)) * i;
+      const y = pad.t + iH * (1 - (v - minV) / (maxV - minV));
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = ds.color; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.stroke();
+
+    // Area fill
+    ctx.beginPath();
+    ds.data.forEach((v, i) => {
+      const x = pad.l + (iW / (ds.data.length - 1)) * i;
+      const y = pad.t + iH * (1 - (v - minV) / (maxV - minV));
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.lineTo(pad.l + iW, pad.t + iH);
+    ctx.lineTo(pad.l, pad.t + iH);
+    ctx.closePath();
+    ctx.fillStyle = ds.color + '18'; ctx.fill();
+
+    // Dots
+    ds.data.forEach((v, i) => {
+      const x = pad.l + (iW / (ds.data.length - 1)) * i;
+      const y = pad.t + iH * (1 - (v - minV) / (maxV - minV));
+      ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = ds.color; ctx.fill();
+    });
+  });
+}
+
+function drawBar(ctx, labels, datasets) {
+  const W = ctx.canvas.width, H = ctx.canvas.height;
+  const pad = {t:20, r:20, b:40, l:52};
+  const iW = W - pad.l - pad.r, iH = H - pad.t - pad.b;
+  ctx.clearRect(0, 0, W, H);
+
+  const allV = datasets.flatMap(d => d.data);
+  const maxV = Math.max(...allV) * 1.1;
+  const bw = (iW / labels.length) * 0.6 / datasets.length;
+
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.t + (iH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + iW, y);
+    ctx.strokeStyle = '#eef1f6'; ctx.lineWidth = 1; ctx.stroke();
+    const v = maxV * (1 - i / 4);
+    ctx.font = '11px sans-serif'; ctx.fillStyle = '#9aaab8'; ctx.textAlign = 'right';
+    ctx.fillText(v.toFixed(0), pad.l - 6, y + 4);
+  }
+
+  labels.forEach((l, i) => {
+    const cx = pad.l + (iW / labels.length) * (i + 0.5);
+    datasets.forEach((ds, di) => {
+      const x = cx - (datasets.length * bw / 2) + di * bw + di * 2;
+      const h = (ds.data[i] / maxV) * iH;
+      ctx.fillStyle = ds.color;
+      const radius = 3;
+      ctx.beginPath();
+      ctx.moveTo(x, pad.t + iH); ctx.lineTo(x, pad.t + iH - h + radius);
+      ctx.quadraticCurveTo(x, pad.t + iH - h, x + radius, pad.t + iH - h);
+      ctx.lineTo(x + bw - radius, pad.t + iH - h);
+      ctx.quadraticCurveTo(x + bw, pad.t + iH - h, x + bw, pad.t + iH - h + radius);
+      ctx.lineTo(x + bw, pad.t + iH); ctx.closePath(); ctx.fill();
+    });
+    ctx.font = '11px sans-serif'; ctx.fillStyle = '#9aaab8'; ctx.textAlign = 'center';
+    ctx.fillText(l, cx, H - 10);
+  });
+}
+
+function drawRadar() {
+  const c = document.getElementById('radarChart');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  const W = c.width, H = c.height, cx = W / 2 - 10, cy = H / 2 + 5, r = Math.min(W, H) * 0.35;
+  const labels = ['运输效率','成本管控','安全合规','供应链稳定','绿色低碳'];
+  const scores = [78.3,85.1,88.7,83.4,79.8];
+  const n = labels.length;
+  ctx.clearRect(0, 0, W, H);
+
+  for (let g = 1; g <= 4; g++) {
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const a = (Math.PI * 2 / n) * i - Math.PI / 2;
+      const pr = r * g / 4;
+      i === 0 ? ctx.moveTo(cx + Math.cos(a) * pr, cy + Math.sin(a) * pr)
+              : ctx.lineTo(cx + Math.cos(a) * pr, cy + Math.sin(a) * pr);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = '#e4e8f0'; ctx.lineWidth = 1; ctx.stroke();
+    if (g === 4) { ctx.fillStyle = 'rgba(0,0,0,0.01)'; ctx.fill(); }
+  }
+  for (let i = 0; i < n; i++) {
+    const a = (Math.PI * 2 / n) * i - Math.PI / 2;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+    ctx.strokeStyle = '#e4e8f0'; ctx.lineWidth = 1; ctx.stroke();
+    const lx = cx + Math.cos(a) * (r + 22), ly = cy + Math.sin(a) * (r + 22);
+    ctx.font = '11px sans-serif'; ctx.fillStyle = '#64748b'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(labels[i], lx, ly);
+  }
+  ctx.beginPath();
+  scores.forEach((s, i) => {
+    const a = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const pr = (s / 100) * r;
+    i === 0 ? ctx.moveTo(cx + Math.cos(a) * pr, cy + Math.sin(a) * pr)
+            : ctx.lineTo(cx + Math.cos(a) * pr, cy + Math.sin(a) * pr);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(22,119,255,0.12)'; ctx.fill();
+  ctx.strokeStyle = '#1677ff'; ctx.lineWidth = 2; ctx.stroke();
+  scores.forEach((s, i) => {
+    const a = (Math.PI * 2 / n) * i - Math.PI / 2;
+    const pr = (s / 100) * r;
+    ctx.beginPath(); ctx.arc(cx + Math.cos(a) * pr, cy + Math.sin(a) * pr, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#1677ff'; ctx.fill();
+  });
+}
+
+function drawChartsForPage(id) {
+  if (id === 'home') {
+    const activeTab = document.querySelector('#page-home .period-btns .time-tab.active');
+    const range = activeTab ? (activeTab.textContent.trim() === '日' ? 'day' : activeTab.textContent.trim() === '月' ? 'month' : 'week') : 'week';
+    updateKPICharts(range);
+  }
+  if (id === 'composite') {
+    const c = document.getElementById('compositeChart');
+    if (c) drawLine(c.getContext('2d'), [{data: HEALTH, color: '#1677ff'}], {labels: MONTHS});
+    const s = document.getElementById('compositeSparkline');
+    if (s) drawLine(s.getContext('2d'), [{data: HEALTH, color: '#1677ff'}], {labels: MONTHS});
+  }
+  if (id === 'supply') {
+    const activeTab = document.querySelector('#page-supply .time-tab.active');
+    let range = 'month';
+    if (activeTab) {
+      const text = activeTab.textContent.trim();
+      range = text.includes('日') ? 'day' : text.includes('周') ? 'week' : 'month';
+    }
+    drawSupplyTrendChart(range);
+  }
+  if (id === 'price') {
+    const activeTab = document.querySelector('#page-price .time-tab.active');
+    let range = 'month';
+    if (activeTab) {
+      const text = activeTab.textContent.trim();
+      range = text.includes('日') ? 'day' : text.includes('周') ? 'week' : 'month';
+    }
+    drawPriceTrendChart(range);
+  }
+  if (id === 'efficiency') {
+    const activeTab = document.querySelector('#page-efficiency .time-tab.active');
+    let range = 'month';
+    if (activeTab) {
+      const text = activeTab.textContent.trim();
+      range = text.includes('日') ? 'day' : text.includes('周') ? 'week' : 'month';
+    }
+    drawEfficiencyTrendChart(range);
+  }
+  if (id === 'shipper-company' || id === 'carrier-company') {
+    drawCompanyChart(id, getPageActiveRange(id), getCompanyActiveMetric(id));
+  }
+  if (id === 'forecast') {
+    const c = document.getElementById('forecastChart');
+    if (c) drawLine(c.getContext('2d'), [
+      {data: FORECAST_DATA, color: '#1677ff'},
+      {data: [108.6,109,107,105,100,90,86,92], color: '#22c55e'},
+    ], {labels: WEEK_LABELS});
+  }
+  if (id === 'regional') {
+    const c = document.getElementById('regionalChart');
+    if (c) drawBar(c.getContext('2d'), ['华北','华东','华南','华中','西北','西南','东北'], [
+      {data: [112.4,108.2,104.8,106.3,115.6,101.2,98.4], color: '#1677ff'},
+      {data: [108,105,102,104,112,99,95], color: '#22c55e'},
+    ]);
+  }
+}
+
+// ===== CLOCK =====
+function updateClock() {
+  document.getElementById('hdr-time').textContent = new Date().toLocaleString('zh-CN', {
+    year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', second:'2-digit', hour12: false
+  }).replace(/\//g,'-');
+}
+setInterval(updateClock, 1000);
+
+// ===== INIT =====
+window.addEventListener('load', () => {
+  ensurePaywallOverlays();
+  updateKPICharts('week');
+  drawChartsForPage('home');
+  updateClock();
+});
+</script>
+</body>
+</html>
