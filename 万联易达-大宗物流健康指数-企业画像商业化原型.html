@@ -79,6 +79,8 @@ button{font-family:inherit;cursor:pointer}
 .kpi-card.red::before{background:var(--red)}
 .kpi-card.purple::before{background:#8b5cf6}
 .kpi-card:hover{box-shadow:0 4px 20px rgba(22,119,255,.12);border-color:#91caff;transform:translateY(-2px)}
+.kpi-card-trend{margin-top:10px;padding-top:10px;border-top:1px dashed #e2e8f0}
+.kpi-card-trend canvas{display:block;width:100%;height:40px}
 .kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
 .kpi-lbl{font-size:12.5px;color:#8899aa;font-weight:400}
 .kpi-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
@@ -851,7 +853,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
       <div class="panel-hd" style="align-items:flex-end">
         <div>
           <div class="panel-title"><div class="ptbar"></div>分层表现</div>
-          <div class="insight-kicker">默认展示里程区间分层，支持切换到里程 × 载重的交易字段分层观察。</div>
+          <div class="insight-kicker">默认展示里程区间分层，支持切换到里程 × 载重的指数分层观察。</div>
         </div>
         <div class="layer-tabs">
           <button class="layer-tab active" onclick="switchPriceLayer('distance',this)">里程区间分层表现</button>
@@ -861,43 +863,43 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
       <div class="panel-bd" style="padding:0">
         <div class="layer-pane active" id="price-layer-distance">
           <table class="tbl">
-            <thead><tr><th>里程区间</th><th>当期表现</th><th>趋势</th><th>状态</th><th>较上期</th><th>主要样本</th></tr></thead>
+            <thead><tr><th>里程区间</th><th>当期表现</th><th>趋势</th><th>状态</th><th>较上期</th></tr></thead>
             <tbody>
-              <tr><td><strong>D ≤ 10KM</strong></td><td>101.2</td><td><canvas class="spark-mini" id="spark-d10" width="80" height="24"></canvas></td><td><span class="badge badge-info">平稳</span></td><td style="color:var(--gray)">→ +0.3</td><td>厂区短驳、港口周边</td></tr>
-              <tr><td><strong>10 < D ≤ 50KM</strong></td><td>104.6</td><td><canvas class="spark-mini" id="spark-d50" width="80" height="24"></canvas></td><td><span class="badge badge-ok">稳定</span></td><td style="color:var(--green)">↑ +0.8</td><td>城市周边短途</td></tr>
-              <tr><td><strong>50 < D ≤ 100KM</strong></td><td>106.8</td><td><canvas class="spark-mini" id="spark-d100" width="80" height="24"></canvas></td><td><span class="badge badge-ok">合理</span></td><td style="color:var(--green)">↑ +1.1</td><td>省内短中途</td></tr>
-              <tr><td><strong>100 < D ≤ 200KM</strong></td><td>110.4</td><td><canvas class="spark-mini" id="spark-d200" width="80" height="24"></canvas></td><td><span class="badge badge-info">合理偏强</span></td><td style="color:var(--green)">↑ +1.9</td><td>省际近程线路</td></tr>
-              <tr><td><strong>200 < D ≤ 500KM</strong></td><td>116.2</td><td><canvas class="spark-mini" id="spark-d500" width="80" height="24"></canvas></td><td><span class="badge badge-warn">偏热</span></td><td style="color:var(--green)">↑ +4.0</td><td>山西/内蒙至长三角</td></tr>
-              <tr><td><strong>500 < D ≤ 1000KM</strong></td><td>118.6</td><td><canvas class="spark-mini" id="spark-d1000" width="80" height="24"></canvas></td><td><span class="badge badge-warn">偏热</span></td><td style="color:var(--green)">↑ +3.2</td><td>西北能源外运</td></tr>
-              <tr><td><strong>D > 1000KM</strong></td><td>108.4</td><td><canvas class="spark-mini" id="spark-d1000p" width="80" height="24"></canvas></td><td><span class="badge badge-info">样本观察</span></td><td style="color:var(--gray)">样本较少</td><td>跨大区低频线路</td></tr>
+              <tr><td><strong>D ≤ 10KM</strong></td><td>101.2</td><td><canvas class="spark-mini" id="spark-d10" width="80" height="24"></canvas></td><td><span class="badge badge-info">平稳</span></td><td style="color:var(--gray)">→ +0.3</td></tr>
+              <tr><td><strong>10 < D ≤ 50KM</strong></td><td>104.6</td><td><canvas class="spark-mini" id="spark-d50" width="80" height="24"></canvas></td><td><span class="badge badge-ok">稳定</span></td><td style="color:var(--green)">↑ +0.8</td></tr>
+              <tr><td><strong>50 < D ≤ 100KM</strong></td><td>106.8</td><td><canvas class="spark-mini" id="spark-d100" width="80" height="24"></canvas></td><td><span class="badge badge-ok">合理</span></td><td style="color:var(--green)">↑ +1.1</td></tr>
+              <tr><td><strong>100 < D ≤ 200KM</strong></td><td>110.4</td><td><canvas class="spark-mini" id="spark-d200" width="80" height="24"></canvas></td><td><span class="badge badge-info">合理偏强</span></td><td style="color:var(--green)">↑ +1.9</td></tr>
+              <tr><td><strong>200 < D ≤ 500KM</strong></td><td>116.2</td><td><canvas class="spark-mini" id="spark-d500" width="80" height="24"></canvas></td><td><span class="badge badge-warn">偏热</span></td><td style="color:var(--green)">↑ +4.0</td></tr>
+              <tr><td><strong>500 < D ≤ 1000KM</strong></td><td>118.6</td><td><canvas class="spark-mini" id="spark-d1000" width="80" height="24"></canvas></td><td><span class="badge badge-warn">偏热</span></td><td style="color:var(--green)">↑ +3.2</td></tr>
+              <tr><td><strong>D > 1000KM</strong></td><td>108.4</td><td><canvas class="spark-mini" id="spark-d1000p" width="80" height="24"></canvas></td><td><span class="badge badge-info">样本观察</span></td><td style="color:var(--gray)">样本较少</td></tr>
             </tbody>
           </table>
         </div>
         <div class="layer-pane" id="price-layer-distance-load">
           <table class="tbl">
-            <thead><tr><th>里程区间</th><th>车辆核载</th><th>运费</th><th>吨公里</th><th>车公里</th></tr></thead>
+            <thead><tr><th>里程区间</th><th>车辆核载</th><th>当期表现</th><th>状态</th><th>较上期</th></tr></thead>
             <tbody>
-              <tr><td rowspan="3"><strong>D ≤ 10KM</strong></td><td>核载 ≤ 5吨</td><td>350</td><td>100</td><td>150</td></tr>
-              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>500</td><td>25</td><td>150</td></tr>
-              <tr><td>核载 &gt; 25吨</td><td>500</td><td>15</td><td>150</td></tr>
-              <tr><td rowspan="3"><strong>10 &lt; D ≤ 50KM</strong></td><td>核载 ≤ 5吨</td><td>500</td><td>10</td><td>35</td></tr>
-              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>800</td><td>5</td><td>50</td></tr>
-              <tr><td>核载 &gt; 25吨</td><td>1000</td><td>1.5</td><td>50</td></tr>
-              <tr><td rowspan="3"><strong>50 &lt; D ≤ 100KM</strong></td><td>核载 ≤ 5吨</td><td>800</td><td>6</td><td>10</td></tr>
-              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>1300</td><td>3</td><td>16</td></tr>
-              <tr><td>核载 &gt; 25吨</td><td>1700</td><td>0.7</td><td>20</td></tr>
-              <tr><td rowspan="3"><strong>100 &lt; D ≤ 200KM</strong></td><td>核载 ≤ 5吨</td><td>1200</td><td>5</td><td>9</td></tr>
-              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>2300</td><td>2</td><td>13</td></tr>
-              <tr><td>核载 &gt; 25吨</td><td>3200</td><td>0.6</td><td>17</td></tr>
-              <tr><td rowspan="3"><strong>200 &lt; D ≤ 500KM</strong></td><td>核载 ≤ 5吨</td><td>2300</td><td>4.5</td><td>7</td></tr>
-              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>5000</td><td>0.8</td><td>12</td></tr>
-              <tr><td>核载 &gt; 25吨</td><td>6500</td><td>0.5</td><td>16</td></tr>
-              <tr><td rowspan="3"><strong>500 &lt; D ≤ 1000KM</strong></td><td>核载 ≤ 5吨</td><td>5000</td><td>3.5</td><td>5</td></tr>
-              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>8000</td><td>0.7</td><td>10</td></tr>
-              <tr><td>核载 &gt; 25吨</td><td>11000</td><td>0.45</td><td>12</td></tr>
-              <tr><td rowspan="3"><strong>1000 &lt; D</strong></td><td>核载 ≤ 5吨</td><td>7500</td><td>3</td><td>6</td></tr>
-              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>20000</td><td>0.6</td><td>10</td></tr>
-              <tr><td>核载 &gt; 25吨</td><td>30000</td><td>0.4</td><td>11</td></tr>
+              <tr><td rowspan="3"><strong>D ≤ 10KM</strong></td><td>核载 ≤ 5吨</td><td>100.4</td><td><span class="badge badge-info">平稳</span></td><td style="color:var(--gray)">→ +0.2</td></tr>
+              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>101.6</td><td><span class="badge badge-info">平稳</span></td><td style="color:var(--gray)">→ +0.3</td></tr>
+              <tr><td>核载 &gt; 25吨</td><td>102.1</td><td><span class="badge badge-ok">稳定</span></td><td style="color:var(--green)">↑ +0.4</td></tr>
+              <tr><td rowspan="3"><strong>10 &lt; D ≤ 50KM</strong></td><td>核载 ≤ 5吨</td><td>103.2</td><td><span class="badge badge-info">平稳</span></td><td style="color:var(--green)">↑ +0.4</td></tr>
+              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>104.6</td><td><span class="badge badge-ok">稳定</span></td><td style="color:var(--green)">↑ +0.8</td></tr>
+              <tr><td>核载 &gt; 25吨</td><td>105.1</td><td><span class="badge badge-ok">稳定</span></td><td style="color:var(--green)">↑ +1.0</td></tr>
+              <tr><td rowspan="3"><strong>50 &lt; D ≤ 100KM</strong></td><td>核载 ≤ 5吨</td><td>105.2</td><td><span class="badge badge-ok">合理</span></td><td style="color:var(--green)">↑ +0.9</td></tr>
+              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>106.8</td><td><span class="badge badge-ok">合理</span></td><td style="color:var(--green)">↑ +1.1</td></tr>
+              <tr><td>核载 &gt; 25吨</td><td>108.1</td><td><span class="badge badge-info">合理偏强</span></td><td style="color:var(--green)">↑ +1.4</td></tr>
+              <tr><td rowspan="3"><strong>100 &lt; D ≤ 200KM</strong></td><td>核载 ≤ 5吨</td><td>108.8</td><td><span class="badge badge-info">合理偏强</span></td><td style="color:var(--green)">↑ +1.6</td></tr>
+              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>110.4</td><td><span class="badge badge-info">合理偏强</span></td><td style="color:var(--green)">↑ +1.9</td></tr>
+              <tr><td>核载 &gt; 25吨</td><td>112.6</td><td><span class="badge badge-warn">偏热边缘</span></td><td style="color:var(--green)">↑ +2.3</td></tr>
+              <tr><td rowspan="3"><strong>200 &lt; D ≤ 500KM</strong></td><td>核载 ≤ 5吨</td><td>112.4</td><td><span class="badge badge-info">合理偏强</span></td><td style="color:var(--green)">↑ +2.2</td></tr>
+              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>116.2</td><td><span class="badge badge-warn">偏热</span></td><td style="color:var(--green)">↑ +4.0</td></tr>
+              <tr><td>核载 &gt; 25吨</td><td>117.5</td><td><span class="badge badge-warn">偏热</span></td><td style="color:var(--green)">↑ +4.4</td></tr>
+              <tr><td rowspan="3"><strong>500 &lt; D ≤ 1000KM</strong></td><td>核载 ≤ 5吨</td><td>114.8</td><td><span class="badge badge-warn">偏热</span></td><td style="color:var(--green)">↑ +2.5</td></tr>
+              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>118.6</td><td><span class="badge badge-warn">偏热</span></td><td style="color:var(--green)">↑ +3.2</td></tr>
+              <tr><td>核载 &gt; 25吨</td><td>119.4</td><td><span class="badge badge-danger">偏高</span></td><td style="color:var(--green)">↑ +3.8</td></tr>
+              <tr><td rowspan="3"><strong>1000 &lt; D</strong></td><td>核载 ≤ 5吨</td><td>106.2</td><td><span class="badge badge-info">样本观察</span></td><td style="color:var(--gray)">样本较少</td></tr>
+              <tr><td>5 &lt; 核载 ≤ 25吨</td><td>108.4</td><td><span class="badge badge-info">样本观察</span></td><td style="color:var(--gray)">样本较少</td></tr>
+              <tr><td>核载 &gt; 25吨</td><td>109.6</td><td><span class="badge badge-info">样本观察</span></td><td style="color:var(--gray)">样本较少</td></tr>
             </tbody>
           </table>
         </div>
@@ -1200,24 +1202,17 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             <div class="kpi-value">87.6%</div>
             <div class="kpi-delta up">↑ +2.1% 较上期</div>
             <div class="premium-mask" style="font-size:12px;margin-top:6px;padding:4px 8px;background:#f0fdf4;border-radius:4px;color:#16a34a;font-weight:500;display:flex;gap:12px;flex-wrap:wrap"><span>行业大盘 82.4%（+5.2%）</span><span>匹配样本 84.1%（+3.5%）</span></div>
+            <div class="kpi-card-trend">
+              <canvas id="shipper-supply-trend-response" width="320" height="40"></canvas>
+            </div>
           </div>
           <div class="kpi-card amber">
             <div class="kpi-top"><span class="kpi-label">平均接单时长</span><span class="badge badge-warn">略慢于大盘</span></div>
             <div class="kpi-value">4.2 小时</div>
             <div class="kpi-delta down">↑ +0.3h 较上期</div>
             <div class="premium-mask" style="font-size:12px;margin-top:6px;padding:4px 8px;background:#fffbeb;border-radius:4px;color:#d97706;font-weight:500;display:flex;gap:12px;flex-wrap:wrap"><span>行业大盘 3.8h（慢 +0.4h）</span><span>匹配样本 3.5h（慢 +0.7h）</span></div>
-          </div>
-        </div>
-        <div class="paywall-card locked" style="margin-top:12px;border:1px dashed var(--border);border-radius:10px;padding:10px">
-          <div style="font-size:13px;font-weight:600;margin-bottom:8px">趋势观察 <span class="badge badge-info">🔒 订阅解锁</span></div>
-          <div class="kpi-grid c2 premium-mask">
-            <div style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-              <div style="font-size:12px;color:var(--gray);margin-bottom:6px">接单响应率趋势</div>
-              <canvas id="shipper-supply-trend-response" width="320" height="64"></canvas>
-            </div>
-            <div style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-              <div style="font-size:12px;color:var(--gray);margin-bottom:6px">平均接单时长趋势</div>
-              <canvas id="shipper-supply-trend-duration" width="320" height="64"></canvas>
+            <div class="kpi-card-trend">
+              <canvas id="shipper-supply-trend-duration" width="320" height="40"></canvas>
             </div>
           </div>
         </div>
@@ -1234,6 +1229,9 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             <div class="kpi-value">0.38 元/吨公里</div>
             <div class="kpi-delta up">↑ +0.02 较上期</div>
             <div class="premium-mask" style="font-size:12px;margin-top:6px;padding:5px 10px;background:#f0fdf4;border-radius:4px;display:flex;gap:16px;flex-wrap:wrap"><span style="color:#374151">行业大盘 <strong>0.35</strong> 元/吨公里 <span style="color:#16a34a;font-weight:600">(+0.03)</span></span><span style="color:#374151">匹配样本 <strong>0.37</strong> 元/吨公里 <span style="color:#16a34a;font-weight:600">(+0.01)</span></span></div>
+            <div class="kpi-card-trend">
+              <canvas id="shipper-price-trend-unit" width="680" height="40"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -1253,14 +1251,6 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
         </tbody>
       </table>
     </div>
-    <div class="paywall-card locked" style="margin-top:12px;border:1px dashed var(--border);border-radius:10px;padding:10px">
-      <div style="font-size:13px;font-weight:600;margin-bottom:8px">趋势观察 <span class="badge badge-info">🔒 订阅解锁</span></div>
-      <div class="premium-mask" style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-        <div style="font-size:12px;color:var(--gray);margin-bottom:6px">吨公里价格趋势</div>
-        <canvas id="shipper-price-trend-unit" width="680" height="64"></canvas>
-      </div>
-    </div>
-
     <!-- 物流效率组 -->
     <div class="panel">
       <div class="panel-hd"><div class="panel-title"><div class="ptbar blue"></div>物流效率组</div></div>
@@ -1274,6 +1264,9 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
               <span style="color:#374151">行业大盘 <strong>3.0h</strong> <span style="color:#16a34a;font-weight:600">(-0.3h)</span></span>
               <span style="color:#374151">匹配样本 <strong>2.9h</strong> <span style="color:#16a34a;font-weight:600">(-0.2h)</span></span>
             </div>
+            <div class="kpi-card-trend">
+              <canvas id="shipper-efficiency-trend-time" width="320" height="40"></canvas>
+            </div>
           </div>
           <div class="kpi-card blue">
             <div class="kpi-top"><span class="kpi-label">准点率</span><span class="badge badge-ok">优于大盘</span></div>
@@ -1282,6 +1275,9 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             <div class="premium-mask" style="font-size:12px;margin-top:6px;padding:5px 10px;background:#f0fdf4;border-radius:4px;display:flex;gap:12px;flex-wrap:wrap">
               <span style="color:#374151">行业大盘 <strong>87.6%</strong> <span style="color:#16a34a;font-weight:600">(+3.6%)</span></span>
               <span style="color:#374151">匹配样本 <strong>89.4%</strong> <span style="color:#16a34a;font-weight:600">(+1.8%)</span></span>
+            </div>
+            <div class="kpi-card-trend">
+              <canvas id="shipper-efficiency-trend-ontime" width="320" height="40"></canvas>
             </div>
           </div>
         </div>
@@ -1296,18 +1292,49 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             </tbody>
           </table>
         </div>
-        <div class="paywall-card locked" style="margin-top:12px;border:1px dashed var(--border);border-radius:10px;padding:10px">
-          <div style="font-size:13px;font-weight:600;margin-bottom:8px">趋势观察 <span class="badge badge-info">🔒 订阅解锁</span></div>
-          <div class="kpi-grid c2 premium-mask">
-            <div style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-              <div style="font-size:12px;color:var(--gray);margin-bottom:6px">百公里运输时长趋势</div>
-              <canvas id="shipper-efficiency-trend-time" width="320" height="64"></canvas>
-            </div>
-            <div style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-              <div style="font-size:12px;color:var(--gray);margin-bottom:6px">准点率趋势</div>
-              <canvas id="shipper-efficiency-trend-ontime" width="320" height="64"></canvas>
-            </div>
-          </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-hd">
+        <div class="panel-title"><div class="ptbar green"></div>推荐承运商机会</div>
+        <div class="panel-actions"><span class="badge badge-info">按线路匹配</span></div>
+      </div>
+      <div class="panel-bd" style="padding:0">
+        <div class="paywall-card locked" style="border:none;border-radius:0">
+          <table class="tbl" style="table-layout:fixed;width:100%">
+            <thead><tr><th>推荐承运商</th><th>匹配线路</th><th>响应表现</th><th>履约表现</th><th>推荐理由</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong><a href="javascript:void(0)" onclick="openCarrierProfile('安能物流')">安能物流</a></strong></td>
+                <td>上海 → 江苏</td>
+                <td><span class="premium-mask">接单响应较快</span></td>
+                <td><span class="premium-mask">准点率较高</span></td>
+                <td><span class="premium-mask">在同线路样本中履约稳定，适合作为短中途补充承运商</span></td>
+              </tr>
+              <tr>
+                <td><span class="premium-mask"><strong><a href="javascript:void(0)" onclick="openCarrierProfile('区域车队联盟')">区域车队联盟</a></strong></span></td>
+                <td><span class="premium-mask">上海 → 山西</span></td>
+                <td><span class="premium-mask">响应稳定</span></td>
+                <td><span class="premium-mask">百公里运输时长较优</span></td>
+                <td><span class="premium-mask">适合中长途线路补充运力，履约波动相对较小</span></td>
+              </tr>
+              <tr>
+                <td><span class="premium-mask"><strong><a href="javascript:void(0)" onclick="openCarrierProfile('德邦大件')">德邦大件</a></strong></span></td>
+                <td><span class="premium-mask">上海 → 河北</span></td>
+                <td><span class="premium-mask">高峰期响应可控</span></td>
+                <td><span class="premium-mask">长途履约表现平稳</span></td>
+                <td><span class="premium-mask">适合钢铁和建材类线路，在匹配样本中价格位置合理</span></td>
+              </tr>
+              <tr>
+                <td><span class="premium-mask"><strong><a href="javascript:void(0)" onclick="openCarrierProfile('中通快运')">中通快运</a></strong></span></td>
+                <td><span class="premium-mask">上海 → 河北</span></td>
+                <td><span class="premium-mask">响应活跃</span></td>
+                <td><span class="premium-mask">准点表现改善</span></td>
+                <td><span class="premium-mask">在同线路样本中承接表现上升，适合做备选合作方</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -1315,8 +1342,8 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
     <!-- 订阅引导 Banner -->
     <div class="company-unlock-banner">
       <div>
-        <div class="company-unlock-title">订阅企业画像，查看完整对标、分层明细与趋势</div>
-        <div class="company-unlock-desc">免费版仅完整展示当前值与少量状态，订阅后一次性解锁行业大盘、匹配样本、路线效率和各组趋势。</div>
+        <div class="company-unlock-title">订阅企业画像，查看完整对标、分层明细与机会线索</div>
+        <div class="company-unlock-desc">免费版仅完整展示当前值、少量状态与趋势，订阅后一次性解锁行业大盘、匹配样本、路线效率和推荐机会细节。</div>
       </div>
       <button class="company-unlock-btn" type="button" onclick="openSubscriptionModal()">订阅查看完整数据</button>
     </div>
@@ -1400,24 +1427,17 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             <div class="kpi-value">91.2%</div>
             <div class="kpi-delta up">↑ +3.6% 较上期</div>
             <div class="premium-mask" style="font-size:12px;margin-top:6px;padding:4px 8px;background:#f0fdf4;border-radius:4px;display:flex;gap:12px;flex-wrap:wrap"><span style="color:#374151">行业大盘 <strong>82.4%</strong> <span style="color:#16a34a;font-weight:600">(+8.8%)</span></span><span style="color:#374151">匹配样本 <strong>86.8%</strong> <span style="color:#16a34a;font-weight:600">(+4.4%)</span></span></div>
+            <div class="kpi-card-trend">
+              <canvas id="carrier-supply-trend-response" width="320" height="40"></canvas>
+            </div>
           </div>
           <div class="kpi-card amber">
             <div class="kpi-top"><span class="kpi-label">平均接单时长</span><span class="badge badge-ok">快于大盘</span></div>
             <div class="kpi-value">1.8 小时</div>
             <div class="kpi-delta up">↓ -0.2h 较上期</div>
             <div class="premium-mask" style="font-size:12px;margin-top:6px;padding:4px 8px;background:#f0fdf4;border-radius:4px;display:flex;gap:12px;flex-wrap:wrap"><span style="color:#374151">行业大盘 <strong>3.8h</strong> <span style="color:#16a34a;font-weight:600">(-2.0h)</span></span><span style="color:#374151">匹配样本 <strong>2.6h</strong> <span style="color:#16a34a;font-weight:600">(-0.8h)</span></span></div>
-          </div>
-        </div>
-        <div class="paywall-card locked" style="margin-top:12px;border:1px dashed var(--border);border-radius:10px;padding:10px">
-          <div style="font-size:13px;font-weight:600;margin-bottom:8px">趋势观察 <span class="badge badge-info">🔒 订阅解锁</span></div>
-          <div class="kpi-grid c2 premium-mask">
-            <div style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-              <div style="font-size:12px;color:var(--gray);margin-bottom:6px">接单响应率趋势</div>
-              <canvas id="carrier-supply-trend-response" width="320" height="64"></canvas>
-            </div>
-            <div style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-              <div style="font-size:12px;color:var(--gray);margin-bottom:6px">平均接单时长趋势</div>
-              <canvas id="carrier-supply-trend-duration" width="320" height="64"></canvas>
+            <div class="kpi-card-trend">
+              <canvas id="carrier-supply-trend-duration" width="320" height="40"></canvas>
             </div>
           </div>
         </div>
@@ -1437,6 +1457,9 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
               <span style="color:#374151">行业大盘 <strong>0.35</strong> 元/吨公里 <span style="color:#16a34a;font-weight:600">(+0.03)</span></span>
               <span style="color:#374151">匹配样本 <strong>0.36</strong> 元/吨公里 <span style="color:#16a34a;font-weight:600">(+0.02)</span></span>
             </div>
+            <div class="kpi-card-trend">
+              <canvas id="carrier-price-trend-unit" width="680" height="40"></canvas>
+            </div>
           </div>
         </div>
         <!-- 7档运距分层明细（订阅解锁） -->
@@ -1455,13 +1478,6 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             </tbody>
           </table>
         </div>
-        <div class="paywall-card locked" style="margin-top:12px;border:1px dashed var(--border);border-radius:10px;padding:10px">
-          <div style="font-size:13px;font-weight:600;margin-bottom:8px">趋势观察 <span class="badge badge-info">🔒 订阅解锁</span></div>
-          <div class="premium-mask" style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-            <div style="font-size:12px;color:var(--gray);margin-bottom:6px">吨公里价格趋势</div>
-            <canvas id="carrier-price-trend-unit" width="680" height="64"></canvas>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -1475,12 +1491,18 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             <div class="kpi-value">2.4 小时</div>
             <div class="kpi-delta up">↓ -0.1h 较上期</div>
             <div class="premium-mask" style="font-size:12px;margin-top:6px;padding:4px 8px;background:#f0fdf4;border-radius:4px;display:flex;gap:12px;flex-wrap:wrap"><span style="color:#374151">行业大盘 <strong>2.8h</strong> <span style="color:#16a34a;font-weight:600">(-0.4h)</span></span><span style="color:#374151">匹配样本 <strong>2.6h</strong> <span style="color:#16a34a;font-weight:600">(-0.2h)</span></span></div>
+            <div class="kpi-card-trend">
+              <canvas id="carrier-efficiency-trend-time" width="320" height="40"></canvas>
+            </div>
           </div>
           <div class="kpi-card blue">
             <div class="kpi-top"><span class="kpi-label">准点率</span><span class="badge badge-ok">优于大盘</span></div>
             <div class="kpi-value">93.6%</div>
             <div class="kpi-delta up">↑ +1.8% 较上期</div>
             <div class="premium-mask" style="font-size:12px;margin-top:6px;padding:4px 8px;background:#f0fdf4;border-radius:4px;display:flex;gap:12px;flex-wrap:wrap"><span style="color:#374151">行业大盘 <strong>87.6%</strong> <span style="color:#16a34a;font-weight:600">(+6.0%)</span></span><span style="color:#374151">匹配样本 <strong>90.8%</strong> <span style="color:#16a34a;font-weight:600">(+2.8%)</span></span></div>
+            <div class="kpi-card-trend">
+              <canvas id="carrier-efficiency-trend-ontime" width="320" height="40"></canvas>
+            </div>
           </div>
         </div>
         <div class="paywall-card locked" style="margin-top:12px;border:1px solid #bbf7d0;border-radius:12px;padding:12px;background:linear-gradient(180deg,#f0fdf4 0%,#ffffff 100%)">
@@ -1494,18 +1516,49 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
             </tbody>
           </table>
         </div>
-        <div class="paywall-card locked" style="margin-top:12px;border:1px dashed var(--border);border-radius:10px;padding:10px">
-          <div style="font-size:13px;font-weight:600;margin-bottom:8px">趋势观察 <span class="badge badge-info">🔒 订阅解锁</span></div>
-          <div class="kpi-grid c2 premium-mask">
-            <div style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-              <div style="font-size:12px;color:var(--gray);margin-bottom:6px">百公里运输时长趋势</div>
-              <canvas id="carrier-efficiency-trend-time" width="320" height="64"></canvas>
-            </div>
-            <div style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">
-              <div style="font-size:12px;color:var(--gray);margin-bottom:6px">准点率趋势</div>
-              <canvas id="carrier-efficiency-trend-ontime" width="320" height="64"></canvas>
-            </div>
-          </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px">
+      <div class="panel-hd">
+        <div class="panel-title"><div class="ptbar green"></div>推荐货主机会</div>
+        <div class="panel-actions"><span class="badge badge-info">按线路匹配</span></div>
+      </div>
+      <div class="panel-bd" style="padding:0">
+        <div class="paywall-card locked" style="border:none;border-radius:0">
+          <table class="tbl" style="table-layout:fixed;width:100%">
+            <thead><tr><th>推荐货主</th><th>匹配线路</th><th>需求热度</th><th>价格接受度</th><th>推荐理由</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>华东钢贸集团</strong></td>
+                <td>上海 → 河北</td>
+                <td><span class="premium-mask">高</span></td>
+                <td><span class="premium-mask">中高</span></td>
+                <td><span class="premium-mask">同线路需求稳定，价格带与当前承运能力匹配，适合重点跟进</span></td>
+              </tr>
+              <tr>
+                <td><span class="premium-mask"><strong>北方能源贸易公司</strong></span></td>
+                <td><span class="premium-mask">上海 → 山西</span></td>
+                <td><span class="premium-mask">中高</span></td>
+                <td><span class="premium-mask">高</span></td>
+                <td><span class="premium-mask">长途线路需求连续，适合补充回程机会，价格接受度较好</span></td>
+              </tr>
+              <tr>
+                <td><span class="premium-mask"><strong>长三角制造业客户</strong></span></td>
+                <td><span class="premium-mask">上海 → 江苏</span></td>
+                <td><span class="premium-mask">中</span></td>
+                <td><span class="premium-mask">中高</span></td>
+                <td><span class="premium-mask">短中途频次高，履约适配度高，适合稳定型运力持续服务</span></td>
+              </tr>
+              <tr>
+                <td><span class="premium-mask"><strong>华南建材贸易商</strong></span></td>
+                <td><span class="premium-mask">上海 → 华中</span></td>
+                <td><span class="premium-mask">中</span></td>
+                <td><span class="premium-mask">中</span></td>
+                <td><span class="premium-mask">在同线路样本中发货节奏平稳，可作为新增合作线索储备</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -1513,8 +1566,8 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
     <!-- 订阅引导 Banner -->
     <div class="company-unlock-banner">
       <div>
-        <div class="company-unlock-title">订阅企业画像，查看完整对标、分层明细与趋势</div>
-        <div class="company-unlock-desc">免费版仅完整展示当前值与少量状态，订阅后一次性解锁行业大盘、匹配样本、路线效率和各组趋势。</div>
+        <div class="company-unlock-title">订阅企业画像，查看完整对标、分层明细与机会线索</div>
+        <div class="company-unlock-desc">免费版仅完整展示当前值、少量状态与趋势，订阅后一次性解锁行业大盘、匹配样本、路线效率和推荐机会细节。</div>
       </div>
       <button class="company-unlock-btn" type="button" onclick="openSubscriptionModal()">订阅查看完整数据</button>
     </div>
@@ -1529,7 +1582,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
       <div class="subscription-dialog-sub">订阅后可同时查看货主企业与承运商企业的完整路线、货类、合作方和对标数据。本原型中点击确认后立即解锁。</div>
     </div>
     <div class="subscription-benefits">
-      <div class="subscription-benefit">✓ 完整路线表现与趋势对标</div>
+      <div class="subscription-benefit">✓ 完整路线表现与对标明细</div>
       <div class="subscription-benefit">✓ 常发货类与结构变化</div>
       <div class="subscription-benefit">✓ 合作方表现与异常指标</div>
       <div class="subscription-benefit">✓ 可替代承运商对比</div>
