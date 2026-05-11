@@ -517,10 +517,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
 .mh-value.green{color:var(--green)}
 .mh-value.amber{color:var(--amber)}
 .mh-range{font-size:13px;color:#8899aa;margin:10px 0 14px}
-.rating-badge{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;font-size:17px;font-weight:700;margin-left:14px;vertical-align:middle}
-.rA{background:#f0fdf4;color:#16a34a;border:2px solid #86efac}
-.rB{background:#fffbeb;color:#d97706;border:2px solid #fcd34d}
-.rC{background:#fff1f2;color:#e11d48;border:2px solid #fda4af}
+.metric-rating-tag{display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;border-radius:999px;font-size:15px;font-weight:700;margin-left:14px;vertical-align:middle;border:1px solid transparent;line-height:1}
 .mh-desc{font-size:14px;color:#4a5a6e;line-height:1.9;background:#f8fafc;border-radius:10px;padding:14px 18px}
 
 /* ===== BREADCRUMB ===== */
@@ -542,6 +539,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
   </a>
   <nav class="hdr-nav">
     <button class="nav-item active" id="nav-home" onclick="showPage('home')">📊 指数首页</button>
+    <button class="nav-item" id="nav-capacity" onclick="showPage('capacity')">平台运力活跃指数</button>
     <button class="nav-item" id="nav-supply" onclick="showPage('supply')">运力响应指数</button>
     <button class="nav-item" id="nav-price" onclick="showPage('price')">运价指数</button>
     <button class="nav-item" id="nav-efficiency" onclick="showPage('efficiency')">物流效率指数</button>
@@ -700,6 +698,119 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
   </div>
 </div>
 <!-- ================================================================
+     PAGE: 平台运力活跃指数
+     ================================================================ -->
+<div class="page" id="page-capacity">
+  <div class="ph"><div class="ph-inner">
+    <div><h1 class="ph-title">平台运力活跃指数</h1><p class="ph-sub">Platform Capacity Activity Index &nbsp;|&nbsp; 观察平台样本内的运力供给活跃变化</p></div>
+    <button class="btn-outline" onclick="showPage('home')">← 返回首页</button>
+  </div></div>
+  <div class="content">
+    <div class="bc"><span onclick="showPage('home')">指数首页</span> / 平台运力活跃指数</div>
+    <div style="display:flex;gap:6px;margin-bottom:16px;justify-content:flex-end;border:1px solid var(--border);border-radius:6px;padding:2px;background:#f8f9fa;width:fit-content;margin-left:auto">
+      <button class="time-tab" onclick="switchTimeRange(this, 'capacity', 'day')" style="padding:6px 14px;font-size:12px;border:none;background:transparent;color:#666;cursor:pointer;transition:all .2s">按日</button>
+      <button class="time-tab active" onclick="switchTimeRange(this, 'capacity', 'week')" style="padding:6px 14px;font-size:12px;border:none;border-radius:4px;background:var(--blue);color:#fff;cursor:pointer;font-weight:600;transition:all .2s">按周</button>
+      <button class="time-tab" onclick="switchTimeRange(this, 'capacity', 'month')" style="padding:6px 14px;font-size:12px;border:none;background:transparent;color:#666;cursor:pointer;transition:all .2s">按月</button>
+    </div>
+
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-bd" style="display:grid;grid-template-columns:1.4fr repeat(3,minmax(0,1fr));gap:14px;align-items:stretch">
+        <div class="index-command-card" style="min-height:210px">
+          <div class="index-command-head">
+            <div class="index-command-name">平台运力活跃指数</div>
+            <span class="badge badge-ok" id="capacity-headline-badge">活跃平稳</span>
+          </div>
+          <div class="index-command-value">
+            <strong style="color:var(--blue)" id="capacity-headline-value">103.8</strong>
+            <span class="kpi-delta up" id="capacity-headline-delta">↑ 1.6 较上期</span>
+          </div>
+          <div class="index-command-status" id="capacity-headline-status">活跃平稳</div>
+          <div class="index-command-desc" id="capacity-headline-desc">平台内有效供给形成稳中有升，成单车辆增长快于供给池波动。</div>
+          <div class="home-chart-note" style="margin-top:14px">
+            <strong id="capacity-period-copy">本期口径：近12周</strong><br>
+            本页只观察平台样本内的供给活跃变化，不表达全国总运力或真实社会供给规模。
+          </div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-top"><span class="kpi-label">找货司机数</span><span class="badge badge-info">前置供给池</span></div>
+          <div class="kpi-value" id="capacity-driver-value">12,860</div>
+          <div class="kpi-delta up" id="capacity-driver-delta">↑ +4.8% 较上期</div>
+          <div class="kpi-meta" id="capacity-driver-copy">司机侧找货活跃度提升，为平台供给池提供增量。</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-top"><span class="kpi-label">已成单车辆数</span><span class="badge badge-ok">有效供给池</span></div>
+          <div class="kpi-value" id="capacity-vehicle-value">8,120</div>
+          <div class="kpi-delta up" id="capacity-vehicle-delta">↑ +6.2% 较上期</div>
+          <div class="kpi-meta" id="capacity-vehicle-copy">成单车辆形成速度快于司机侧波动，是 headline 走强的主要来源。</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-top"><span class="kpi-label">供给转化率</span><span class="badge badge-ok">转化改善</span></div>
+          <div class="kpi-value" id="capacity-conversion-value">63.1%</div>
+          <div class="kpi-delta up" id="capacity-conversion-delta">↑ +0.8pt 较上期</div>
+          <div class="kpi-meta" id="capacity-conversion-copy">找货流量向有效成单车辆的转化改善，为活跃指数提供正向修正。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hd">
+        <div>
+          <div class="panel-title"><div class="ptbar"></div>平台运力活跃趋势（<span id="capacity-period">近12周</span>）</div>
+          <div class="insight-kicker">与页面上方按日/按周/按月联动，100 表示近期滚动常态。</div>
+        </div>
+      </div>
+      <div class="panel-bd" style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
+        <div>
+          <canvas id="capacityChart" width="640" height="260" class="index-chart-canvas"></canvas>
+        </div>
+        <div style="border-left:1px solid var(--border);padding-left:20px">
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--dark)">本期解读</div>
+          <div style="margin-bottom:14px">
+            <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px">🔍 核心观点</div>
+            <div style="font-size:13px;color:var(--dark);line-height:1.8" id="capacity-insight-main">平台运力活跃指数处于常态偏强区间，成单车辆增长延续，供给池向有效供给的转化保持改善。</div>
+          </div>
+          <div style="margin-bottom:14px">
+            <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px">📋 下期关注</div>
+            <div style="font-size:13px;color:var(--dark);line-height:1.8" id="capacity-insight-watch">关注重点货类和重点线路的成单车辆能否持续释放，若司机侧增速快于成单侧，活跃指数可能回落至常态中枢。</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="capacity-insight-tags">
+            <span class="badge badge-ok">成单车辆 走强</span>
+            <span class="badge badge-info">司机找货 活跃</span>
+            <span class="badge badge-ok">转化率 改善</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="panel-title"><div class="ptbar blue"></div>维度拆解</div>
+        <div class="panel-actions">
+          <button class="btn-sm active" onclick="switchCapacityBreakdown('origin',this)">发货地区</button>
+          <button class="btn-sm" onclick="switchCapacityBreakdown('route',this)">重点线路</button>
+          <button class="btn-sm" onclick="switchCapacityBreakdown('cargo',this)">重点货类</button>
+        </div>
+      </div>
+      <div class="panel-bd" style="padding:0">
+        <table class="tbl" id="capacity-breakdown-table">
+          <thead><tr><th>维度</th><th>平台运力活跃指数</th><th>成单车辆数</th><th>供给转化率</th><th>较上期</th><th>简要原因</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <details style="margin-top:12px;padding:12px 16px;background:#fafbfc;border:1px solid var(--border);border-radius:8px">
+      <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--gray)">数据口径说明</summary>
+      <div style="margin-top:10px;font-size:12px;color:var(--gray);line-height:1.8">
+        <p><strong>本页回答什么：</strong>平台样本内的运力供给活跃变化，以及哪些区域、线路和货类在支撑有效供给形成。</p>
+        <p><strong>主统计对象：</strong>车辆。司机找货行为只作为前置供给池观察，headline 以成单车辆形成的有效供给为主。</p>
+        <p><strong>指数基线：</strong>采用滚动观察基线，不使用固定历史基期，不表达真实社会总运力变化。</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ================================================================
      PAGE: 运力响应指数
      ================================================================ -->
 <div class="page" id="page-supply">
@@ -718,7 +829,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
         <div>
           <div style="font-size:13px;color:#8899aa;margin-bottom:8px">2024年12月 · 月度</div>
-          <div class="mh-value" style="color:var(--amber)">96.8 <span class="rating-badge rB">B</span></div>
+          <div class="mh-value" style="color:var(--amber)">96.8 <span class="badge metric-rating-tag" id="supply-hero-tag">轻度承压</span></div>
           <div class="mh-range">基准值：100 &nbsp;|&nbsp; 常态区间：80~120 &nbsp;|&nbsp; 较上期：<span style="color:#ef4444">↓ -1.8pt</span></div>
           <div class="mh-desc">运力响应指数低于100，表示本期货源发布后的承接响应变慢，西北出发能源线路和中长途订单是主要压力来源。</div>
         </div>
@@ -813,7 +924,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
 	      <button class="time-tab active" onclick="switchTimeRange(this, 'price', 'month')" style="padding:6px 14px;font-size:12px;border:none;border-radius:4px;background:var(--blue);color:#fff;cursor:pointer;font-weight:600;transition:all .2s">按月</button>
     </div>
     <div class="metric-hero">
-      <div class="mh-value green">112.4 <span class="rating-badge rA">A</span></div>
+      <div class="mh-value green">112.4 <span class="badge metric-rating-tag" id="price-hero-tag">上行</span></div>
 	      <div class="mh-range">基准值：100 &nbsp;|&nbsp; 常态区间：80~120 &nbsp;|&nbsp; 较上期：<span style="color:var(--green)">↑ +4.0pt</span></div>
       <div class="mh-desc">运价不是越高越健康，本期上行主要来自能源和金属相关中长途线路的结构性偏热；页面按里程区间展示不同距离段的价格状态。</div>
     </div>
@@ -963,7 +1074,7 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
 	      <button class="time-tab active" onclick="switchTimeRange(this, 'efficiency', 'month')" style="padding:6px 14px;font-size:12px;border:none;border-radius:4px;background:var(--blue);color:#fff;cursor:pointer;font-weight:600;transition:all .2s">按月</button>
     </div>
     <div class="metric-hero">
-      <div class="mh-value blue">102.1 <span class="rating-badge rA">A-</span></div>
+      <div class="mh-value blue">102.1 <span class="badge metric-rating-tag" id="efficiency-hero-tag">稳定</span></div>
 	      <div class="mh-range">基准值：100 &nbsp;|&nbsp; 常态区间：80~120 &nbsp;|&nbsp; 较上月：<span style="color:var(--amber)">— -0.5pt</span></div>
       <div class="mh-desc">物流效率指数微幅下降，主要来自西北出发长途线路的天气和装卸等待扰动；华东到达和短中途线路整体仍保持稳定。</div>
     </div>
@@ -1298,42 +1409,20 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
     <div class="panel" style="margin-top:16px">
       <div class="panel-hd">
         <div class="panel-title"><div class="ptbar green"></div>推荐承运商机会</div>
-        <div class="panel-actions"><span class="badge badge-info">按线路匹配</span></div>
+        <div class="panel-actions">
+          <span class="badge badge-info">按线路匹配</span>
+          <div class="lens-tabs">
+            <button class="lens-tab active" onclick="setRecommendationSort(this, 'shipper', 'overall')">综合推荐</button>
+            <button class="lens-tab" onclick="setRecommendationSort(this, 'shipper', 'price')">价格优先</button>
+            <button class="lens-tab" onclick="setRecommendationSort(this, 'shipper', 'efficiency')">效率优先</button>
+          </div>
+        </div>
       </div>
       <div class="panel-bd" style="padding:0">
         <div class="paywall-card locked" style="border:none;border-radius:0">
           <table class="tbl" style="table-layout:fixed;width:100%">
-            <thead><tr><th>推荐承运商</th><th>匹配线路</th><th>响应表现</th><th>履约表现</th><th>推荐理由</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong><a href="javascript:void(0)" onclick="openCarrierProfile('安能物流')">安能物流</a></strong></td>
-                <td>上海 → 江苏</td>
-                <td><span class="premium-mask">接单响应较快</span></td>
-                <td><span class="premium-mask">准点率较高</span></td>
-                <td><span class="premium-mask">在同线路样本中履约稳定，适合作为短中途补充承运商</span></td>
-              </tr>
-              <tr>
-                <td><span class="premium-mask"><strong><a href="javascript:void(0)" onclick="openCarrierProfile('区域车队联盟')">区域车队联盟</a></strong></span></td>
-                <td><span class="premium-mask">上海 → 山西</span></td>
-                <td><span class="premium-mask">响应稳定</span></td>
-                <td><span class="premium-mask">百公里运输时长较优</span></td>
-                <td><span class="premium-mask">适合中长途线路补充运力，履约波动相对较小</span></td>
-              </tr>
-              <tr>
-                <td><span class="premium-mask"><strong><a href="javascript:void(0)" onclick="openCarrierProfile('德邦大件')">德邦大件</a></strong></span></td>
-                <td><span class="premium-mask">上海 → 河北</span></td>
-                <td><span class="premium-mask">高峰期响应可控</span></td>
-                <td><span class="premium-mask">长途履约表现平稳</span></td>
-                <td><span class="premium-mask">适合钢铁和建材类线路，在匹配样本中价格位置合理</span></td>
-              </tr>
-              <tr>
-                <td><span class="premium-mask"><strong><a href="javascript:void(0)" onclick="openCarrierProfile('中通快运')">中通快运</a></strong></span></td>
-                <td><span class="premium-mask">上海 → 河北</span></td>
-                <td><span class="premium-mask">响应活跃</span></td>
-                <td><span class="premium-mask">准点表现改善</span></td>
-                <td><span class="premium-mask">在同线路样本中承接表现上升，适合做备选合作方</span></td>
-              </tr>
-            </tbody>
+            <thead><tr><th>推荐承运商</th><th>匹配线路</th><th>价格表现</th><th>效率表现</th><th>综合推荐原因</th></tr></thead>
+            <tbody id="shipper-recommendation-body"></tbody>
           </table>
         </div>
       </div>
@@ -1522,42 +1611,20 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
     <div class="panel" style="margin-top:16px">
       <div class="panel-hd">
         <div class="panel-title"><div class="ptbar green"></div>推荐货主机会</div>
-        <div class="panel-actions"><span class="badge badge-info">按线路匹配</span></div>
+        <div class="panel-actions">
+          <span class="badge badge-info">按线路匹配</span>
+          <div class="lens-tabs">
+            <button class="lens-tab active" onclick="setRecommendationSort(this, 'carrier', 'overall')">综合推荐</button>
+            <button class="lens-tab" onclick="setRecommendationSort(this, 'carrier', 'price')">价格优先</button>
+            <button class="lens-tab" onclick="setRecommendationSort(this, 'carrier', 'efficiency')">效率优先</button>
+          </div>
+        </div>
       </div>
       <div class="panel-bd" style="padding:0">
         <div class="paywall-card locked" style="border:none;border-radius:0">
           <table class="tbl" style="table-layout:fixed;width:100%">
-            <thead><tr><th>推荐货主</th><th>匹配线路</th><th>需求热度</th><th>价格接受度</th><th>推荐理由</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>华东钢贸集团</strong></td>
-                <td>上海 → 河北</td>
-                <td><span class="premium-mask">高</span></td>
-                <td><span class="premium-mask">中高</span></td>
-                <td><span class="premium-mask">同线路需求稳定，价格带与当前承运能力匹配，适合重点跟进</span></td>
-              </tr>
-              <tr>
-                <td><span class="premium-mask"><strong>北方能源贸易公司</strong></span></td>
-                <td><span class="premium-mask">上海 → 山西</span></td>
-                <td><span class="premium-mask">中高</span></td>
-                <td><span class="premium-mask">高</span></td>
-                <td><span class="premium-mask">长途线路需求连续，适合补充回程机会，价格接受度较好</span></td>
-              </tr>
-              <tr>
-                <td><span class="premium-mask"><strong>长三角制造业客户</strong></span></td>
-                <td><span class="premium-mask">上海 → 江苏</span></td>
-                <td><span class="premium-mask">中</span></td>
-                <td><span class="premium-mask">中高</span></td>
-                <td><span class="premium-mask">短中途频次高，履约适配度高，适合稳定型运力持续服务</span></td>
-              </tr>
-              <tr>
-                <td><span class="premium-mask"><strong>华南建材贸易商</strong></span></td>
-                <td><span class="premium-mask">上海 → 华中</span></td>
-                <td><span class="premium-mask">中</span></td>
-                <td><span class="premium-mask">中</span></td>
-                <td><span class="premium-mask">在同线路样本中发货节奏平稳，可作为新增合作线索储备</span></td>
-              </tr>
-            </tbody>
+            <thead><tr><th>推荐货主</th><th>匹配线路</th><th>价格匹配度</th><th>效率匹配度</th><th>综合推荐原因</th></tr></thead>
+            <tbody id="carrier-recommendation-body"></tbody>
           </table>
         </div>
       </div>
@@ -1646,6 +1713,221 @@ function getHomeSeries(timeRange) {
       ? [99.8, 100.1, 100.4, 100.7, 100.9, 101.1, 101.3, 101.4, 101.6, 101.8, 101.5, 102.1]
       : [98.6, 99.0, 99.4, 99.8, 100.2, 100.5, 100.8, 101.0, 101.2, 101.4, 101.5, 102.1];
   return { labels, supply, price, efficiency };
+}
+
+const CAPACITY_PAGE_SERIES = {
+  day: {
+    labels: ['D-6','D-5','D-4','D-3','D-2','D-1','D'],
+    headline: [101.2, 101.6, 102.1, 102.4, 102.7, 103.1, 103.8],
+    drivers: [11840, 11920, 12060, 12140, 12220, 12310, 12480],
+    vehicles: [7390, 7440, 7520, 7610, 7690, 7780, 7860],
+    conversion: [62.4, 62.4, 62.4, 62.7, 62.9, 63.2, 63.0],
+    periodLabel: '近7日',
+    headlineDesc: '平台内有效供给形成稳中有升，日度成单车辆持续释放，转化率维持改善。',
+    watchDesc: '若司机找货继续走高但成单车辆跟进放缓，活跃指数将回落至常态区间中部。',
+    tags: ['成单车辆 走强', '司机找货 活跃', '转化率 改善']
+  },
+  week: {
+    labels: ['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12'],
+    headline: [97.6, 98.4, 99.1, 99.8, 100.6, 101.4, 101.9, 102.4, 102.8, 103.1, 102.2, 103.8],
+    drivers: [9420, 9680, 9920, 10120, 10360, 10620, 10980, 11240, 11610, 11920, 12160, 12480],
+    vehicles: [5610, 5840, 6030, 6280, 6510, 6760, 7020, 7240, 7480, 7680, 7610, 7860],
+    conversion: [59.6, 60.3, 60.8, 62.1, 62.8, 63.7, 63.9, 64.4, 64.4, 64.4, 62.6, 63.0],
+    periodLabel: '近12周',
+    headlineDesc: '平台运力活跃指数处于常态偏强区间，成单车辆增长延续，供给池向有效供给的转化保持改善。',
+    watchDesc: '关注重点货类与重点线路的成单车辆是否继续释放，若司机侧增速快于成单侧，指数可能回落至100附近。',
+    tags: ['有效供给 偏强', '重点线路 支撑', '转化率 稳定']
+  },
+  month: {
+    labels: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    headline: [94.8, 95.6, 96.4, 97.6, 98.8, 99.6, 100.5, 101.3, 102.1, 102.8, 103.1, 103.8],
+    drivers: [7360, 7680, 8040, 8520, 9030, 9560, 10180, 10840, 11460, 11980, 12260, 12480],
+    vehicles: [4280, 4520, 4810, 5190, 5580, 6030, 6470, 6900, 7260, 7540, 7680, 7860],
+    conversion: [58.2, 58.9, 59.8, 60.9, 61.8, 63.1, 63.6, 63.7, 63.4, 62.9, 62.6, 63.0],
+    periodLabel: '近12个月',
+    headlineDesc: '平台供给活跃度较年初明显改善，成单车辆规模持续抬升，供给转化保持在近期常态偏强水平。',
+    watchDesc: '若增长继续由成单车辆驱动且转化率稳定，指数仍将维持在常态偏强区间。',
+    tags: ['增长延续', '有效供给 扩大', '平台样本 偏强']
+  }
+};
+
+const CAPACITY_BREAKDOWN_DATA = {
+  day: {
+    origin: [
+      {name:'华东出发', index:'104.8', vehicles:'2,140', conversion:'64.1%', delta:'+1.4', deltaClass:'up', reason:'制造和短中途样本活跃，成单车辆释放稳定'},
+      {name:'华北出发', index:'102.6', vehicles:'1,720', conversion:'62.8%', delta:'+0.8', deltaClass:'up', reason:'钢贸和能源线路稳定贡献有效供给'},
+      {name:'华中出发', index:'101.2', vehicles:'1,130', conversion:'61.9%', delta:'+0.3', deltaClass:'flat', reason:'中转样本平稳，供给形成节奏正常'},
+      {name:'西北出发', index:'95.4', vehicles:'860', conversion:'58.6%', delta:'-1.2', deltaClass:'down', reason:'长途线路成单放缓，供给形成承压'},
+      {name:'东北出发', index:'96.8', vehicles:'710', conversion:'59.4%', delta:'-0.6', deltaClass:'down', reason:'天气扰动影响成单车辆释放'}
+    ],
+    route: [
+      {name:'上海 → 江苏', index:'105.2', vehicles:'1,020', conversion:'65.2%', delta:'+1.1', deltaClass:'up', reason:'短中途高频线路供给形成稳定'},
+      {name:'上海 → 河北', index:'103.4', vehicles:'860', conversion:'63.1%', delta:'+0.7', deltaClass:'up', reason:'钢铁线路成单车辆持续释放'},
+      {name:'上海 → 山西', index:'98.6', vehicles:'640', conversion:'60.2%', delta:'-0.2', deltaClass:'flat', reason:'中长途样本稳定，活跃处于常态中枢'},
+      {name:'乌鲁木齐 → 兰州', index:'94.8', vehicles:'290', conversion:'57.8%', delta:'-1.4', deltaClass:'down', reason:'西北长途成单承压'},
+      {name:'广州 → 武汉', index:'101.6', vehicles:'520', conversion:'62.4%', delta:'+0.4', deltaClass:'up', reason:'区域线供给形成平稳'}
+    ],
+    cargo: [
+      {name:'钢铁/金属', index:'104.1', vehicles:'1,460', conversion:'64.4%', delta:'+1.2', deltaClass:'up', reason:'重点线路持续释放有效供给'},
+      {name:'煤炭', index:'98.2', vehicles:'1,280', conversion:'59.6%', delta:'-0.4', deltaClass:'down', reason:'司机活跃上升但成单侧跟进一般'},
+      {name:'化工品', index:'102.4', vehicles:'920', conversion:'63.3%', delta:'+0.6', deltaClass:'up', reason:'样本平稳，成单形成正常'},
+      {name:'建材', index:'101.8', vehicles:'740', conversion:'62.7%', delta:'+0.3', deltaClass:'flat', reason:'短中途线路支撑明显'},
+      {name:'粮食', index:'96.6', vehicles:'510', conversion:'58.9%', delta:'-0.8', deltaClass:'down', reason:'季节性回落影响活跃'}
+    ]
+  },
+  week: {
+    origin: [
+      {name:'华东出发', index:'105.6', vehicles:'15,240', conversion:'64.5%', delta:'+1.8', deltaClass:'up', reason:'制造和短中途样本持续支撑成单车辆释放'},
+      {name:'华北出发', index:'103.2', vehicles:'12,680', conversion:'63.2%', delta:'+1.0', deltaClass:'up', reason:'钢贸与能源线路稳定形成有效供给'},
+      {name:'华中出发', index:'101.4', vehicles:'8,260', conversion:'61.8%', delta:'+0.4', deltaClass:'flat', reason:'中转型样本整体平稳'},
+      {name:'西北出发', index:'96.2', vehicles:'6,480', conversion:'58.8%', delta:'-1.0', deltaClass:'down', reason:'长途线路供给形成承压'},
+      {name:'东北出发', index:'97.4', vehicles:'5,920', conversion:'59.6%', delta:'-0.5', deltaClass:'down', reason:'天气影响成单形成效率'}
+    ],
+    route: [
+      {name:'上海 → 江苏', index:'106.1', vehicles:'7,180', conversion:'65.4%', delta:'+1.6', deltaClass:'up', reason:'高频短中途线路支撑 headline 走强'},
+      {name:'上海 → 河北', index:'104.2', vehicles:'5,940', conversion:'63.6%', delta:'+1.1', deltaClass:'up', reason:'钢铁线成单车辆释放稳定'},
+      {name:'上海 → 山西', index:'99.4', vehicles:'4,620', conversion:'60.8%', delta:'+0.2', deltaClass:'flat', reason:'中长途供给形成处于常态'},
+      {name:'乌鲁木齐 → 兰州', index:'95.8', vehicles:'2,180', conversion:'58.4%', delta:'-1.3', deltaClass:'down', reason:'西北长途成单侧偏弱'},
+      {name:'广州 → 武汉', index:'102.4', vehicles:'3,540', conversion:'62.8%', delta:'+0.5', deltaClass:'up', reason:'区域线样本平稳'}
+    ],
+    cargo: [
+      {name:'钢铁/金属', index:'104.8', vehicles:'10,620', conversion:'64.8%', delta:'+1.4', deltaClass:'up', reason:'重点线路持续贡献有效供给'},
+      {name:'煤炭', index:'99.1', vehicles:'9,840', conversion:'60.4%', delta:'+0.1', deltaClass:'flat', reason:'司机端活跃较高，成单形成中性'},
+      {name:'化工品', index:'102.6', vehicles:'6,180', conversion:'63.5%', delta:'+0.6', deltaClass:'up', reason:'样本结构稳定'},
+      {name:'建材', index:'101.9', vehicles:'5,460', conversion:'62.9%', delta:'+0.3', deltaClass:'flat', reason:'区域短中途支撑稳定'},
+      {name:'粮食', index:'96.8', vehicles:'3,820', conversion:'59.2%', delta:'-0.7', deltaClass:'down', reason:'季节性波动影响供给形成'}
+    ]
+  },
+  month: {
+    origin: [
+      {name:'华东出发', index:'106.2', vehicles:'62,400', conversion:'64.9%', delta:'+2.1', deltaClass:'up', reason:'华东样本扩张带动有效供给持续走强'},
+      {name:'华北出发', index:'103.8', vehicles:'52,300', conversion:'63.4%', delta:'+1.2', deltaClass:'up', reason:'钢贸和能源成单车辆维持稳定增长'},
+      {name:'华中出发', index:'101.6', vehicles:'34,700', conversion:'62.0%', delta:'+0.5', deltaClass:'flat', reason:'中转型线路供给形成平稳'},
+      {name:'西北出发', index:'96.4', vehicles:'26,900', conversion:'58.9%', delta:'-0.8', deltaClass:'down', reason:'长途线路增长慢于平台整体'},
+      {name:'东北出发', index:'97.2', vehicles:'23,600', conversion:'59.4%', delta:'-0.4', deltaClass:'down', reason:'季节和天气影响成单释放'}
+    ],
+    route: [
+      {name:'上海 → 江苏', index:'106.8', vehicles:'28,600', conversion:'65.6%', delta:'+1.9', deltaClass:'up', reason:'短中途高频线路是平台活跃增长主支撑'},
+      {name:'上海 → 河北', index:'104.6', vehicles:'24,300', conversion:'63.8%', delta:'+1.2', deltaClass:'up', reason:'钢铁链路持续形成有效供给'},
+      {name:'上海 → 山西', index:'100.2', vehicles:'18,900', conversion:'61.0%', delta:'+0.3', deltaClass:'flat', reason:'中长途供给形成保持常态'},
+      {name:'乌鲁木齐 → 兰州', index:'95.6', vehicles:'8,420', conversion:'58.2%', delta:'-1.0', deltaClass:'down', reason:'西北长途有效供给释放偏慢'},
+      {name:'广州 → 武汉', index:'102.8', vehicles:'13,500', conversion:'63.0%', delta:'+0.6', deltaClass:'up', reason:'区域线活跃稳定'}
+    ],
+    cargo: [
+      {name:'钢铁/金属', index:'105.2', vehicles:'42,600', conversion:'65.0%', delta:'+1.5', deltaClass:'up', reason:'重点制造和钢贸线路持续贡献活跃度'},
+      {name:'煤炭', index:'99.4', vehicles:'39,200', conversion:'60.6%', delta:'+0.2', deltaClass:'flat', reason:'司机侧高活跃，但有效供给形成中性'},
+      {name:'化工品', index:'102.8', vehicles:'24,800', conversion:'63.8%', delta:'+0.7', deltaClass:'up', reason:'样本结构稳定，成单释放持续'},
+      {name:'建材', index:'102.1', vehicles:'21,600', conversion:'63.1%', delta:'+0.4', deltaClass:'flat', reason:'短中途样本支撑平稳'},
+      {name:'粮食', index:'97.0', vehicles:'16,400', conversion:'59.0%', delta:'-0.6', deltaClass:'down', reason:'季节性回落影响活跃形成'}
+    ]
+  }
+};
+
+let CAPACITY_BREAKDOWN_STATE = 'origin';
+
+function getCapacityStatus(value) {
+  if (value < 95) return { label: '活跃走弱', badge: 'badge-danger', desc: '平台内有效供给形成偏弱，成单车辆释放慢于近期常态。' };
+  if (value <= 105) return { label: '活跃平稳', badge: 'badge-ok', desc: '平台内供给活跃整体处于近期常态区间。' };
+  return { label: '活跃走强', badge: 'badge-info', desc: '平台内有效供给形成增强，成单车辆释放强于近期常态。' };
+}
+
+function formatSignedDelta(value, suffix = '') {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return String(value);
+  const sign = num > 0 ? '↑ ' : num < 0 ? '↓ ' : '— ';
+  return `${sign}${Math.abs(num).toFixed(1)}${suffix} 较上期`;
+}
+
+function updateCapacityPage(range) {
+  const series = CAPACITY_PAGE_SERIES[range] || CAPACITY_PAGE_SERIES.week;
+  const headline = series.headline[series.headline.length - 1];
+  const headlinePrev = series.headline[series.headline.length - 2];
+  const drivers = series.drivers[series.drivers.length - 1];
+  const driversPrev = series.drivers[series.drivers.length - 2];
+  const vehicles = series.vehicles[series.vehicles.length - 1];
+  const vehiclesPrev = series.vehicles[series.vehicles.length - 2];
+  const conversion = series.conversion[series.conversion.length - 1];
+  const conversionPrev = series.conversion[series.conversion.length - 2];
+  const status = getCapacityStatus(headline);
+  const periodText = range === 'day' ? '近7日' : range === 'week' ? '近12周' : '近12个月';
+
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  };
+  setText('capacity-headline-value', headline.toFixed(1));
+  setText('capacity-headline-delta', formatSignedDelta(headline - headlinePrev));
+  setText('capacity-headline-status', status.label);
+  setText('capacity-headline-desc', status.desc);
+  setText('capacity-driver-value', drivers.toLocaleString('zh-CN'));
+  setText('capacity-driver-delta', formatSignedDelta(((drivers - driversPrev) / driversPrev) * 100, '%'));
+  setText('capacity-vehicle-value', vehicles.toLocaleString('zh-CN'));
+  setText('capacity-vehicle-delta', formatSignedDelta(((vehicles - vehiclesPrev) / vehiclesPrev) * 100, '%'));
+  setText('capacity-conversion-value', conversion.toFixed(1) + '%');
+  setText('capacity-conversion-delta', formatSignedDelta(conversion - conversionPrev, 'pt'));
+  setText('capacity-driver-copy', range === 'day' ? '日度找货司机活跃继续抬升，为平台供给池提供增量。' : range === 'week' ? '司机侧找货活跃维持上升，供给池保持扩张。' : '平台司机侧活跃较年初明显提升，供给池逐步扩大。');
+  setText('capacity-vehicle-copy', range === 'day' ? '当日成单车辆形成继续走高，是 headline 改善的主要来源。' : range === 'week' ? '近阶段成单车辆持续释放，构成有效供给增长主轴。' : '年内成单车辆规模持续增长，有效供给形成明显改善。');
+  setText('capacity-conversion-copy', range === 'day' ? '找货流量向有效供给的转化保持在近期偏强水平。': range === 'week' ? '供给池向成单车辆的转化维持改善，对 headline 起正向修正。':'转化率维持在近期常态偏强区间，增长并非只由流量拉动。');
+  setText('capacity-period-copy', `本期口径：${periodText}`);
+  setText('capacity-period', periodText);
+  setText('capacity-insight-main', series.headlineDesc);
+  setText('capacity-insight-watch', series.watchDesc);
+  const badgeEl = document.getElementById('capacity-headline-badge');
+  if (badgeEl) {
+    badgeEl.textContent = status.label;
+    badgeEl.className = 'badge ' + status.badge;
+  }
+  const tagsWrap = document.getElementById('capacity-insight-tags');
+  if (tagsWrap) {
+    tagsWrap.innerHTML = series.tags.map((tag, idx) => {
+      const badgeClass = idx === 0 ? 'badge-ok' : idx === 1 ? 'badge-info' : 'badge-warn';
+      return `<span class="badge ${badgeClass}">${tag}</span>`;
+    }).join('');
+  }
+  renderCapacityBreakdownTable(CAPACITY_BREAKDOWN_STATE, range);
+  drawCapacityTrendChart(range);
+}
+
+function getMetricHeroStatus(type, value, delta) {
+  if (type === 'supply') {
+    if (value >= 103) return { label: '响应良好', badgeClass: 'badge-info' };
+    if (value >= 100 && Math.abs(delta) < 1) return { label: '稳定', badgeClass: 'badge-ok' };
+    if (value >= 97) return { label: '平稳', badgeClass: 'badge-ok' };
+    if (value >= 94) return { label: '轻度承压', badgeClass: 'badge-warn' };
+    if (value >= 90) return { label: '偏弱', badgeClass: 'badge-danger' };
+    if (value < 95 && delta <= -2) return { label: '承压', badgeClass: 'badge-danger' };
+    return { label: '承压', badgeClass: 'badge-danger' };
+  }
+  if (type === 'price') {
+    if (delta <= -2) return { label: '回落', badgeClass: 'badge-danger' };
+    if (value >= 115) return { label: '偏热', badgeClass: 'badge-warn' };
+    if (value >= 108 || (value >= 103 && delta >= 2)) return { label: '上行', badgeClass: 'badge-warn' };
+    if (value >= 103) return { label: '偏强', badgeClass: 'badge-info' };
+    if (value >= 95) return { label: '平稳', badgeClass: 'badge-ok' };
+    return { label: '偏低观察', badgeClass: 'badge-info' };
+  }
+  if (value >= 105) return { label: '高效', badgeClass: 'badge-ok' };
+  if (value >= 103) return { label: '良好', badgeClass: 'badge-info' };
+  if (value >= 100 && Math.abs(delta) < 1) return { label: '稳定', badgeClass: 'badge-ok' };
+  if (value >= 97) return { label: '平稳', badgeClass: 'badge-ok' };
+  if (value >= 94) return { label: '偏慢', badgeClass: 'badge-warn' };
+  if (value < 98 && delta <= -2) return { label: '承压', badgeClass: 'badge-danger' };
+  return { label: '承压', badgeClass: 'badge-danger' };
+}
+
+function renderMetricHeroTags() {
+  const configs = [
+    { id: 'supply-hero-tag', type: 'supply', value: 96.8, delta: -1.8 },
+    { id: 'price-hero-tag', type: 'price', value: 112.4, delta: 4.0 },
+    { id: 'efficiency-hero-tag', type: 'efficiency', value: 102.1, delta: -0.5 }
+  ];
+  configs.forEach(({ id, type, value, delta }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const status = getMetricHeroStatus(type, value, delta);
+    el.textContent = status.label;
+    el.className = `badge metric-rating-tag ${status.badgeClass}`;
+  });
 }
 
 function getIndexStatus(type, value) {
@@ -1874,6 +2156,62 @@ function openCarrierProfile(name) {
   showPage('carrier-company');
 }
 
+const RECOMMENDATION_SORT_STATE = {
+  shipper: 'overall',
+  carrier: 'overall'
+};
+
+const RECOMMENDATION_DATA = {
+  shipper: [
+    {name:'安能物流', route:'上海 → 江苏', priceLabel:'价格稳健', efficiencyLabel:'准点率较高', reason:'短中途线路价格位置稳定，履约顺畅，适合作为高频补充承运商。', overallScore:95, priceScore:88, efficiencyScore:93},
+    {name:'德邦大件', route:'上海 → 河北', priceLabel:'价格优势', efficiencyLabel:'长途履约平稳', reason:'同线路价格接受度和长途履约都较好，适合钢铁与建材线路做主力备选。', overallScore:92, priceScore:96, efficiencyScore:86},
+    {name:'中通快运', route:'上海 → 河北', priceLabel:'价格适中', efficiencyLabel:'准点改善', reason:'承接活跃且准点表现改善，适合作为稳定期的替代承运选择。', overallScore:89, priceScore:84, efficiencyScore:89},
+    {name:'区域车队联盟', route:'上海 → 山西', priceLabel:'价格弹性较好', efficiencyLabel:'百公里时长较优', reason:'中长途线路效率表现突出，适合在紧急补位场景下优先关注。', overallScore:88, priceScore:82, efficiencyScore:97}
+  ],
+  carrier: [
+    {name:'华东钢贸集团', route:'上海 → 河北', priceLabel:'价格接受度高', efficiencyLabel:'长途协同稳定', reason:'同线路需求稳定，价格带和履约要求与当前承运能力匹配，值得重点跟进。', overallScore:95, priceScore:94, efficiencyScore:90},
+    {name:'北方能源贸易公司', route:'上海 → 山西', priceLabel:'长途价格友好', efficiencyLabel:'装卸节奏可控', reason:'长途线路需求连续，价格接受度高，适合补充回程与中长途运力。', overallScore:91, priceScore:97, efficiencyScore:83},
+    {name:'长三角制造业客户', route:'上海 → 江苏', priceLabel:'价格稳定', efficiencyLabel:'短中途高适配', reason:'发运频次高、效率要求清晰，适合稳定型运力持续服务。', overallScore:89, priceScore:86, efficiencyScore:95},
+    {name:'华南建材贸易商', route:'上海 → 华中', priceLabel:'价格中性', efficiencyLabel:'效率要求平稳', reason:'线路节奏稳定，可作为新增合作线索储备，适合渐进式拓客。', overallScore:84, priceScore:78, efficiencyScore:82}
+  ]
+};
+
+function renderRecommendationTable(type) {
+  const tbody = document.getElementById(type + '-recommendation-body');
+  if (!tbody || !RECOMMENDATION_DATA[type]) return;
+  const sortMap = { overall: 'overallScore', price: 'priceScore', efficiency: 'efficiencyScore' };
+  const sortKey = sortMap[RECOMMENDATION_SORT_STATE[type]] || 'overallScore';
+  const items = [...RECOMMENDATION_DATA[type]].sort((a, b) => b[sortKey] - a[sortKey]);
+  const nameCell = (item, masked) => {
+    if (type === 'shipper') {
+      const anchor = `<a href="javascript:void(0)" onclick="openCarrierProfile('${item.name}')">${item.name}</a>`;
+      return masked ? `<span class="premium-mask"><strong>${anchor}</strong></span>` : `<strong>${anchor}</strong>`;
+    }
+    return masked ? `<span class="premium-mask"><strong>${item.name}</strong></span>` : `<strong>${item.name}</strong>`;
+  };
+  tbody.innerHTML = items.map((item, index) => {
+    const firstRow = index === 0;
+    const showAll = document.body.classList.contains('enterprise-subscribed');
+    const maskWholeRow = !showAll && !firstRow;
+    const partialMaskedCell = (value) => showAll ? value : `<span class="premium-mask">${value}</span>`;
+    return `<tr>
+      <td>${nameCell(item, maskWholeRow)}</td>
+      <td>${maskWholeRow ? `<span class="premium-mask">${item.route}</span>` : item.route}</td>
+      <td>${showAll ? item.priceLabel : partialMaskedCell(item.priceLabel)}</td>
+      <td>${showAll ? item.efficiencyLabel : partialMaskedCell(item.efficiencyLabel)}</td>
+      <td>${showAll ? item.reason : partialMaskedCell(item.reason)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function setRecommendationSort(btn, type, mode) {
+  RECOMMENDATION_SORT_STATE[type] = mode;
+  const wrap = btn.closest('.lens-tabs');
+  if (wrap) wrap.querySelectorAll('.lens-tab').forEach(tab => tab.classList.remove('active'));
+  btn.classList.add('active');
+  renderRecommendationTable(type);
+}
+
 function switchTimeRange(btn, page, range) {
   const container = btn.parentElement;
   container.querySelectorAll('.time-tab').forEach(b => {
@@ -1894,6 +2232,8 @@ function switchTimeRange(btn, page, range) {
   
   if (page === 'home') {
     updateKPICharts(range);
+  } else if (page === 'capacity') {
+    updateCapacityPage(range);
   } else if (page === 'supply') {
     drawSupplyTrendChart(range);
     const supplyPeriod = document.getElementById('supply-period');
@@ -2115,6 +2455,55 @@ function switchPriceBreakdown(key, btn) {
 
 function switchEfficiencyBreakdown(key, btn) {
   switchBreakdown(btn, 'efficiency-breakdown-table', EFFICIENCY_BREAKDOWN_DATA, key);
+}
+
+function renderCapacityBreakdownTable(key = 'origin', range = 'week') {
+  const table = document.getElementById('capacity-breakdown-table');
+  if (!table) return;
+  const rows = (CAPACITY_BREAKDOWN_DATA[range] && CAPACITY_BREAKDOWN_DATA[range][key]) || [];
+  const headCells = table.querySelectorAll('thead th');
+  if (headCells.length >= 3) {
+    headCells[0].textContent = BREAKDOWN_HEADER_LABELS[key] || '维度';
+    headCells[1].textContent = '平台运力活跃指数';
+    headCells[2].textContent = '成单车辆数';
+  }
+  const tbody = table.querySelector('tbody');
+  if (!tbody) return;
+  tbody.innerHTML = rows.map(row => `
+    <tr>
+      <td><strong>${row.name}</strong></td>
+      <td>${row.index}</td>
+      <td>${row.vehicles}</td>
+      <td>${row.conversion}</td>
+      <td>${getDeltaHtml(row.delta, row.deltaClass)}</td>
+      <td>${row.reason}</td>
+    </tr>
+  `).join('');
+}
+
+function switchCapacityBreakdown(key, btn) {
+  CAPACITY_BREAKDOWN_STATE = key;
+  const panel = btn.closest('.panel');
+  if (panel) {
+    panel.querySelectorAll('.btn-sm').forEach(tab => tab.classList.remove('active'));
+  }
+  btn.classList.add('active');
+  renderCapacityBreakdownTable(key, getPageActiveRange('capacity'));
+}
+
+function drawCapacityTrendChart(range) {
+  const canvas = document.getElementById('capacityChart');
+  if (!canvas) return;
+  const series = CAPACITY_PAGE_SERIES[range] || CAPACITY_PAGE_SERIES.week;
+  const ctx = canvas.getContext('2d');
+  drawLine(ctx, [{ data: series.headline, color: '#1677ff' }], {
+    labels: series.labels,
+    rangeValues: [95, 100, 105],
+    normalBand: [95, 105],
+    referenceLines: [
+      { value: 100, label: '滚动常态100', color: '#94a3b8', dash: [6, 6], width: 1.2 }
+    ]
+  });
 }
 
 const REGIONAL_LENS_DATA = {
@@ -2434,6 +2823,15 @@ function drawChartsForPage(id) {
     }
     drawSupplyTrendChart(range);
   }
+  if (id === 'capacity') {
+    const activeTab = document.querySelector('#page-capacity .time-tab.active');
+    let range = 'week';
+    if (activeTab) {
+      const text = activeTab.textContent.trim();
+      range = text.includes('日') ? 'day' : text.includes('月') ? 'month' : 'week';
+    }
+    updateCapacityPage(range);
+  }
   if (id === 'price') {
     const activeTab = document.querySelector('#page-price .time-tab.active');
     let range = 'month';
@@ -2484,7 +2882,11 @@ setInterval(updateClock, 1000);
 window.addEventListener('load', () => {
   ensurePaywallOverlays();
   applyGlobalSubscription('free');
+  renderMetricHeroTags();
+  renderRecommendationTable('shipper');
+  renderRecommendationTable('carrier');
   document.querySelectorAll('.regional-analysis-shell').forEach(section => renderRegionalSection(section, 'origin'));
+  updateCapacityPage('week');
   renderBreakdownTable('supply-breakdown-table', SUPPLY_BREAKDOWN_DATA.origin, 'origin');
   renderBreakdownTable('price-breakdown-table', PRICE_BREAKDOWN_DATA.origin, 'origin');
   renderBreakdownTable('efficiency-breakdown-table', EFFICIENCY_BREAKDOWN_DATA.origin, 'origin');
