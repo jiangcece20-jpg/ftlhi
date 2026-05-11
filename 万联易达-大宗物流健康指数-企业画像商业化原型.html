@@ -726,10 +726,6 @@ table.tbl tr:hover td{background:#f7fbff;cursor:pointer}
           </div>
           <div class="index-command-status" id="capacity-headline-status">活跃平稳</div>
           <div class="index-command-desc" id="capacity-headline-desc">平台内有效供给形成稳中有升，成单车辆增长快于供给池波动。</div>
-          <div class="home-chart-note" style="margin-top:14px">
-            <strong id="capacity-period-copy">本期口径：近12周</strong><br>
-            本页只观察平台样本内的供给活跃变化，不表达全国总运力或真实社会供给规模。
-          </div>
         </div>
         <div class="kpi-card blue">
           <div class="kpi-top"><span class="kpi-label">找货司机数</span><span class="badge badge-info">前置供给池</span></div>
@@ -1868,7 +1864,6 @@ function updateCapacityPage(range) {
   setText('capacity-driver-copy', range === 'day' ? '日度找货司机活跃继续抬升，为平台供给池提供增量。' : range === 'week' ? '司机侧找货活跃维持上升，供给池保持扩张。' : '平台司机侧活跃较年初明显提升，供给池逐步扩大。');
   setText('capacity-vehicle-copy', range === 'day' ? '当日成单车辆形成继续走高，是 headline 改善的主要来源。' : range === 'week' ? '近阶段成单车辆持续释放，构成有效供给增长主轴。' : '年内成单车辆规模持续增长，有效供给形成明显改善。');
   setText('capacity-conversion-copy', range === 'day' ? '找货流量向有效供给的转化保持在近期偏强水平。': range === 'week' ? '供给池向成单车辆的转化维持改善，对 headline 起正向修正。':'转化率维持在近期常态偏强区间，增长并非只由流量拉动。');
-  setText('capacity-period-copy', `本期口径：${periodText}`);
   setText('capacity-period', periodText);
   setText('capacity-insight-main', series.headlineDesc);
   setText('capacity-insight-watch', series.watchDesc);
